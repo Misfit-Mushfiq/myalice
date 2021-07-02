@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/services.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:pusher_client/pusher_client.dart';
+
 
 class PusherService {
   PusherEvent? lastEvent;

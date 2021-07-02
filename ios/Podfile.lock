@@ -1,6 +1,8 @@
 PODS:
   - Flutter (1.0.0)
   - NWWebSocket (0.5.2)
+  - path_provider (0.0.1):
+    - Flutter
   - pusher_client (1.1.3):
     - Flutter
     - PusherSwiftWithEncryption (~> 9.2.2)
@@ -11,6 +13,7 @@ PODS:
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - pusher_client (from `.symlinks/plugins/pusher_client/ios`)
 
 SPEC REPOS:
@@ -22,12 +25,15 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
   pusher_client:
     :path: ".symlinks/plugins/pusher_client/ios"
 
 SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   NWWebSocket: 21f0c73639815da3272862c912275b26102aa80c
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   pusher_client: 2cba3f134643ac90af44940be03f7db4e24b0223
   PusherSwiftWithEncryption: 7c5192445971a4105e1f425dcbcc7d0286c4fc23
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6

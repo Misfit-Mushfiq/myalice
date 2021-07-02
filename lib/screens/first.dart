@@ -54,7 +54,12 @@ class First extends StatelessWidget {
                 Get.to(Second());
               },
             ),
-          */ ],
+          */  RaisedButton(
+              child: Text('Next Screen'),
+              onPressed: () {
+                
+              },
+            )],
         ),
       ),
       floatingActionButton: FloatingActionButton(
