@@ -9,6 +9,7 @@ class LoggingInterceptors extends InterceptorsWrapper {
     debugPrint("--> ${options.method} ${options.baseUrl}${options.path}");
     debugPrint("Content type: ${options.contentType}");
     debugPrint("QueryParams: ${options.queryParameters}");
+    debugPrint("QueryParams: ${options.headers}");
     debugPrint("Data: ${options.data}");
     return super.onRequest(options,handler);
   }

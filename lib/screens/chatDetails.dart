@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/models/chatModel/chat.dart';
+import 'package:myalice/models/responseModels/chatResponse.dart';
 import 'package:myalice/utils/constant_strings.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class ChatDetails extends StatefulWidget {
   @override
@@ -10,10 +14,11 @@ class ChatDetails extends StatefulWidget {
 
 class _ChatDetailsState extends State<ChatDetails> {
   late List<ChatMessage> messages;
-
+  final SharedPref _sharedPref = SharedPref();
   @override
   void initState() {
     super.initState();
+    init();
     messages = [
       ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
       ChatMessage(
@@ -29,44 +34,51 @@ class _ChatDetailsState extends State<ChatDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final obj = Get.put(ChatApiController());
     return Scaffold(
         appBar: AppBar(),
         body: Stack(
           children: <Widget>[
-            ListView.builder(
-              itemCount: messages.length,
-              shrinkWrap: true,
-              padding: EdgeInsets.only(top: 10, bottom: 10),
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return Container(
-                  padding:
-                      EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
-                  child: Align(
-                    alignment: (messages[index].messageType == "receiver"
-                        ? Alignment.topLeft
-                        : Alignment.topRight),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: (messages[index].messageType == "receiver"
-                            ? CHAT_RECEIVER
-                            : CHAT_SENDER),
-                      ),
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        messages[index].messageContent!,
-                        style: TextStyle(
-                            fontSize: 12,
+            Obx(() {
+              return obj.dataAvailable
+                  ? Text(obj.chats.dataSource!.elementAt(25).data!.data!.text!)
+                  : Text('... waiting ...');
+            }),
+            /* ListView.builder(
+                  itemCount: messages.length,
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  physics: NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    return Container(
+                      padding:
+                          EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
+                      child: Align(
+                        alignment: (messages[index].messageType == "receiver"
+                            ? Alignment.topLeft
+                            : Alignment.topRight),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
                             color: (messages[index].messageType == "receiver"
-                                ? Colors.black
-                                : Colors.white)),
+                                ? CHAT_RECEIVER
+                                : CHAT_SENDER),
+                          ),
+                          padding: EdgeInsets.all(16),
+                          child: Text(
+                            messages[index].messageContent!,
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: (messages[index].messageType == "receiver"
+                                    ? Colors.black
+                                    : Colors.white)),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                );
-              },
-            ),
+                    );
+                  },
+                ),
+                 */
             Align(
               alignment: Alignment.bottomLeft,
               child: Container(
@@ -127,4 +139,6 @@ class _ChatDetailsState extends State<ChatDetails> {
           ],
         ));
   }
+
+  void init() {}
 }

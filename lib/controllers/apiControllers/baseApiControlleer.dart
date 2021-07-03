@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/interceptor.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class BaseApiController extends GetxController {
   static const bool MODE_DEVELOPMENT = false;
+  final SharedPref _sharedPref = SharedPref();
 
   static const String _baseUrl = MODE_DEVELOPMENT == true
       ? 'https://v3stage.getalice.ai/api/'
@@ -35,7 +37,10 @@ class BaseApiController extends GetxController {
       baseUrl: _baseUrl,
       connectTimeout: 30000,
       receiveTimeout: 60000,
-      headers: {_contentType: 'application/json'},
+      headers: {
+        _contentType: 'application/json',
+        "Authorization": "Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjI1MzkxOTExLCJqdGkiOiIzMDMxY2FhOWZjM2E0ZDFkOTIxNmY0YmYxYzQ5NGMxNCIsInVzZXJfaWQiOjMzfQ.f2dtZX09Hpv_JYsygXeZlx9ogYIz5mS230PWjKuhi2U"
+        },
     );
 
     _dio = Dio(dioOptions)..interceptors.add(LoggingInterceptors());
