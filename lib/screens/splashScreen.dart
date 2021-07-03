@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/utils/constant_strings.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -11,11 +12,15 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final SharedPref _sharedPref = SharedPref();
+
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () {
-      Get.offNamed(LOGIN_PAGE);
+    Timer(Duration(seconds: 2), () {
+      _sharedPref.readString("apiToken") != null
+          ? Get.offNamed(CHAT_DETAILS_PAGE)
+          : Get.offNamed(LOGIN_PAGE);
     });
   }
 

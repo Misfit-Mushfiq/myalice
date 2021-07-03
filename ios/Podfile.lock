@@ -9,12 +9,15 @@ PODS:
   - PusherSwiftWithEncryption (9.2.2):
     - NWWebSocket (~> 0.5.2)
     - TweetNacl (~> 1.0.0)
+  - shared_preferences (0.0.1):
+    - Flutter
   - TweetNacl (1.0.2)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - pusher_client (from `.symlinks/plugins/pusher_client/ios`)
+  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
 
 SPEC REPOS:
   trunk:
@@ -29,6 +32,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
   pusher_client:
     :path: ".symlinks/plugins/pusher_client/ios"
+  shared_preferences:
+    :path: ".symlinks/plugins/shared_preferences/ios"
 
 SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
@@ -36,6 +41,7 @@ SPEC CHECKSUMS:
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   pusher_client: 2cba3f134643ac90af44940be03f7db4e24b0223
   PusherSwiftWithEncryption: 7c5192445971a4105e1f425dcbcc7d0286c4fc23
+  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
 
 PODFILE CHECKSUM: e4c97c7a9aacaeda4b952f7ef9ea29e47660f622

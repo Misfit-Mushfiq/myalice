@@ -6,9 +6,9 @@ class LoginApiController extends BaseApiController {
   static String _loginPath = "accounts/login";
 
   Future<LoginResponse> login(String email, String password) async {
-    Response response = await getDio()!.post(_loginPath,data: {
-      'username':'raphhael@misfit.tech',
-      'password':'raphael1234',
+    Response response = await getDio()!.post(_loginPath, data: {
+      'username': email /* 'raphhael@misfit.tech' */,
+      'password': password /* 'raphael1234' */,
     });
     return LoginResponse.fromJson(response.data);
   }

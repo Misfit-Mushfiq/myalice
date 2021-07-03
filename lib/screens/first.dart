@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/loginApiController.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class First extends StatelessWidget {
   final LoginApiController loginApiController = Get.put(LoginApiController());
+  final SharedPref _sharedPref = SharedPref();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +16,7 @@ class First extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-           /*  GetBuilder<CountController>(
+            /*  GetBuilder<CountController>(
               // You can initialize your controller here the first time. Don't use init in your other GetBuilders of same controller
               // GetX/Obx is reactive (streams) while GetBuilder only rebuilds on update()
               builder: (s) => Text(
@@ -54,18 +56,22 @@ class First extends StatelessWidget {
                 Get.to(Second());
               },
             ),
-          */  RaisedButton(
+          */
+            RaisedButton(
               child: Text('Next Screen'),
-              onPressed: () {
-                
-              },
-            )],
+              onPressed: () {},
+            )
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            Get.find<LoginApiController>().login("","");
+            Get.find<LoginApiController>().login("", "").then((value) {
+              if (value.success!) {
+                _sharedPref.saveString("apiToken", value.access);
+              }
+            });
           }),
     );
   }

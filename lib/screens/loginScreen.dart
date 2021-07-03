@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/utils.dart';
+import 'package:get/get.dart';
+import 'package:myalice/controllers/apiControllers/loginApiController.dart';
 import 'package:myalice/utils/constant_strings.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -10,11 +14,17 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late bool passwordVisible;
+  late bool showLoader;
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  final LoginApiController loginApiController = Get.put(LoginApiController());
+  final SharedPref _sharedPref = SharedPref();
 
   @override
   void initState() {
     super.initState();
     passwordVisible = true;
+    showLoader = false;
   }
 
   @override
@@ -38,6 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     horizontal: 16.0,
                   ),
                   child: TextFormField(
+                    controller: _emailController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     autofocus: false,
                     validator: (value) {
@@ -101,7 +112,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: EdgeInsets.symmetric(
                   horizontal: 16.0,
                 ),
-                child: TextField(
+                child: TextFormField(
+                  controller: _passwordController,
                   obscureText: passwordVisible,
                   textAlign: TextAlign.start,
                   autofocus: false,
@@ -200,10 +212,35 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     color: ALICE_GREEN,
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        showLoader = !showLoader;
+                      });
+                      Get.find<LoginApiController>()
+                          .login(
+                              _emailController.text, _passwordController.text)
+                          .then((value) {
+                        if (value.success!) {
+                          _sharedPref.saveString("apiToken", value.access);
+                          Get.offNamed('chatDetailsPage');
+                        }
+                      });
+                    },
                   ),
                 ),
               ),
+              if (showLoader)
+                SpinKitChasingDots(
+                  itemBuilder: (BuildContext context, int index) {
+                    return DecoratedBox(
+                      decoration: BoxDecoration(
+                          color: index.isEven ? Colors.yellow : Colors.green,
+                          shape: BoxShape.circle),
+                    );
+                  },
+                  size: 30,
+                  duration: Duration(milliseconds: 1500),
+                ),
               SizedBox(
                 height: 24.0,
               ),
