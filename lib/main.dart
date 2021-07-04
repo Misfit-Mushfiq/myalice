@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(name: LOGIN_PAGE, page: () => LoginScreen()),
         GetPage(name: CHAT_DETAILS_PAGE, page: () => ChatDetails())
-        ],
+      ],
     );
   }
 }

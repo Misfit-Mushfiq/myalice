@@ -28,6 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        width: MediaQuery.of(context).size.width,
         color: SPLASH_SCREEN_BACKGROUND,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

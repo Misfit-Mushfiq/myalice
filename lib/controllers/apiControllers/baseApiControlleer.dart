@@ -39,7 +39,7 @@ class BaseApiController extends GetxController {
       receiveTimeout: 60000,
       headers: {
         _contentType: 'application/json',
-        "Authorization": "Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjI1MzkxOTExLCJqdGkiOiIzMDMxY2FhOWZjM2E0ZDFkOTIxNmY0YmYxYzQ5NGMxNCIsInVzZXJfaWQiOjMzfQ.f2dtZX09Hpv_JYsygXeZlx9ogYIz5mS230PWjKuhi2U"
+        "Authorization": "Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjI1NDc5Mzc3LCJqdGkiOiI2ZmM0Y2NjNTNhZjE0MGVmOThlZmJhZjA4OTI2NzFhNSIsInVzZXJfaWQiOjMzfQ.2WMpMq8wY5ENDgcF47v8GNMUtem6Xlom4il3Sv5NVMM"
         },
     );
 
