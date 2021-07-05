@@ -1,0 +1,8 @@
+import 'package:flutter/cupertino.dart';
+
+class AliceColors {
+  static const SPLASH_SCREEN_BACKGROUND = const Color(0xFF1F2937);
+  static const ALICE_GREEN = const Color(0xFF04B25F);
+  static const CHAT_RECEIVER = const Color(0xFFF3F4F6);
+  static const CHAT_SENDER = const Color(0xFF04B25F);
+}

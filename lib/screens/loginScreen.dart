@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/utils.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/loginApiController.dart';
+import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/constant_strings.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
@@ -96,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
-                          color: ALICE_GREEN,
+                          color: AliceColors.ALICE_GREEN,
                           width: 2.0,
                         ),
                         borderRadius: BorderRadius.all(
@@ -150,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: ALICE_GREEN,
+                        color: AliceColors.ALICE_GREEN,
                         width: 1.0,
                       ),
                       borderRadius: BorderRadius.all(
@@ -159,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
-                        color: ALICE_GREEN,
+                        color: AliceColors.ALICE_GREEN,
                         width: 2.0,
                       ),
                       borderRadius: BorderRadius.all(
@@ -211,7 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    color: ALICE_GREEN,
+                    color: AliceColors.ALICE_GREEN,
                     onPressed: () {
                       setState(() {
                         showLoader = !showLoader;

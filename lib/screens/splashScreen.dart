@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/utils/constant_strings.dart';
 import 'package:myalice/utils/shared_pref.dart';
+import 'package:myalice/utils/colors.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -12,15 +13,21 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  final SharedPref _sharedPref = SharedPref();
+  
 
   @override
   void initState() {
+    whichScreenToNavigate();
     super.initState();
-    Timer(Duration(seconds: 2), () {
-      _sharedPref.readString("apiToken") != null
-          ? Get.offNamed(CHAT_DETAILS_PAGE)
-          : Get.offNamed(LOGIN_PAGE);
+  }
+
+  Future<void> whichScreenToNavigate() async {
+    final SharedPref _sharedPref = SharedPref();
+    String token = await _sharedPref.readString('apiToken');
+    Timer(Duration(seconds: 2), () async {
+      null!= token
+          ? Get.offNamed(LOGIN_PAGE)
+          : Get.offNamed(CHAT_DETAILS_PAGE);
     });
   }
 
@@ -29,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
-        color: SPLASH_SCREEN_BACKGROUND,
+        color: AliceColors.SPLASH_SCREEN_BACKGROUND,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

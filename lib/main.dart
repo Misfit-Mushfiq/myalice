@@ -7,7 +7,10 @@ import 'package:myalice/screens/loginScreen.dart';
 import 'package:myalice/screens/splashScreen.dart';
 import 'package:myalice/utils/constant_strings.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override

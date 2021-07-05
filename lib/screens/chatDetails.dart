@@ -1,10 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/controllers/pusherController.dart';
 import 'package:myalice/models/chatModel/chat.dart';
-import 'package:myalice/utils/constant_strings.dart';
+import 'package:myalice/utils/colors.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class ChatDetails extends StatefulWidget {
   @override
@@ -14,11 +16,18 @@ class ChatDetails extends StatefulWidget {
 class _ChatDetailsState extends State<ChatDetails> {
   late List<ChatMessage> messages = <ChatMessage>[];
   late final PusherService pusherService;
+  final SharedPref _sharedPref = SharedPref();
 
   @override
   void initState() {
     super.initState();
     init();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _sharedPref.remove('apiToken');
   }
 
   Future<void> init() async {
@@ -59,33 +68,59 @@ class _ChatDetailsState extends State<ChatDetails> {
                                               .elementAt(index)
                                               .source ==
                                           "customer"
-                                      ? CHAT_RECEIVER
-                                      : CHAT_SENDER),
+                                      ? AliceColors.CHAT_RECEIVER
+                                      : AliceColors.CHAT_SENDER),
                                 ),
                                 padding: EdgeInsets.all(16),
-                                child: Text(
-                                  obj.chats.dataSource!
-                                              .elementAt(index)
-                                              .source ==
-                                          "customer"
-                                      ? obj.chats.dataSource!
-                                          .elementAt(index)
-                                          .data!
-                                          .text!
-                                      : obj.chats.dataSource!
-                                          .elementAt(index)
-                                          .data!
-                                          .data!
-                                          .text!,
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: (obj.chats.dataSource!
-                                                  .elementAt(index)
-                                                  .source ==
-                                              "customer"
-                                          ? Colors.black
-                                          : Colors.white)),
-                                ),
+                                child: obj.chats.dataSource!
+                                                .elementAt(index)
+                                                .data!
+                                                .type ==
+                                            "attachment" &&
+                                        obj.chats.dataSource!
+                                                .elementAt(index)
+                                                .data!
+                                                .data!
+                                                .subType ==
+                                            "image"
+                                    ? CachedNetworkImage(
+                                        imageUrl: obj.chats.dataSource!
+                                            .elementAt(index)
+                                            .data!
+                                            .data!
+                                            .urls!
+                                            .elementAt(0),
+                                        progressIndicatorBuilder: (context, url,
+                                                downloadProgress) =>
+                                            CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
+                                      )
+                                    : Text(
+                                        obj.chats.dataSource!
+                                                    .elementAt(index)
+                                                    .source ==
+                                                "customer"
+                                            ? obj.chats.dataSource!
+                                                .elementAt(index)
+                                                .data!
+                                                .text!
+                                            : obj.chats.dataSource!
+                                                .elementAt(index)
+                                                .data!
+                                                .data!
+                                                .text!,
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: (obj.chats.dataSource!
+                                                        .elementAt(index)
+                                                        .source ==
+                                                    "customer"
+                                                ? Colors.black
+                                                : Colors.white)),
+                                      ),
                               ),
                             ),
                           );
@@ -134,10 +169,11 @@ class _ChatDetailsState extends State<ChatDetails> {
                   FloatingActionButton(
                     onPressed: () async {
                       //await pusherService.pusherTrigger('test-event');
+                      Get.find<ChatApiController>().printChats().toString();
                     },
                     child: Icon(
                       Icons.send,
-                      color: ALICE_GREEN,
+                      color: AliceColors.ALICE_GREEN,
                       size: 20,
                     ),
                     backgroundColor: Colors.white,

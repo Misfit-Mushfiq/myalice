@@ -2,11 +2,13 @@ class ChatResponse {
   bool? success;
   List<DataSource>? dataSource;
   List<Actions>? actions;
+  Data? data;
 
   ChatResponse({this.success, this.dataSource, this.actions});
 
   ChatResponse.fromJson(Map<String, dynamic> json) {
     success = json['success'];
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
     if (json['dataSource'] != null) {
       dataSource = <DataSource>[];
       json['dataSource'].forEach((v) {
@@ -55,7 +57,7 @@ class DataSource {
       this.source,
       this.type,
       this.platformType,
-     // this.conversationId,
+      // this.conversationId,
       this.timestamp,
       this.platformId,
       this.projectId,
@@ -149,6 +151,7 @@ class Datam {
   List<Buttons>? buttons;
   //Null api;
   String? subType;
+  List<String>? urls;
 
   Datam(
       {this.text,
@@ -161,6 +164,10 @@ class Datam {
   Datam.fromJson(Map<String, dynamic> json) {
     text = json['text'];
     save = json['save'];
+    if (json['urls'] != null) {
+       urls = json['urls'].cast<String>();
+    }
+   
     //attribute = json['attribute'];
     if (json['buttons'] != null) {
       buttons = <Buttons>[];
@@ -182,6 +189,7 @@ class Datam {
     }
     //data['api'] = this.api;
     data['sub_type'] = this.subType;
+    data['urls'] = this.urls;
     return data;
   }
 }
