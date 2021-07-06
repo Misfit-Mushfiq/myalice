@@ -4,14 +4,15 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/models/responseModels/chatResponse.dart';
+import 'package:myalice/utils/db.dart';
 import 'package:pusher_client/pusher_client.dart';
 
-class PusherService extends GetxController {
+class PusherService extends ChatApiController {
   PusherEvent? lastEvent;
   String? lastConnectionState;
   Channel? channel;
   PusherClient? pusher;
-  var _chatResponse = ChatResponse().obs;
+  ChatDataBase _chatDataBase = ChatDataBase();
 
   StreamController<String> _eventData = StreamController<String>();
   Sink get _inEventData => _eventData.sink;
@@ -27,10 +28,10 @@ class PusherService extends GetxController {
         print(state.currentState);
       });
       channel = pusher!.subscribe(channelName);
-      channel!.bind(eventName, (event) {
-        _inEventData.add(event.data);
-        _chatResponse.update((ChatResponse? val) {
-          
+      channel!.bind(eventName, (event) async {
+        await _chatDataBase.getChats().then((value) {
+          chatResponse.add(DataSource.fromJson(jsonDecode(event.data)));
+          chatResponse.refresh();
         });
       });
     } on PlatformException catch (e) {

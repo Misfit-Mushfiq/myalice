@@ -17,23 +17,23 @@ class ChatDataBase {
       path,
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE IF NOT EXISTS chats(id INTEGER PRIMARY KEY, text TEXT, image BLOB)',
+          'CREATE TABLE IF NOT EXISTS chats(text TEXT, image_url TEXT , source TEXT, type TEXT, sub_type TEXT)',
         );
       },
       version: 1,
     );
   }
 
-  Future<void> insertChats(Data? chatData) async {
+  Future<void> insertChats(DataSource? chatData) async {
   final db = await this.database;
   await db!.insert(
     'chats',
-    chatData!.toJson(),
+    chatData!.toJsonForDB(),
     conflictAlgorithm: ConflictAlgorithm.replace,
   );
 }
 
-Future<List<Data?>> getChats() async {
+Future<List<DataSource?>> getChats() async {
   // Get a reference to the database.
   final db = await this.database;
 
@@ -42,15 +42,17 @@ Future<List<Data?>> getChats() async {
 
   // Convert the List<Map<String, dynamic> into a List<Dog>.
   return List.generate(maps.length, (i) {
-    return Data(
-      text: maps[i]['text']
+    return DataSource(
+      text: maps[i]['text'],
+      imageUrl: maps[i]["image_url"],
+      source: maps[i]["source"],
+      type: maps[i]["type"],
+      subType: maps[i]["sub_type"]
     );
   });
 }
 
   Future<void> dbClose() async {
-    if (null != _database) {
-      await _database!.close();
-    }
+    await _database!.close();
   }
 }

@@ -52,6 +52,11 @@ class DataSource {
   int? adminId;
   AdminInfo? adminInfo;
 
+  //For DB
+  String? text;
+  String? imageUrl;
+  String? subType;
+
   DataSource(
       {this.sId,
       this.source,
@@ -66,7 +71,10 @@ class DataSource {
       this.success,
       this.report,
       this.adminId,
-      this.adminInfo});
+      this.adminInfo,
+      this.text,
+      this.imageUrl,
+      this.subType});
 
   DataSource.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -86,6 +94,7 @@ class DataSource {
     adminInfo = json['admin_info'] != null
         ? new AdminInfo.fromJson(json['admin_info'])
         : null;
+    this.text= json['text'];
   }
 
   Map<String, dynamic> toJson() {
@@ -111,6 +120,27 @@ class DataSource {
       data['admin_info'] = this.adminInfo!.toJson();
     }
     return data;
+  }
+
+  Map<String, dynamic> toJsonForDB() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['text'] =
+        this.source == "customer" ? this.data!.text : this.data!.data!.text;
+    data['image_url'] = this.data!.type == "attachment"
+        ? this.data!.data!.subType == "image"
+            ? this.data!.data!.urls!.elementAt(0)
+            : ""
+        : "";
+    data['source'] = this.source;
+    data['type'] = this.data!.type;
+    data['sub_type'] =
+        this.data!.type == "attachment" ? this.data!.data!.subType : "";
+    return data;
+  }
+
+  @override
+  String toString() {
+    return 'Chats {text : ${this.source == "customer" ? this.data!.text : this.data!.data!.text}}';
   }
 }
 
@@ -165,9 +195,9 @@ class Datam {
     text = json['text'];
     save = json['save'];
     if (json['urls'] != null) {
-       urls = json['urls'].cast<String>();
+      urls = json['urls'].cast<String>();
     }
-   
+
     //attribute = json['attribute'];
     if (json['buttons'] != null) {
       buttons = <Buttons>[];

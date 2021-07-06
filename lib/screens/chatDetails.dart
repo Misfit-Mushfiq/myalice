@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/controllers/pusherController.dart';
 import 'package:myalice/models/chatModel/chat.dart';
+import 'package:myalice/models/responseModels/chatResponse.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
@@ -46,7 +47,7 @@ class _ChatDetailsState extends State<ChatDetails> {
               child: Obx(() {
                 return Get.find<ChatApiController>().isDataAvailable
                     ? ListView.builder(
-                        itemCount: obj.chats.dataSource!.length,
+                        itemCount: obj.chats.length,
                         shrinkWrap: true,
                         padding: EdgeInsets.only(top: 10, bottom: 10),
                         physics: AlwaysScrollableScrollPhysics(),
@@ -55,41 +56,27 @@ class _ChatDetailsState extends State<ChatDetails> {
                             padding: EdgeInsets.only(
                                 left: 14, right: 14, top: 10, bottom: 10),
                             child: Align(
-                              alignment: (obj.chats.dataSource!
-                                          .elementAt(index)
-                                          .source ==
+                              alignment: (obj.chats.elementAt(index)!.source ==
                                       "customer"
                                   ? Alignment.topLeft
                                   : Alignment.topRight),
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
-                                  color: (obj.chats.dataSource!
-                                              .elementAt(index)
-                                              .source ==
+                                  color: (obj.chats.elementAt(index)!.source ==
                                           "customer"
                                       ? AliceColors.CHAT_RECEIVER
                                       : AliceColors.CHAT_SENDER),
                                 ),
                                 padding: EdgeInsets.all(16),
-                                child: obj.chats.dataSource!
-                                                .elementAt(index)
-                                                .data!
-                                                .type ==
+                                child: obj.chats.elementAt(index)!.type ==
                                             "attachment" &&
-                                        obj.chats.dataSource!
-                                                .elementAt(index)
-                                                .data!
-                                                .data!
-                                                .subType ==
+                                        obj.chats.elementAt(index)!.subType ==
                                             "image"
                                     ? CachedNetworkImage(
-                                        imageUrl: obj.chats.dataSource!
-                                            .elementAt(index)
-                                            .data!
-                                            .data!
-                                            .urls!
-                                            .elementAt(0),
+                                        imageUrl: obj.chats
+                                            .elementAt(index)!
+                                            .imageUrl!,
                                         progressIndicatorBuilder: (context, url,
                                                 downloadProgress) =>
                                             CircularProgressIndicator(
@@ -99,23 +86,14 @@ class _ChatDetailsState extends State<ChatDetails> {
                                             Icon(Icons.error),
                                       )
                                     : Text(
-                                        obj.chats.dataSource!
-                                                    .elementAt(index)
-                                                    .source ==
+                                        obj.chats.elementAt(index)!.source ==
                                                 "customer"
-                                            ? obj.chats.dataSource!
-                                                .elementAt(index)
-                                                .data!
-                                                .text!
-                                            : obj.chats.dataSource!
-                                                .elementAt(index)
-                                                .data!
-                                                .data!
-                                                .text!,
+                                            ? obj.chats.elementAt(0)!.text!
+                                            : obj.chats.elementAt(0)!.text!,
                                         style: TextStyle(
                                             fontSize: 12,
-                                            color: (obj.chats.dataSource!
-                                                        .elementAt(index)
+                                            color: (obj.chats
+                                                        .elementAt(index)!
                                                         .source ==
                                                     "customer"
                                                 ? Colors.black
@@ -169,7 +147,7 @@ class _ChatDetailsState extends State<ChatDetails> {
                   FloatingActionButton(
                     onPressed: () async {
                       //await pusherService.pusherTrigger('test-event');
-                      Get.find<ChatApiController>().printChats().toString();
+                      Get.find<ChatApiController>().chatResponse.add(DataSource.fromJson({"Text":"hello","source":"customer","sub_type":"","type":""}));
                     },
                     child: Icon(
                       Icons.send,

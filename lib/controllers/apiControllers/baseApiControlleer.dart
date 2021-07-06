@@ -38,8 +38,7 @@ class BaseApiController extends GetxController {
       connectTimeout: 30000,
       receiveTimeout: 60000,
       headers: {
-        _contentType: 'application/json',
-        "Authorization": "Token eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjI1NTc1NTk1LCJqdGkiOiI3NmZiZTg0MWE4M2I0M2MyOGVjOGMxOTE0Nzc2OWE5NiIsInVzZXJfaWQiOjMzfQ.PZsZ21DdEH63wXIpoKPBW9BlIolgtbGb_ZhQJprt1fI"
+        _contentType: 'application/json'
         },
     );
 

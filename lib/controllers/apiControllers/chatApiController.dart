@@ -1,38 +1,51 @@
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/baseApiControlleer.dart';
 import 'package:myalice/models/responseModels/chatResponse.dart';
 import 'package:myalice/utils/db.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class ChatApiController extends BaseApiController {
   static String _chatPath = "/crm/tickets/932/messenger-chat";
-  var _chatResponse = ChatResponse().obs;
+  var chatResponse = <DataSource?>[].obs;
   var dataAvailable = false.obs;
   bool get isDataAvailable => dataAvailable.value;
-  ChatResponse get chats => _chatResponse.value;
+  List<DataSource?> get chats => chatResponse.value;
   ChatDataBase _chatDataBase = ChatDataBase();
+  final SharedPref _sharedPref = SharedPref();
+  late String? token;
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
+    token = await _sharedPref.readString("apiToken");
     getChats();
   }
 
   void getChats() async {
-    getDio()!.get(_chatPath).then((value) async {
+    getDio()!
+        .get(_chatPath,
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((value) async {
       if (value.statusCode == 200) {
+        ChatResponse response = ChatResponse.fromJson(value.data);
+/* 
         _chatResponse.update((val) {
-          val!.dataSource = ChatResponse.fromJson(value.data).dataSource;
-        });
-        ChatResponse chatResponse = ChatResponse.fromJson(value.data);
+          val!.data = DataSource.fromJson(value.data).data;
+        }); */
 
-        for (int i = 0; i < chatResponse.dataSource!.length; i++) {
-          await _chatDataBase.insertChats(chatResponse.dataSource![i].data);
+        for (int i = 0; i < response.dataSource!.length; i++) {
+          await _chatDataBase.insertChats(response.dataSource![i]);
         }
+        _chatDataBase.getChats().then((value) {
+          for (int i = 0; i < value.length; i++) {
+            chatResponse.add(value[i]);
+          }
+        });
       }
-    }).whenComplete(() => dataAvailable.value = true);
-  }
-
-  printChats() {
-    return _chatDataBase.getChats();
+    }).whenComplete(() {
+      dataAvailable.value = true;
+      chatResponse.refresh();
+    });
   }
 }

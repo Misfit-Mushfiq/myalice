@@ -13,7 +13,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  
+  String? token;
 
   @override
   void initState() {
@@ -23,9 +23,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> whichScreenToNavigate() async {
     final SharedPref _sharedPref = SharedPref();
-    String token = await _sharedPref.readString('apiToken');
-    Timer(Duration(seconds: 2), () async {
-      null!= token
+    token = await _sharedPref.readString('apiToken');
+    print(token);
+    Timer(Duration(seconds: 3), () {
+      token == null 
           ? Get.offNamed(LOGIN_PAGE)
           : Get.offNamed(CHAT_DETAILS_PAGE);
     });
