@@ -30,7 +30,10 @@ class PusherService extends ChatApiController {
       channel = pusher!.subscribe(channelName);
       channel!.bind(eventName, (event) async {
         await _chatDataBase.getChats().then((value) {
-          chatResponse.add(DataSource.fromJson(jsonDecode(event.data)));
+          Map<String, dynamic> text = jsonDecode(event.data);
+          Get.find<ChatApiController>()
+              .chatResponse
+              .add(DataSource(text: text['data']['text'],source: text['source'],type: text['type']));
           chatResponse.refresh();
         });
       });

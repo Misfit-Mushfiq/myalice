@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ class _ChatDetailsState extends State<ChatDetails> {
   late List<ChatMessage> messages = <ChatMessage>[];
   late final PusherService pusherService;
   final SharedPref _sharedPref = SharedPref();
-
+  final ScrollController _scrollController = new ScrollController();
   @override
   void initState() {
     super.initState();
@@ -36,19 +38,30 @@ class _ChatDetailsState extends State<ChatDetails> {
     await pusherService.connectPusher('chat-C_593', "messages");
   }
 
+  void animateToScreenEnd(){
+    Timer(
+    Duration(seconds: 1),
+    () => _scrollController.jumpTo(_scrollController.position.maxScrollExtent),
+  );
+  }
+
   @override
   Widget build(BuildContext context) {
     final obj = Get.put(ChatApiController());
+    animateToScreenEnd();
     return Scaffold(
         appBar: AppBar(),
         body: Column(
           children: <Widget>[
             Expanded(
               child: Obx(() {
-                return Get.find<ChatApiController>().isDataAvailable
+                animateToScreenEnd();
+                return                 
+                Get.find<ChatApiController>().isDataAvailable
                     ? ListView.builder(
                         itemCount: obj.chats.length,
                         shrinkWrap: true,
+                        controller: _scrollController,
                         padding: EdgeInsets.only(top: 10, bottom: 10),
                         physics: AlwaysScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
@@ -88,8 +101,8 @@ class _ChatDetailsState extends State<ChatDetails> {
                                     : Text(
                                         obj.chats.elementAt(index)!.source ==
                                                 "customer"
-                                            ? obj.chats.elementAt(0)!.text!
-                                            : obj.chats.elementAt(0)!.text!,
+                                            ? obj.chats.elementAt(index)!.text!
+                                            : obj.chats.elementAt(index)!.text!,
                                         style: TextStyle(
                                             fontSize: 12,
                                             color: (obj.chats
@@ -147,7 +160,13 @@ class _ChatDetailsState extends State<ChatDetails> {
                   FloatingActionButton(
                     onPressed: () async {
                       //await pusherService.pusherTrigger('test-event');
-                      Get.find<ChatApiController>().chatResponse.add(DataSource.fromJson({"Text":"hello","source":"customer","sub_type":"","type":""}));
+                      Get.find<ChatApiController>().chatResponse.add(
+                              DataSource.fromJson({
+                            "text": "hi",
+                            "source": "admin",
+                            "sub_type": "",
+                            "type": ""
+                          }));
                     },
                     child: Icon(
                       Icons.send,
