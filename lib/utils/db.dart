@@ -6,7 +6,7 @@ class ChatDataBase {
   static Database? _database;
 
   Future<Database?> get database async {
-    if (_database != null) return _database;
+    if (_database != null && _database!.isOpen) return _database;
     _database = await initDatabase();
     return _database;
   }
@@ -25,34 +25,35 @@ class ChatDataBase {
   }
 
   Future<void> insertChats(DataSource? chatData) async {
-  final db = await this.database;
-  await db!.insert(
-    'chats',
-    chatData!.toJsonForDB(),
-    conflictAlgorithm: ConflictAlgorithm.replace,
-  );
-}
-
-Future<List<DataSource?>> getChats() async {
-  // Get a reference to the database.
-  final db = await this.database;
-
-  // Query the table for all The Dogs.
-  final List<Map<String, dynamic>> maps = await db!.query('chats');
-
-  // Convert the List<Map<String, dynamic> into a List<Dog>.
-  return List.generate(maps.length, (i) {
-    return DataSource(
-      text: maps[i]['text'],
-      imageUrl: maps[i]["image_url"],
-      source: maps[i]["source"],
-      type: maps[i]["type"],
-      subType: maps[i]["sub_type"]
+    final db = await this.database;
+    await db!.insert(
+      'chats',
+      chatData!.toJsonForDB(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
-  });
-}
+  }
+
+  Future<List<DataSource?>> getChats() async {
+    // Get a reference to the database.
+    final db = await this.database;
+
+    // Query the table for all The Dogs.
+    final List<Map<String, dynamic>> maps = await db!.query('chats');
+
+    // Convert the List<Map<String, dynamic> into a List<Dog>.
+    return List.generate(maps.length, (i) {
+      return DataSource(
+          text: maps[i]['text'],
+          imageUrl: maps[i]["image_url"],
+          source: maps[i]["source"],
+          type: maps[i]["type"],
+          subType: maps[i]["sub_type"]);
+    });
+  }
 
   Future<void> dbClose() async {
+    String path = join(await getDatabasesPath(), "alice_chat.db");
     await _database!.close();
+    deleteDatabase(path);
   }
 }

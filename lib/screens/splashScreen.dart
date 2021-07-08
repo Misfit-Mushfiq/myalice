@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myalice/screens/first.dart';
 import 'package:myalice/utils/constant_strings.dart';
 import 'package:myalice/utils/shared_pref.dart';
 import 'package:myalice/utils/colors.dart';
@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(Duration(seconds: 3), () {
       token == null 
           ? Get.offNamed(LOGIN_PAGE)
-          : Get.offNamed(CHAT_DETAILS_PAGE);
+          : Get.off(First());
     });
   }
 

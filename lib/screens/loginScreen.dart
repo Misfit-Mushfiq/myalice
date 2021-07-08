@@ -23,9 +23,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    super.initState();
     passwordVisible = true;
     showLoader = false;
+    super.initState();
   }
 
   @override
@@ -196,12 +196,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 child: ConstrainedBox(
                   constraints: BoxConstraints(minWidth: double.infinity),
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(
+                  child: ElevatedButton(
+                    /* shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(10.0),
                       ),
-                    ),
+                    ), */
                     child: Padding(
                       padding: EdgeInsets.all(
                         16.0,
@@ -212,7 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    color: AliceColors.ALICE_GREEN,
+                    //color: AliceColors.ALICE_GREEN,
                     onPressed: () {
                       setState(() {
                         showLoader = !showLoader;

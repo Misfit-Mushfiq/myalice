@@ -10,7 +10,7 @@ class ChatApiController extends BaseApiController {
   var chatResponse = <DataSource?>[].obs;
   var dataAvailable = false.obs;
   bool get isDataAvailable => dataAvailable.value;
-  List<DataSource?> get chats => chatResponse.value;
+  List<DataSource?> get chats => chatResponse;
   ChatDataBase _chatDataBase = ChatDataBase();
   final SharedPref _sharedPref = SharedPref();
   late String? token;
@@ -47,5 +47,9 @@ class ChatApiController extends BaseApiController {
       dataAvailable.value = true;
       chatResponse.refresh();
     });
+  }
+
+  Future<void> closeDB() async {
+    await _chatDataBase.dbClose();
   }
 }

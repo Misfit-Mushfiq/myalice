@@ -1,11 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/interceptor.dart';
-import 'package:myalice/utils/shared_pref.dart';
 
 class BaseApiController extends GetxController {
   static const bool MODE_DEVELOPMENT = false;
-  final SharedPref _sharedPref = SharedPref();
 
   static const String _baseUrl = MODE_DEVELOPMENT == true
       ? 'https://v3stage.getalice.ai/api/'

@@ -1,5 +1,8 @@
 PODS:
   - Flutter (1.0.0)
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
   - NWWebSocket (0.5.2)
   - path_provider (0.0.1):
     - Flutter
@@ -11,6 +14,9 @@ PODS:
     - TweetNacl (~> 1.0.0)
   - shared_preferences (0.0.1):
     - Flutter
+  - sqflite (0.0.2):
+    - Flutter
+    - FMDB (>= 2.7.5)
   - TweetNacl (1.0.2)
 
 DEPENDENCIES:
@@ -18,9 +24,11 @@ DEPENDENCIES:
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - pusher_client (from `.symlinks/plugins/pusher_client/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
 
 SPEC REPOS:
   trunk:
+    - FMDB
     - NWWebSocket
     - PusherSwiftWithEncryption
     - TweetNacl
@@ -34,14 +42,18 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/pusher_client/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   NWWebSocket: 21f0c73639815da3272862c912275b26102aa80c
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   pusher_client: 2cba3f134643ac90af44940be03f7db4e24b0223
   PusherSwiftWithEncryption: 7c5192445971a4105e1f425dcbcc7d0286c4fc23
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
+  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
 
 PODFILE CHECKSUM: e4c97c7a9aacaeda4b952f7ef9ea29e47660f622

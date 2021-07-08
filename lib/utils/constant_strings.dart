@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 ///APP TEXTS///
 const MY_ALICE = 'myalice';
 const ALICE_LABS = 'Alice Labs';
