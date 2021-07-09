@@ -23,6 +23,8 @@ dependencies:
   cached_network_image: ^3.0.0
   sqflite: ^2.0.0+3
   scrollable_positioned_list: ^0.1.10
+  smart_select: ^4.3.2
+  
 
 dev_dependencies:
   flutter_test:

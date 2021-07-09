@@ -13,7 +13,6 @@ class PusherService extends ChatApiController {
   String? lastConnectionState;
   Channel? channel;
   PusherClient? pusher;
-  ChatDataBase _chatDataBase = ChatDataBase();
 
 
   Future<void> connectPusher(String channelName, String eventName) async {
@@ -32,6 +31,7 @@ class PusherService extends ChatApiController {
               .chatResponse
               .add(DataSource(text: text['data']['text'],source: text['source'],type: text['type']));
       });
+      
     } on PlatformException catch (e) {
       print(e.message);
     }

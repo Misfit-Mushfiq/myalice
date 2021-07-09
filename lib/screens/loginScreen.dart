@@ -4,6 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/utils.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/loginApiController.dart';
+import 'package:myalice/screens/first.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/constant_strings.dart';
 import 'package:myalice/utils/shared_pref.dart';
@@ -223,7 +224,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           .then((value) {
                         if (value.success!) {
                           _sharedPref.saveString("apiToken", value.access);
-                          Get.offNamed('chatDetailsPage');
+                          //Get.offNamed('chatDetailsPage');
+                          Get.to(First());
                         }
                       });
                     },
