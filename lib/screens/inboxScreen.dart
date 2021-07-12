@@ -1,12 +1,10 @@
+import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:myalice/custom%20widgets/BottomOptionWidget.dart';
 import 'package:myalice/utils/colors.dart';
-import 'package:smart_select/smart_select.dart';
 import 'package:myalice/utils/choices.dart' as choices;
+import 'package:smart_select/smart_select.dart';
 
 class Inbox extends StatefulWidget {
   @override
@@ -15,6 +13,7 @@ class Inbox extends StatefulWidget {
 
 class _InboxState extends State<Inbox> {
   String _os = 'win';
+
   final globalKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -50,7 +49,43 @@ class _InboxState extends State<Inbox> {
                 child: Row(
                   children: [
                     Expanded(
-                        child: SmartSelect<String>.single(
+                        child: GestureDetector(
+                      
+                      child: Container(
+                        margin: EdgeInsets.only(left: 8.0),
+                        child: Row(
+                        children: [
+                          Text('Pending Text',style: TextStyle(color: Colors.white),),
+                          SizedBox(width: 5,),
+                          Icon(Icons.arrow_drop_down_outlined,color: Colors.white,)
+                        ],
+                      ),),
+                      onTap: () {
+                        globalKey.currentState!
+                            .showBottomSheet((BuildContext context) {
+                          return Container(
+                            height: 200,
+                            color: Colors.amber,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  const Text('BottomSheet'),
+                                  ElevatedButton(
+                                      child: const Text('Close BottomSheet'),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      })
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                      },
+                    )
+
+                        /* SmartSelect<String>.single(
                       title: _os,
                       choiceItems: choices.ticketType,
                       modalHeader: false,
@@ -65,6 +100,7 @@ class _InboxState extends State<Inbox> {
                           isTwoLine: true,
                           hideValue: true,
                           dense: true,
+                          selected: true,
                           trailing: Text(''),
                           title: Padding(
                             padding: const EdgeInsets.only(bottom: 5),
@@ -81,7 +117,8 @@ class _InboxState extends State<Inbox> {
                         );
                       },
                       value: _os,
-                    )),
+                    ) */
+                        ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset("assets/launch_icon/filter.svg"),
@@ -99,24 +136,154 @@ class _InboxState extends State<Inbox> {
               preferredSize: Size.fromHeight(40.0)),
         ),
         body: Container(
-          child: SmartSelect<String>.single(
-            title: 'OS',
-            choiceItems: choices.os,
-            onChange: (selected) => setState(() => _os = selected.value),
-            modalType: S2ModalType.bottomSheet,
-            tileBuilder: (context, state) {
-              return S2Tile.fromState(
-                state,
-                isTwoLine: true,
-                leading: const CircleAvatar(
-                  backgroundImage: NetworkImage(
-                    'https://source.unsplash.com/xsGxhtAsfSA/100x100',
-                  ),
-                ),
-              );
-            },
-            value: _os,
-          ),
-        ));
+            child: ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Card(
+                    margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
+                    clipBehavior: Clip.hardEdge,
+                    borderOnForeground: true,
+                    elevation: 3,
+                    child: Column(
+                      children: [
+                        ListTile(
+                          visualDensity:
+                              VisualDensity(horizontal: 0, vertical: -4),
+                          horizontalTitleGap: 10,
+                          selected: true,
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                "https://picsum.photos/250?image=9"),
+                          ),
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(20.0, 0.0, 15.0, 0.0),
+                          title: Text("Mr. Baal"),
+                          subtitle: Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Row(children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: AliceColors.ALICE_GREY,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.facebook,
+                                        size: 15,
+                                      ),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(
+                                        "Online Store",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Spacer()
+                              ])),
+                          trailing: Column(
+                            children: [Text('5 mins ago')],
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(20.0, 0.0, 15.0, 0.0),
+                          child: Divider(
+                            color: Colors.grey[300],
+                            thickness: 0.5,
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.fromLTRB(20.0, 0.0, 15.0, 10.0),
+                          child: Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: AliceColors.ALICE_GREY,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            8.0, 3.0, 0.0, 3.0),
+                                        child: CircleAvatar(
+                                          radius: 10,
+                                          backgroundImage: NetworkImage(
+                                              "https://picsum.photos/250?image=9"),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            8.0, 3.0, 8.0, 3.0),
+                                        child: Text(
+                                          "Chef's Food",
+                                          style: TextStyle(fontSize: 12),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                Spacer(),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: AliceColors.ALICE_GREY,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Row(
+                                      children: [
+                                        CircleAvatar(
+                                          backgroundColor:
+                                              AliceColors.ALICE_GREEN,
+                                          radius: 5,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          "Low",
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: AliceColors.ALICE_GREY,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Icon(
+                                      Icons.lock,
+                                      size: 15,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                itemCount: 10)));
   }
 }
