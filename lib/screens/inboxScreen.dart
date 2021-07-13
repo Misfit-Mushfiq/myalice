@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/choices.dart' as choices;
@@ -13,6 +14,9 @@ class Inbox extends StatefulWidget {
 
 class _InboxState extends State<Inbox> {
   String _os = 'win';
+  String _ticketType = 'Pending Tickets';
+  bool _pendingSelected = true;
+  bool _resolvedSelected = false;
 
   final globalKey = GlobalKey<ScaffoldState>();
   @override
@@ -50,33 +54,58 @@ class _InboxState extends State<Inbox> {
                   children: [
                     Expanded(
                         child: GestureDetector(
-                      
                       child: Container(
                         margin: EdgeInsets.only(left: 8.0),
                         child: Row(
-                        children: [
-                          Text('Pending Text',style: TextStyle(color: Colors.white),),
-                          SizedBox(width: 5,),
-                          Icon(Icons.arrow_drop_down_outlined,color: Colors.white,)
-                        ],
-                      ),),
+                          children: [
+                            Text(
+                              _ticketType,
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Icon(
+                              Icons.arrow_drop_down_outlined,
+                              color: Colors.white,
+                            )
+                          ],
+                        ),
+                      ),
                       onTap: () {
                         globalKey.currentState!
                             .showBottomSheet((BuildContext context) {
                           return Container(
                             height: 200,
-                            color: Colors.amber,
                             child: Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
-                                  const Text('BottomSheet'),
-                                  ElevatedButton(
-                                      child: const Text('Close BottomSheet'),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      })
+                                  ListTile(
+                                    title: Text('Pending Tickets'),
+                                    trailing: _pendingSelected? Icon(Icons.check) : null,
+                                    onTap: () {
+                                      setState(() {
+                                        _ticketType = "Pending Tickets";
+                                        _pendingSelected = true;
+                                        _resolvedSelected= false;
+                                      });
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  ListTile(
+                                    title: Text('Resolved Tickets'),
+                                    trailing: _resolvedSelected? Icon(Icons.check) : null,
+                                    onTap: () {
+                                      setState(() {
+                                        _ticketType = "Resolved Tickets";
+                                        _pendingSelected = false;
+                                        _resolvedSelected= true;
+                                      });
+                                      Navigator.of(context).pop();
+                                    },
+                                  )
                                 ],
                               ),
                             ),
@@ -142,7 +171,6 @@ class _InboxState extends State<Inbox> {
                   return Card(
                     margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
                     clipBehavior: Clip.hardEdge,
-                    borderOnForeground: true,
                     elevation: 3,
                     child: Column(
                       children: [
@@ -157,7 +185,10 @@ class _InboxState extends State<Inbox> {
                           ),
                           contentPadding:
                               const EdgeInsets.fromLTRB(20.0, 0.0, 15.0, 0.0),
-                          title: Text("Mr. Baal"),
+                          title: Text(
+                            "Mr. Baal",
+                            style: TextStyle(color: Colors.black),
+                          ),
                           subtitle: Padding(
                               padding: const EdgeInsets.only(top: 8.0),
                               child: Row(children: [
@@ -178,8 +209,9 @@ class _InboxState extends State<Inbox> {
                                       Text(
                                         "Online Store",
                                         style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold),
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                        ),
                                       )
                                     ],
                                   ),
@@ -187,7 +219,12 @@ class _InboxState extends State<Inbox> {
                                 Spacer()
                               ])),
                           trailing: Column(
-                            children: [Text('5 mins ago')],
+                            children: [
+                              Text(
+                                '5 mins ago',
+                                style: TextStyle(color: Colors.grey),
+                              )
+                            ],
                           ),
                         ),
                         Padding(
@@ -216,7 +253,7 @@ class _InboxState extends State<Inbox> {
                                         padding: const EdgeInsets.fromLTRB(
                                             8.0, 3.0, 0.0, 3.0),
                                         child: CircleAvatar(
-                                          radius: 10,
+                                          radius: 8,
                                           backgroundImage: NetworkImage(
                                               "https://picsum.photos/250?image=9"),
                                         ),
@@ -252,9 +289,7 @@ class _InboxState extends State<Inbox> {
                                         ),
                                         Text(
                                           "Low",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 12),
+                                          style: TextStyle(fontSize: 12),
                                         )
                                       ],
                                     ),
