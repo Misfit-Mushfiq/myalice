@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:myalice/controllers/apiControllers/baseApiControlleer.dart';
+import 'package:myalice/controllers/apiControllers/baseApiController.dart';
 import 'package:myalice/models/responseModels/loginResponse.dart';
 
 class LoginApiController extends BaseApiController {

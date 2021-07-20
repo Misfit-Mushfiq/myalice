@@ -6,4 +6,5 @@ class AliceColors {
   static const CHAT_RECEIVER = const Color(0xFFF3F4F6);
   static const CHAT_SENDER = const Color(0xFF04B25F);
   static const ALICE_GREY = const Color(0xFFF3F4F6);
+  static const ALICE_BLUE = const Color(0xFF0078CF);
 }

@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/utils.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/loginApiController.dart';
-import 'package:myalice/screens/first.dart';
+import 'package:myalice/utils/routes.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/constant_strings.dart';
 import 'package:myalice/utils/shared_pref.dart';
@@ -61,39 +61,36 @@ class _LoginScreenState extends State<LoginScreen> {
                     decoration: InputDecoration(
                       hintText: "Email address",
                       focusedErrorBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.red,
-                          width: 1.0,
-                        ),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10.0),
-                        ),
-                      ),
+                          borderSide: BorderSide(
+                            color: Colors.red,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10.0),
+                            topRight: Radius.circular(10.0),
+                          )),
                       errorBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.red,
                           width: 1.0,
                         ),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10.0),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10.0),
+                          topRight: Radius.circular(10.0),
                         ),
                       ),
                       contentPadding: EdgeInsets.symmetric(
                         vertical: 0.0,
                         horizontal: 20.0,
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10.0),
-                        ),
-                      ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
                           width: 1.0,
                         ),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10.0),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10.0),
+                          topRight: Radius.circular(10.0),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
@@ -101,15 +98,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: AliceColors.ALICE_GREEN,
                           width: 2.0,
                         ),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10.0),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10.0),
+                          topRight: Radius.circular(10.0),
                         ),
                       ),
                     ),
                   )),
-              SizedBox(
-                height: 16.0,
-              ),
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: 16.0,
@@ -123,22 +118,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     hintText: "Password",
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.red,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
-                      ),
-                    ),
                     errorBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.red,
                         width: 1.0,
                       ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10.0),
+                        topRight: Radius.circular(10.0),
                       ),
                     ),
                     contentPadding: EdgeInsets.symmetric(
@@ -146,17 +133,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       horizontal: 20.0,
                     ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: AliceColors.ALICE_GREEN,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(10.0),
+                        bottomRight: Radius.circular(10.0),
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -164,8 +143,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: AliceColors.ALICE_GREEN,
                         width: 2.0,
                       ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(10.0),
+                        bottomRight: Radius.circular(10.0),
                       ),
                     ),
                     suffixIcon: IconButton(
@@ -203,6 +183,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         Radius.circular(10.0),
                       ),
                     ), */
+                    style: ElevatedButton.styleFrom(
+                        primary: AliceColors.ALICE_GREEN),
                     child: Padding(
                       padding: EdgeInsets.all(
                         16.0,
@@ -225,7 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (value.success!) {
                           _sharedPref.saveString("apiToken", value.access);
                           //Get.offNamed('chatDetailsPage');
-                          Get.to(First());
+                          Get.offNamed(INBOX_PAGE);
                         }
                       });
                     },
@@ -245,14 +227,34 @@ class _LoginScreenState extends State<LoginScreen> {
                   duration: Duration(milliseconds: 1500),
                 ),
               SizedBox(
-                height: 24.0,
+                height: 20.0,
               ),
-              GestureDetector(
-                child: Text(
-                  'Forgot Password?',
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
                 ),
-                onTap: () {},
-              ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      child: Text(
+                        'Need to sign up?',
+                        style: TextStyle(color: AliceColors.ALICE_BLUE),
+                      ),
+                      onTap: () {
+                        Get.toNamed(SIGNUP_PAGE);
+                      },
+                    ),
+                    GestureDetector(
+                      child: Text(
+                        'Forgot Password?',
+                        style: TextStyle(color: AliceColors.ALICE_BLUE),
+                      ),
+                      onTap: () {},
+                    ),
+                  ],
+                ),
+              )
             ],
           ),
         ));

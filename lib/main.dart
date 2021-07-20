@@ -6,8 +6,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/screens/inboxScreen.dart';
 import 'package:myalice/screens/loginScreen.dart';
+import 'package:myalice/screens/signUpScreen.dart';
 import 'package:myalice/screens/splashScreen.dart';
-import 'package:myalice/utils/constant_strings.dart';
+import 'package:myalice/utils/routes.dart';
+
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +32,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: LOGIN_PAGE, page: () => LoginScreen()),
         GetPage(name: CHAT_DETAILS_PAGE, page: () => ChatDetails()),
         GetPage(name: INBOX_PAGE, page: () => Inbox()),
+        GetPage(name: SIGNUP_PAGE, page: () => SignUpScreen()),
       ],
     );
   }

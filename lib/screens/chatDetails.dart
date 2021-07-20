@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/controllers/pusherController.dart';
@@ -49,7 +50,44 @@ class _ChatDetailsState extends State<ChatDetails> {
   Widget build(BuildContext context) {
     final obj = Get.put(ChatApiController());
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          title: Text(
+            'Mark Tewin',
+            style: TextStyle(fontWeight: FontWeight.normal),
+          ),
+          leadingWidth: 25.0,
+          centerTitle: false,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
+              child: Row(
+                children: [
+                  InkWell(
+                    child: Container(
+                        child: Text(
+                          'Resolve',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.black, fontSize: 12),
+                        ),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5)),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 5)),
+                  ),
+                  SizedBox(width: 5),
+                  Icon(
+                    Icons.info_rounded,
+                  )
+                ],
+              ),
+            ),
+          ],
+          bottom: PreferredSize(
+              child: ChatAppBarBottomSection(),
+              preferredSize: Size.fromHeight(40.0)),
+        ),
         body: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
@@ -69,7 +107,7 @@ class _ChatDetailsState extends State<ChatDetails> {
                             Get.find<ChatApiController>().chats.length) {
                           animateToScreenEnd();
                         }
-                        
+
                         //print(index);
                         return Container(
                           padding: EdgeInsets.only(
@@ -191,5 +229,156 @@ class _ChatDetailsState extends State<ChatDetails> {
                 )
               ],
             )));
+  }
+}
+
+class ChatAppBarBottomSection extends StatefulWidget {
+  @override
+  _ChatAppBarBottomSectionState createState() =>
+      _ChatAppBarBottomSectionState();
+}
+
+class _ChatAppBarBottomSectionState extends State<ChatAppBarBottomSection> {
+  String _ticketType = 'Pending Tickets';
+  bool _pendingSelected = true;
+  bool _resolvedSelected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: AliceColors.ALICE_GREY,
+      height: 40.0,
+      child: Row(
+        children: [
+          Expanded(
+              child: GestureDetector(
+            child: Container(
+              margin: EdgeInsets.only(left: 8.0),
+              child: Row(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: Offset(0, 0), // changes position of shadow
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.grey[200]),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.sell,
+                        size: 15,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 30),
+                  Text(
+                    "Agents",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Icon(
+                    Icons.arrow_drop_down_outlined,
+                    color: Colors.white,
+                  )
+                ],
+              ),
+            ),
+            onTap: () {
+              Scaffold.of(context).showBottomSheet((BuildContext context) {
+                return Container(
+                  height: 200,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          title: Text('Pending Tickets'),
+                          trailing: _pendingSelected ? Icon(Icons.check) : null,
+                          onTap: () {
+                            setState(() {
+                              _ticketType = "Pending Tickets";
+                              _pendingSelected = true;
+                              _resolvedSelected = false;
+                            });
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        ListTile(
+                          title: Text('Resolved Tickets'),
+                          trailing:
+                              _resolvedSelected ? Icon(Icons.check) : null,
+                          onTap: () {
+                            setState(() {
+                              _ticketType = "Resolved Tickets";
+                              _pendingSelected = false;
+                              _resolvedSelected = true;
+                            });
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
+          )
+              /* SmartSelect<String>.single(
+                      title: _os,
+                      choiceItems: choices.ticketType,
+                      modalHeader: false,
+                      choiceType: S2ChoiceType.radios,
+                      choiceStyle: S2ChoiceStyle(activeColor: Colors.green),
+                      onChange: (selected) =>
+                          setState(() => _os = selected.value),
+                      modalType: S2ModalType.bottomSheet,
+                      tileBuilder: (context, state) {
+                        return S2Tile.fromState(
+                          state,
+                          isTwoLine: true,
+                          hideValue: true,
+                          dense: true,
+                          selected: true,
+                          trailing: Text(''),
+                          title: Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Text(
+                              _os,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 14),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                          padding: EdgeInsets.only(bottom: 10.0, left: 8.0),
+                        );
+                      },
+                      value: _os,
+                    ) */
+              ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SvgPicture.asset("assets/launch_icon/filter.svg"),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SvgPicture.asset(
+              "assets/launch_icon/descending.svg",
+              height: 15,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

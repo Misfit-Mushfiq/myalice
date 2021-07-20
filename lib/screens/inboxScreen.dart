@@ -1,11 +1,12 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/choices.dart' as choices;
-import 'package:smart_select/smart_select.dart';
+import 'package:myalice/utils/routes.dart';
+
 
 class Inbox extends StatefulWidget {
   @override
@@ -13,16 +14,10 @@ class Inbox extends StatefulWidget {
 }
 
 class _InboxState extends State<Inbox> {
-  String _os = 'win';
-  String _ticketType = 'Pending Tickets';
-  bool _pendingSelected = true;
-  bool _resolvedSelected = false;
-
   final globalKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: globalKey,
         appBar: AppBar(
           backgroundColor: Colors.black,
           title: Text(
@@ -47,121 +42,7 @@ class _InboxState extends State<Inbox> {
             ),
           ],
           bottom: PreferredSize(
-              child: Container(
-                color: AliceColors.ALICE_GREEN,
-                height: 40.0,
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: GestureDetector(
-                      child: Container(
-                        margin: EdgeInsets.only(left: 8.0),
-                        child: Row(
-                          children: [
-                            Text(
-                              _ticketType,
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.arrow_drop_down_outlined,
-                              color: Colors.white,
-                            )
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                        globalKey.currentState!
-                            .showBottomSheet((BuildContext context) {
-                          return Container(
-                            height: 200,
-                            child: Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  ListTile(
-                                    title: Text('Pending Tickets'),
-                                    trailing: _pendingSelected? Icon(Icons.check) : null,
-                                    onTap: () {
-                                      setState(() {
-                                        _ticketType = "Pending Tickets";
-                                        _pendingSelected = true;
-                                        _resolvedSelected= false;
-                                      });
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                  ListTile(
-                                    title: Text('Resolved Tickets'),
-                                    trailing: _resolvedSelected? Icon(Icons.check) : null,
-                                    onTap: () {
-                                      setState(() {
-                                        _ticketType = "Resolved Tickets";
-                                        _pendingSelected = false;
-                                        _resolvedSelected= true;
-                                      });
-                                      Navigator.of(context).pop();
-                                    },
-                                  )
-                                ],
-                              ),
-                            ),
-                          );
-                        });
-                      },
-                    )
-
-                        /* SmartSelect<String>.single(
-                      title: _os,
-                      choiceItems: choices.ticketType,
-                      modalHeader: false,
-                      choiceType: S2ChoiceType.radios,
-                      choiceStyle: S2ChoiceStyle(activeColor: Colors.green),
-                      onChange: (selected) =>
-                          setState(() => _os = selected.value),
-                      modalType: S2ModalType.bottomSheet,
-                      tileBuilder: (context, state) {
-                        return S2Tile.fromState(
-                          state,
-                          isTwoLine: true,
-                          hideValue: true,
-                          dense: true,
-                          selected: true,
-                          trailing: Text(''),
-                          title: Padding(
-                            padding: const EdgeInsets.only(bottom: 5),
-                            child: Text(
-                              _os,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 14),
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                          padding: EdgeInsets.only(bottom: 10.0, left: 8.0),
-                        );
-                      },
-                      value: _os,
-                    ) */
-                        ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset("assets/launch_icon/filter.svg"),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset(
-                        "assets/launch_icon/descending.svg",
-                        height: 15,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              child: InboxAppBarBottomSection(),
               preferredSize: Size.fromHeight(40.0)),
         ),
         body: Container(
@@ -175,6 +56,9 @@ class _InboxState extends State<Inbox> {
                     child: Column(
                       children: [
                         ListTile(
+                          onTap: () {
+                            Get.toNamed(CHAT_DETAILS_PAGE);
+                          },
                           visualDensity:
                               VisualDensity(horizontal: 0, vertical: -4),
                           horizontalTitleGap: 10,
@@ -320,5 +204,136 @@ class _InboxState extends State<Inbox> {
                   );
                 },
                 itemCount: 10)));
+  }
+}
+
+class InboxAppBarBottomSection extends StatefulWidget {
+  @override
+  _InboxAppBarBottomSectionState createState() => _InboxAppBarBottomSectionState();
+}
+
+class _InboxAppBarBottomSectionState extends State<InboxAppBarBottomSection> {
+  String _ticketType = 'Pending Tickets';
+  bool _pendingSelected = true;
+  bool _resolvedSelected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: AliceColors.ALICE_GREEN,
+      height: 40.0,
+      child: Row(
+        children: [
+          Expanded(
+              child: GestureDetector(
+            child: Container(
+              margin: EdgeInsets.only(left: 8.0),
+              child: Row(
+                children: [
+                  Text(
+                    _ticketType,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Icon(
+                    Icons.arrow_drop_down_outlined,
+                    color: Colors.white,
+                  )
+                ],
+              ),
+            ),
+            onTap: () {
+              Scaffold.of(context)
+                  .showBottomSheet((BuildContext context) {
+                return Container(
+                  height: 200,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          title: Text('Pending Tickets'),
+                          trailing: _pendingSelected ? Icon(Icons.check) : null,
+                          onTap: () {
+                            setState(() {
+                              _ticketType = "Pending Tickets";
+                              _pendingSelected = true;
+                              _resolvedSelected = false;
+                            });
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        ListTile(
+                          title: Text('Resolved Tickets'),
+                          trailing:
+                              _resolvedSelected ? Icon(Icons.check) : null,
+                          onTap: () {
+                            setState(() {
+                              _ticketType = "Resolved Tickets";
+                              _pendingSelected = false;
+                              _resolvedSelected = true;
+                            });
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
+          )
+
+              /* SmartSelect<String>.single(
+                      title: _os,
+                      choiceItems: choices.ticketType,
+                      modalHeader: false,
+                      choiceType: S2ChoiceType.radios,
+                      choiceStyle: S2ChoiceStyle(activeColor: Colors.green),
+                      onChange: (selected) =>
+                          setState(() => _os = selected.value),
+                      modalType: S2ModalType.bottomSheet,
+                      tileBuilder: (context, state) {
+                        return S2Tile.fromState(
+                          state,
+                          isTwoLine: true,
+                          hideValue: true,
+                          dense: true,
+                          selected: true,
+                          trailing: Text(''),
+                          title: Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Text(
+                              _os,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 14),
+                              textAlign: TextAlign.start,
+                            ),
+                          ),
+                          padding: EdgeInsets.only(bottom: 10.0, left: 8.0),
+                        );
+                      },
+                      value: _os,
+                    ) */
+              ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SvgPicture.asset("assets/launch_icon/filter.svg"),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SvgPicture.asset(
+              "assets/launch_icon/descending.svg",
+              height: 15,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

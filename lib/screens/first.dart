@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/loginApiController.dart';
-import 'package:myalice/utils/constant_strings.dart';
+import 'package:myalice/utils/routes.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
 class First extends StatelessWidget {

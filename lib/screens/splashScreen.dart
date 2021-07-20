@@ -2,8 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myalice/screens/first.dart';
-import 'package:myalice/screens/inboxScreen.dart';
+import 'package:myalice/utils/routes.dart';
 import 'package:myalice/utils/constant_strings.dart';
 import 'package:myalice/utils/shared_pref.dart';
 import 'package:myalice/utils/colors.dart';
@@ -24,8 +23,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> whichScreenToNavigate() async {
     final SharedPref _sharedPref = SharedPref();
-    token = await _sharedPref.readString('apiToken');
-    print("API TOKEN :: "+token!);
+    token = await _sharedPref.remove('apiToken');
+    //print("API TOKEN :: "+token!);
     Timer(Duration(seconds: 3), () {
       token == null 
           ? Get.offNamed(LOGIN_PAGE)
