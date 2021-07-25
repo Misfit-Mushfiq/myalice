@@ -13,8 +13,6 @@ import 'package:myalice/utils/routes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Colors.white));
   runApp(MyApp());
 }
 

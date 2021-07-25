@@ -7,7 +7,6 @@ import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/choices.dart' as choices;
 import 'package:myalice/utils/routes.dart';
 
-
 class Inbox extends StatefulWidget {
   @override
   _InboxState createState() => _InboxState();
@@ -15,10 +14,14 @@ class Inbox extends StatefulWidget {
 
 class _InboxState extends State<Inbox> {
   final globalKey = GlobalKey<ScaffoldState>();
+  String _ticketType = 'Pending Tickets';
+  bool _pendingSelected = true;
+  bool _resolvedSelected = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
+        key: globalKey,
+        /* AppBar(
           backgroundColor: Colors.black,
           title: Text(
             'Live Chat',
@@ -44,124 +47,219 @@ class _InboxState extends State<Inbox> {
           bottom: PreferredSize(
               child: InboxAppBarBottomSection(),
               preferredSize: Size.fromHeight(40.0)),
-        ),
+        ), */
         body: Container(
-            child: ListView.builder(
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return Card(
-                    margin: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0.0),
-                    clipBehavior: Clip.hardEdge,
-                    elevation: 3,
-                    child: Column(
-                      children: [
-                        ListTile(
-                          onTap: () {
-                            Get.toNamed(CHAT_DETAILS_PAGE);
-                          },
-                          visualDensity:
-                              VisualDensity(horizontal: 0, vertical: -4),
-                          horizontalTitleGap: 10,
-                          selected: true,
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                                "https://picsum.photos/250?image=9"),
-                          ),
-                          contentPadding:
-                              const EdgeInsets.fromLTRB(20.0, 0.0, 15.0, 0.0),
-                          title: Text(
-                            "Mr. Baal",
-                            style: TextStyle(color: Colors.black),
-                          ),
-                          subtitle: Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Row(children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: AliceColors.ALICE_GREY,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.facebook,
-                                        size: 15,
-                                      ),
-                                      SizedBox(
-                                        width: 8,
-                                      ),
-                                      Text(
-                                        "Online Store",
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.black,
+            child: Column(children: [
+          Container(
+            height: 160,
+            child: Stack(children: <Widget>[
+              Container(
+                // Background
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20.0, 8.0, 8.0, 8.0),
+                      child: CircleAvatar(
+                        backgroundImage:
+                            NetworkImage("https://picsum.photos/250?image=9"),
+                        radius: 20.0,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        "Live Chat",
+                        style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white),
+                      ),
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                            child: Icon(
+                              Icons.more_vert,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                            onTap: () {
+                              globalKey.currentState!
+                                  .showBottomSheet((BuildContext context) {
+                                return Container(
+                                  height: 200,
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[
+                                        ListTile(
+                                          title: Text(_ticketType),
+                                          leading:
+                                              Icon(Icons.check_circle_outline,color: Colors.black),
+                                          minLeadingWidth: 0.0,
+                                          onTap: () {
+                                            setState(() {
+                                              _ticketType = "Resolve Tickets";
+                                              _pendingSelected = true;
+                                              _resolvedSelected = false;
+                                            });
+                                            Navigator.of(context).pop();
+                                          },
                                         ),
-                                      )
-                                    ],
+                                        Divider(
+                                          thickness: 0.5,
+                                          color: Colors.grey,
+                                        ),
+                                        ListTile(
+                                          title: Text("Filter Tickets"),
+                                          leading: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: SvgPicture.asset(
+                                              "assets/launch_icon/filter.svg",
+                                              color: Colors.black
+                                            ),
+                                          ),
+                                          minLeadingWidth: 0.0,
+                                          onTap: () {
+                                            setState(() {
+                                              _ticketType = "Resolve Tickets";
+                                              _pendingSelected = true;
+                                              _resolvedSelected = false;
+                                            });
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        Divider(
+                                          thickness: 0.5,
+                                          color: Colors.grey,
+                                        ),
+                                        ListTile(
+                                          title: Text("Filter Tickets"),
+                                          leading: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: SvgPicture.asset(
+                                              "assets/launch_icon/descending.svg",
+                                              color: Colors.black,
+                                              height: 15,
+                                            ),
+                                          ),
+                                          minLeadingWidth: 0.0,
+                                          onTap: () {
+                                            setState(() {
+                                              _ticketType = "Resolve Tickets";
+                                              _pendingSelected = true;
+                                              _resolvedSelected = false;
+                                            });
+                                            Navigator.of(context).pop();
+                                          },
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Spacer()
-                              ])),
-                          trailing: Column(
-                            children: [
-                              Text(
-                                '5 mins ago',
-                                style: TextStyle(color: Colors.grey),
-                              )
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(20.0, 0.0, 15.0, 0.0),
-                          child: Divider(
-                            color: Colors.grey[300],
-                            thickness: 0.5,
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(20.0, 0.0, 15.0, 10.0),
+                                );
+                              });
+                            }))
+                  ],
+                ),
+                color: AliceColors.ALICE_GREEN,
+                height: MediaQuery.of(context).size.height * 0.14,
+                width: MediaQuery.of(context).size.width,
+              ),
+              Positioned(
+                // To take AppBar Size only
+                top: 100.0,
+                left: 20.0,
+                right: 20.0,
+                child: AppBar(
+                  toolbarHeight: 50,
+                  backgroundColor: Colors.white,
+                  leading: Icon(
+                    Icons.search,
+                    color: Colors.grey,
+                  ),
+                  primary: false,
+                  title: TextField(
+                      decoration: InputDecoration(
+                          hintText: "Search",
+                          border: InputBorder.none,
+                          hintStyle: TextStyle(color: Colors.grey))),
+                ),
+              )
+            ]),
+          ),
+          Expanded(
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
                           child: Container(
+                              child: Padding(
+                            padding: const EdgeInsets.all(10.0),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: AliceColors.ALICE_GREY,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            8.0, 3.0, 0.0, 3.0),
+                                Stack(
+                                  children: [
+                                    CircleAvatar(
+                                      backgroundImage: NetworkImage(""),
+                                      radius: 25,
+                                    ),
+                                    Positioned(
+                                        top: 30,
+                                        left: 30,
                                         child: CircleAvatar(
-                                          radius: 8,
                                           backgroundImage: NetworkImage(
                                               "https://picsum.photos/250?image=9"),
-                                        ),
+                                          radius: 10,
+                                        ))
+                                  ],
+                                ),
+                                Expanded(
+                                    child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "Jorge Webb",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Icon(
+                                            Icons.facebook,
+                                            color: AliceColors.ALICE_BLUE,
+                                            size: 20,
+                                          )
+                                        ],
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            8.0, 3.0, 8.0, 3.0),
-                                        child: Text(
-                                          "Chef's Food",
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                      )
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      Text("Welcome .........")
                                     ],
                                   ),
-                                ),
-                                Spacer(),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: AliceColors.ALICE_GREY,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Row(
+                                )),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      '5 mins ago',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         CircleAvatar(
                                           backgroundColor:
@@ -169,171 +267,23 @@ class _InboxState extends State<Inbox> {
                                           radius: 5,
                                         ),
                                         SizedBox(
-                                          width: 5,
+                                          width: 10,
                                         ),
-                                        Text(
-                                          "Low",
-                                          style: TextStyle(fontSize: 12),
+                                        Icon(
+                                          Icons.lock,
+                                          size: 15,
                                         )
                                       ],
                                     ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    color: AliceColors.ALICE_GREY,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Icon(
-                                      Icons.lock,
-                                      size: 15,
-                                    ),
-                                  ),
+                                  ],
                                 )
                               ],
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                itemCount: 10)));
-  }
-}
-
-class InboxAppBarBottomSection extends StatefulWidget {
-  @override
-  _InboxAppBarBottomSectionState createState() => _InboxAppBarBottomSectionState();
-}
-
-class _InboxAppBarBottomSectionState extends State<InboxAppBarBottomSection> {
-  String _ticketType = 'Pending Tickets';
-  bool _pendingSelected = true;
-  bool _resolvedSelected = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: AliceColors.ALICE_GREEN,
-      height: 40.0,
-      child: Row(
-        children: [
-          Expanded(
-              child: GestureDetector(
-            child: Container(
-              margin: EdgeInsets.only(left: 8.0),
-              child: Row(
-                children: [
-                  Text(
-                    _ticketType,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Icon(
-                    Icons.arrow_drop_down_outlined,
-                    color: Colors.white,
-                  )
-                ],
-              ),
-            ),
-            onTap: () {
-              Scaffold.of(context)
-                  .showBottomSheet((BuildContext context) {
-                return Container(
-                  height: 200,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        ListTile(
-                          title: Text('Pending Tickets'),
-                          trailing: _pendingSelected ? Icon(Icons.check) : null,
-                          onTap: () {
-                            setState(() {
-                              _ticketType = "Pending Tickets";
-                              _pendingSelected = true;
-                              _resolvedSelected = false;
-                            });
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        ListTile(
-                          title: Text('Resolved Tickets'),
-                          trailing:
-                              _resolvedSelected ? Icon(Icons.check) : null,
-                          onTap: () {
-                            setState(() {
-                              _ticketType = "Resolved Tickets";
-                              _pendingSelected = false;
-                              _resolvedSelected = true;
-                            });
-                            Navigator.of(context).pop();
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              });
-            },
-          )
-
-              /* SmartSelect<String>.single(
-                      title: _os,
-                      choiceItems: choices.ticketType,
-                      modalHeader: false,
-                      choiceType: S2ChoiceType.radios,
-                      choiceStyle: S2ChoiceStyle(activeColor: Colors.green),
-                      onChange: (selected) =>
-                          setState(() => _os = selected.value),
-                      modalType: S2ModalType.bottomSheet,
-                      tileBuilder: (context, state) {
-                        return S2Tile.fromState(
-                          state,
-                          isTwoLine: true,
-                          hideValue: true,
-                          dense: true,
-                          selected: true,
-                          trailing: Text(''),
-                          title: Padding(
-                            padding: const EdgeInsets.only(bottom: 5),
-                            child: Text(
-                              _os,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 14),
-                              textAlign: TextAlign.start,
-                            ),
-                          ),
-                          padding: EdgeInsets.only(bottom: 10.0, left: 8.0),
-                        );
-                      },
-                      value: _os,
-                    ) */
-              ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SvgPicture.asset("assets/launch_icon/filter.svg"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SvgPicture.asset(
-              "assets/launch_icon/descending.svg",
-              height: 15,
-            ),
-          ),
-        ],
-      ),
-    );
+                          )),
+                          onTap: () => Get.toNamed(CHAT_DETAILS_PAGE),
+                        ));
+                  },
+                  itemCount: 10))
+        ])));
   }
 }

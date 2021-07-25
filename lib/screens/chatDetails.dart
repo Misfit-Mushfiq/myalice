@@ -51,13 +51,18 @@ class _ChatDetailsState extends State<ChatDetails> {
     final obj = Get.put(ChatApiController());
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.white,
           title: Text(
             'Mark Tewin',
-            style: TextStyle(fontWeight: FontWeight.normal),
+            style: TextStyle(fontWeight: FontWeight.normal,color: Colors.black),
           ),
-          leadingWidth: 25.0,
           centerTitle: false,
+          titleSpacing: 35,
+          leading: Row(children: [
+          Icon(Icons.arrow_left,color: Colors.red,size: 25,),
+          CircleAvatar(radius: 20,),
+          ],),
+          automaticallyImplyLeading: true,
           actions: [
             Padding(
               padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
@@ -71,7 +76,7 @@ class _ChatDetailsState extends State<ChatDetails> {
                           style: TextStyle(color: Colors.black, fontSize: 12),
                         ),
                         decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: AliceColors.ALICE_GREEN,
                             borderRadius: BorderRadius.circular(5)),
                         padding:
                             EdgeInsets.symmetric(horizontal: 10, vertical: 5)),

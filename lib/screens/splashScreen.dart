@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> whichScreenToNavigate() async {
     final SharedPref _sharedPref = SharedPref();
-    token = await _sharedPref.remove('apiToken');
+    token = await _sharedPref.readString('apiToken');
     //print("API TOKEN :: "+token!);
     Timer(Duration(seconds: 3), () {
       token == null 
