@@ -10,7 +10,6 @@ import 'package:myalice/screens/signUpScreen.dart';
 import 'package:myalice/screens/splashScreen.dart';
 import 'package:myalice/utils/routes.dart';
 
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());

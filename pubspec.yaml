@@ -24,6 +24,7 @@ dependencies:
   sqflite: ^2.0.0+3
   scrollable_positioned_list: ^0.1.10
   smart_select: ^4.3.2
+  modal_bottom_sheet: ^2.0.0
   
 
 dev_dependencies:

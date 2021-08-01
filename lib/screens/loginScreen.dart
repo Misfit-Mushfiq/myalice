@@ -208,6 +208,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           _sharedPref.saveString("apiToken", value.access);
                           //Get.offNamed('chatDetailsPage');
                           Get.offNamed(INBOX_PAGE);
+                        } else {
+                          final snackBar = SnackBar(
+                            content: const Text("Error"),
+                            action: SnackBarAction(
+                              label: 'Undo',
+                              onPressed: () {
+                                // Some code to undo the change.
+                              },
+                            ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }
                       });
                     },

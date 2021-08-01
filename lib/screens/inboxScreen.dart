@@ -13,14 +13,14 @@ class Inbox extends StatefulWidget {
 }
 
 class _InboxState extends State<Inbox> {
-  final globalKey = GlobalKey<ScaffoldState>();
+  final _inboxBottomSheet = GlobalKey<ScaffoldState>();
   String _ticketType = 'Pending Tickets';
   bool _pendingSelected = true;
   bool _resolvedSelected = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        key: globalKey,
+        key: _inboxBottomSheet,
         /* AppBar(
           backgroundColor: Colors.black,
           title: Text(
@@ -83,7 +83,8 @@ class _InboxState extends State<Inbox> {
                               size: 30,
                             ),
                             onTap: () {
-                              globalKey.currentState!
+                              showModal2(context);
+                              /* _inboxBottomSheet.currentState!
                                   .showBottomSheet((BuildContext context) {
                                 return Container(
                                   height: 200,
@@ -95,8 +96,9 @@ class _InboxState extends State<Inbox> {
                                       children: <Widget>[
                                         ListTile(
                                           title: Text(_ticketType),
-                                          leading:
-                                              Icon(Icons.check_circle_outline,color: Colors.black),
+                                          leading: Icon(
+                                              Icons.check_circle_outline,
+                                              color: Colors.black),
                                           minLeadingWidth: 0.0,
                                           onTap: () {
                                             setState(() {
@@ -116,18 +118,45 @@ class _InboxState extends State<Inbox> {
                                           leading: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: SvgPicture.asset(
-                                              "assets/launch_icon/filter.svg",
-                                              color: Colors.black
-                                            ),
+                                                "assets/launch_icon/filter.svg",
+                                                color: Colors.black),
                                           ),
                                           minLeadingWidth: 0.0,
                                           onTap: () {
-                                            setState(() {
-                                              _ticketType = "Resolve Tickets";
-                                              _pendingSelected = true;
-                                              _resolvedSelected = false;
+                                            _controller = _inboxBottomSheet
+                                                .currentState!
+                                                .showBottomSheet((context) {
+                                              return Container(
+                                                height: 400,
+                                                child: Column(
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        IconButton(
+                                                            onPressed: () {
+                                                              _controller
+                                                                  .close();
+                                                            },
+                                                            icon: Icon(Icons
+                                                                .arrow_back_ios))
+                                                      ],
+                                                    ),
+                                                    ListTile(
+                                                      title: Text(_ticketType),
+                                                      leading: Icon(
+                                                          Icons
+                                                              .check_circle_outline,
+                                                          color: Colors.black),
+                                                      minLeadingWidth: 0.0,
+                                                      onTap: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                    )
+                                                  ],
+                                                ),
+                                              );
                                             });
-                                            Navigator.of(context).pop();
                                           },
                                         ),
                                         Divider(
@@ -158,7 +187,7 @@ class _InboxState extends State<Inbox> {
                                     ),
                                   ),
                                 );
-                              });
+                              }); */
                             }))
                   ],
                 ),
@@ -285,5 +314,112 @@ class _InboxState extends State<Inbox> {
                   },
                   itemCount: 10))
         ])));
+  }
+
+  void showModal1(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            height: 400,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          Get.back();
+                          showModal2(context);
+                        },
+                        icon: Icon(Icons.arrow_back_ios))
+                  ],
+                ),
+                ListTile(
+                  title: Text(_ticketType),
+                  leading:
+                      Icon(Icons.check_circle_outline, color: Colors.black),
+                  minLeadingWidth: 0.0,
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ),
+          );
+        });
+  }
+
+  void showModal2(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        useRootNavigator: true,
+        builder: (context) {
+          return Container(
+            height: 200,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ListTile(
+                    title: Text(_ticketType),
+                    leading:
+                        Icon(Icons.check_circle_outline, color: Colors.black),
+                    minLeadingWidth: 0.0,
+                    onTap: () {
+                      setState(() {
+                        _ticketType = "Resolve Tickets";
+                        _pendingSelected = true;
+                        _resolvedSelected = false;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  Divider(
+                    thickness: 0.5,
+                    color: Colors.grey,
+                  ),
+                  ListTile(
+                    title: Text("Filter Tickets"),
+                    leading: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset("assets/launch_icon/filter.svg",
+                          color: Colors.black),
+                    ),
+                    minLeadingWidth: 0.0,
+                    onTap: () {
+                      Get.back();
+                      showModal1(context);
+                    },
+                  ),
+                  Divider(
+                    thickness: 0.5,
+                    color: Colors.grey,
+                  ),
+                  ListTile(
+                    title: Text("Filter Tickets"),
+                    leading: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: SvgPicture.asset(
+                        "assets/launch_icon/descending.svg",
+                        color: Colors.black,
+                        height: 15,
+                      ),
+                    ),
+                    minLeadingWidth: 0.0,
+                    onTap: () {
+                      setState(() {
+                        _ticketType = "Resolve Tickets";
+                        _pendingSelected = true;
+                        _resolvedSelected = false;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
