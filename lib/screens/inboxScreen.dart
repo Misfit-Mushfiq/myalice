@@ -362,15 +362,16 @@ class _InboxState extends State<Inbox> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   ListTile(
-                    title: Text(_ticketType),
+                    title: Text(_resolvedSelected
+                        ? "Resolve Tickets"
+                        : "Pending Tickets"),
                     leading:
                         Icon(Icons.check_circle_outline, color: Colors.black),
                     minLeadingWidth: 0.0,
                     onTap: () {
                       setState(() {
-                        _ticketType = "Resolve Tickets";
-                        _pendingSelected = true;
-                        _resolvedSelected = false;
+                        _pendingSelected = !_pendingSelected;
+                        _resolvedSelected = !_resolvedSelected;
                       });
                       Navigator.of(context).pop();
                     },
@@ -397,7 +398,7 @@ class _InboxState extends State<Inbox> {
                     color: Colors.grey,
                   ),
                   ListTile(
-                    title: Text("Filter Tickets"),
+                    title: Text("Sort by newest"),
                     leading: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(

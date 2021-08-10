@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/controllers/pusherController.dart';
+import 'package:myalice/custom%20widgets/botButton.dart';
 import 'package:myalice/models/chatModel/chat.dart';
 import 'package:myalice/models/responseModels/chatResponse.dart';
 import 'package:myalice/utils/colors.dart';
@@ -15,7 +16,8 @@ class ChatDetails extends StatefulWidget {
   _ChatDetailsState createState() => _ChatDetailsState();
 }
 
-class _ChatDetailsState extends State<ChatDetails> {
+class _ChatDetailsState extends State<ChatDetails>
+    with SingleTickerProviderStateMixin {
   late List<ChatMessage> messages = <ChatMessage>[];
   late final PusherService pusherService;
   final ScrollController _scrollController = ScrollController();
@@ -23,6 +25,7 @@ class _ChatDetailsState extends State<ChatDetails> {
   bool _visiblity = false;
   bool _botEnabled = false;
   final _chatboxBottomSheet = GlobalKey<ScaffoldState>();
+  late TabController _tabController = TabController(length: 2, vsync: this);
   @override
   void initState() {
     init();
@@ -366,52 +369,160 @@ class _ChatDetailsState extends State<ChatDetails> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  ListTile(
-                    title: Text("Used Tags"),
-                    trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey),
-                    minLeadingWidth: 0.0,
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  Divider(
-                    thickness: 0.5,
-                    color: Colors.grey,
-                  ),
-                  ListTile(
-                    title: Text("Filter Tickets"),
-                    leading: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SvgPicture.asset("assets/launch_icon/filter.svg",
-                          color: Colors.black),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Used Tags"),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Row(
+                            children: [
+                              Icon(Icons.arrow_forward_ios, color: Colors.grey)
+                            ],
+                          )
+                        ],
+                      ),
+                      
                     ),
-                    minLeadingWidth: 0.0,
-                    onTap: () {
-                      Get.back();
-                    },
                   ),
                   Divider(
                     thickness: 0.5,
                     color: Colors.grey,
                   ),
-                  ListTile(
-                    title: Text("Bot"),
-                    trailing: Switch(
-                        activeColor: AliceColors.ALICE_GREEN,
-                        value: _botEnabled,
-                        onChanged: (bool onvalue) {
-                          setState(() {
-                            _botEnabled = onvalue;
-                          });
-                        }),
-                    minLeadingWidth: 0.0,
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Assigned Agent"),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 10,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text("Robert Becky"),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Icon(Icons.arrow_forward_ios, color: Colors.grey)
+                            ],
+                          )
+                        ],
+                      ),
+                      onTap: () {
+                        showAssignModal(context);
+                      }
+                    ),
+                  ),
+                  Divider(
+                    thickness: 0.5,
+                    color: Colors.grey,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Bot"),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Row(
+                            children: [
+                              BottomSheetSwitch(
+                                switchValue: _botEnabled,
+                                valueChanged: (value) {
+                                  _botEnabled = value;
+                                },
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
                   )
                 ],
               ),
             ),
+          );
+        });
+  }
+
+  void showAssignModal(BuildContext context) {
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        isScrollControlled: true,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.zero,
+            child: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+              return Container(
+                height: 500,
+                decoration: BoxDecoration(
+                  // color: colorPrimary,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(18.0),
+                    topRight: const Radius.circular(18.0),
+                  ),
+                ),
+                child: DefaultTabController(
+                  length: 2,
+                  child: Scaffold(
+                    appBar: AppBar(
+                      backgroundColor: Colors.white,
+                      automaticallyImplyLeading: false,
+                      leading: IconButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          icon: Icon(Icons.arrow_back_ios_new,color: Colors.black,)),
+                      bottom: TabBar(
+                        labelColor: AliceColors.ALICE_GREEN,
+                        unselectedLabelColor: Colors.grey,
+                        indicatorColor: AliceColors.ALICE_GREEN,
+                        tabs: [
+                          Tab(
+                            text: "Agents",
+                          ),
+                          Tab(
+                            text: "Groups",
+                          ),
+                        ],
+                      ),
+                      title: Text('Ressaign Ticket',style: TextStyle(color: Colors.black,fontSize: 14),),
+                      centerTitle: false,
+                    ),
+                    body: TabBarView(
+                      children: [
+                        ListView.builder(
+                          itemCount: 100,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text("items: $index",style: TextStyle(color: Colors.black,fontSize: 14),),
+                            );
+                          },
+                        ),
+                        Icon(Icons.directions_transit),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }),
           );
         });
   }
