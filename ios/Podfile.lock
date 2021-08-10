@@ -50,7 +50,7 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   NWWebSocket: 21f0c73639815da3272862c912275b26102aa80c
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
-  pusher_client: 2cba3f134643ac90af44940be03f7db4e24b0223
+  pusher_client: bb9d2d6e6ef77837dafddfc89349ea018df4c994
   PusherSwiftWithEncryption: 7c5192445971a4105e1f425dcbcc7d0286c4fc23
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
@@ -58,4 +58,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: e4c97c7a9aacaeda4b952f7ef9ea29e47660f622
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.2
