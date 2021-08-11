@@ -25,6 +25,7 @@ dependencies:
   scrollable_positioned_list: ^0.1.10
   smart_select: ^4.3.2
   modal_bottom_sheet: ^2.0.0
+  multi_select_flutter: ^4.0.0
   
 
 dev_dependencies:

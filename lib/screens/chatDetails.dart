@@ -2,8 +2,9 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/controllers/pusherController.dart';
 import 'package:myalice/custom%20widgets/botButton.dart';
@@ -16,6 +17,16 @@ class ChatDetails extends StatefulWidget {
   _ChatDetailsState createState() => _ChatDetailsState();
 }
 
+class Animal {
+  final int id;
+  final String name;
+
+  Animal({
+    required this.id,
+    required this.name,
+  });
+}
+
 class _ChatDetailsState extends State<ChatDetails>
     with SingleTickerProviderStateMixin {
   late List<ChatMessage> messages = <ChatMessage>[];
@@ -26,6 +37,21 @@ class _ChatDetailsState extends State<ChatDetails>
   bool _botEnabled = false;
   final _chatboxBottomSheet = GlobalKey<ScaffoldState>();
   late TabController _tabController = TabController(length: 2, vsync: this);
+
+  static List<Animal> _animals = [
+    Animal(id: 1, name: "Lion"),
+    Animal(id: 2, name: "Flamingo"),
+    Animal(id: 3, name: "Hippo"),
+  ];
+  final _items = _animals
+      .map((animal) => MultiSelectItem<Animal>(animal, animal.name))
+      .toList();
+  //List<Animal> _selectedAnimals = [];
+  List<Object?> _selectedAnimals2 = [];
+  List<Animal> _selectedAnimals3 = [];
+  //List<Animal> _selectedAnimals4 = [];
+  List<Animal> _selectedAnimals5 = [];
+  final _multiSelectKey = GlobalKey<FormFieldState>();
   @override
   void initState() {
     init();
@@ -363,7 +389,8 @@ class _ChatDetailsState extends State<ChatDetails>
         useRootNavigator: true,
         builder: (context) {
           return Container(
-            height: 200,
+            color: Colors.white,
+            height: 300,
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -375,18 +402,50 @@ class _ChatDetailsState extends State<ChatDetails>
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("Used Tags"),
-                          SizedBox(
-                            width: 5,
+                          Expanded(
+                            child: Container(
+                              child: Column(
+                                children: <Widget>[
+                                  MultiSelectChipField(
+                                    items: _items,
+                                    initialValue: _selectedAnimals2,
+                                    title: Text("Used Tags",style: TextStyle(fontSize: 14),),
+                                    headerColor: Colors.white,
+                                    chipShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                                   decoration: BoxDecoration(),
+                                   
+                                    selectedChipColor:
+                                        AliceColors.ALICE_GREEN,
+                                    selectedTextStyle:
+                                        TextStyle(color: Colors.white),
+                                    onTap: (values) {
+                                      _selectedAnimals2 = values;
+                                    },
+                                    icon: Icon(Icons.cancel,color: Colors.white,),
+                                    
+                                  ),
+                                  /* _selectedAnimals2.isEmpty
+                                  ? Container(
+                                      padding: EdgeInsets.all(10),
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "None selected",
+                                        style: TextStyle(color: Colors.black54),
+                                      ))
+                                  : MultiSelectChipDisplay(
+                                  onTap: (value) {
+                                    setState(() {
+                                      _selectedAnimals2.remove(value);
+                                    });
+                                  },
+                                ), */
+                                ],
+                              ),
+                            ),
                           ),
-                          Row(
-                            children: [
-                              Icon(Icons.arrow_forward_ios, color: Colors.grey)
-                            ],
-                          )
                         ],
                       ),
-                      
+                      onTap: () {},
                     ),
                   ),
                   Divider(
@@ -396,34 +455,34 @@ class _ChatDetailsState extends State<ChatDetails>
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: InkWell(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Assigned Agent"),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 10,
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text("Robert Becky"),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Icon(Icons.arrow_forward_ios, color: Colors.grey)
-                            ],
-                          )
-                        ],
-                      ),
-                      onTap: () {
-                        showAssignModal(context);
-                      }
-                    ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Assigned Agent"),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 10,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text("Robert Becky"),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Icon(Icons.arrow_forward_ios,
+                                    color: Colors.grey)
+                              ],
+                            )
+                          ],
+                        ),
+                        onTap: () {
+                          showAssignModal(context);
+                        }),
                   ),
                   Divider(
                     thickness: 0.5,
@@ -489,7 +548,10 @@ class _ChatDetailsState extends State<ChatDetails>
                           onPressed: () {
                             Get.back();
                           },
-                          icon: Icon(Icons.arrow_back_ios_new,color: Colors.black,)),
+                          icon: Icon(
+                            Icons.arrow_back_ios_new,
+                            color: Colors.black,
+                          )),
                       bottom: TabBar(
                         labelColor: AliceColors.ALICE_GREEN,
                         unselectedLabelColor: Colors.grey,
@@ -503,7 +565,10 @@ class _ChatDetailsState extends State<ChatDetails>
                           ),
                         ],
                       ),
-                      title: Text('Ressaign Ticket',style: TextStyle(color: Colors.black,fontSize: 14),),
+                      title: Text(
+                        'Ressaign Ticket',
+                        style: TextStyle(color: Colors.black, fontSize: 14),
+                      ),
                       centerTitle: false,
                     ),
                     body: TabBarView(
@@ -512,7 +577,11 @@ class _ChatDetailsState extends State<ChatDetails>
                           itemCount: 100,
                           itemBuilder: (context, index) {
                             return ListTile(
-                              title: Text("items: $index",style: TextStyle(color: Colors.black,fontSize: 14),),
+                              title: Text(
+                                "items: $index",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 14),
+                              ),
                             );
                           },
                         ),

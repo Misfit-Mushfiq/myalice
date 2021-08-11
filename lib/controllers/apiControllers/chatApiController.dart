@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/baseApiController.dart';
 import 'package:myalice/models/responseModels/chatResponse.dart';
-import 'package:myalice/utils/constant_strings.dart';
 import 'package:myalice/utils/db.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
@@ -30,8 +29,7 @@ class ChatApiController extends BaseApiController {
         .then((value) async {
       if (value.statusCode == 200) {
         ChatResponse response = ChatResponse.fromJson(value.data);
-/* 
-        _chatResponse.update((val) {
+/* _chatResponse.update((val) {
           val!.data = DataSource.fromJson(value.data).data;
         }); */
 
@@ -43,7 +41,7 @@ class ChatApiController extends BaseApiController {
             chatResponse.add(value[i]);
           }
         });
-      } 
+      }
     }).whenComplete(() {
       dataAvailable.value = true;
       chatResponse.refresh();
