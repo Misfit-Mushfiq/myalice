@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/models/responseModels/chatResponse.dart';
-import 'package:myalice/utils/db.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:pusher_client/pusher_client.dart';
 

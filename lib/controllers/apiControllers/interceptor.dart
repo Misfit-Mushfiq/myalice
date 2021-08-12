@@ -42,6 +42,7 @@ class LoggingInterceptors extends InterceptorsWrapper {
     if (err.response?.statusCode == 401) {
       pref.Get.offNamed(LOGIN_PAGE);
     }
+    debugPrint(err.response!.statusMessage);
     debugPrint(
         "ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.baseUrl}${err.requestOptions.path}");
     return super.onError(err, handler);

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:myalice/utils/colors.dart';
-import 'package:myalice/utils/choices.dart' as choices;
 import 'package:myalice/utils/routes.dart';
 
 class Inbox extends StatefulWidget {
