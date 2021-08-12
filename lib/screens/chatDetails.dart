@@ -162,8 +162,8 @@ class _ChatDetailsState extends State<ChatDetails>
 
                         //print(index);
                         return Container(
-                          padding: EdgeInsets.only(
-                              left: 14, right: 14, top: 10),
+                          padding:
+                              EdgeInsets.only(left: 14, right: 14, top: 10),
                           child: Align(
                             alignment: (obj.chats.elementAt(index)!.source ==
                                     "customer"
@@ -227,37 +227,27 @@ class _ChatDetailsState extends State<ChatDetails>
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
-                    padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
+                    padding: EdgeInsets.only(
+                        bottom: 10, top: 10, right: 10),
                     width: double.infinity,
                     color: Colors.white,
                     child: Row(
                       children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(0.0),
-                          child: GestureDetector(
-                            onTap: () {
+                        IconButton(
+                            onPressed: () {
                               setState(() {
                                 _visiblity = !_visiblity;
                               });
                             },
-                            child: Container(
-                              height: 30,
-                              width: 30,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                              ),
-                              child: Icon(
-                                Icons.add,
-                                color: AliceColors.ALICE_GREEN,
-                                size: 20,
-                              ),
-                            ),
-                          ),
-                        ),
+                            icon: Icon(
+                              Icons.add,
+                              color: AliceColors.ALICE_GREEN,
+                              size: 20,
+                            )),
                         SizedBox(
                           width: 10,
                         ),
-                        Expanded(
+                        Flexible(
                           child: TextField(
                             keyboardType: TextInputType.text,
                             maxLines: null,
@@ -277,7 +267,7 @@ class _ChatDetailsState extends State<ChatDetails>
                             ),
                           ),
                         ),
-                        FloatingActionButton(
+                        IconButton(
                           onPressed: () async {
                             //await pusherService.pusherTrigger('test-event');
                             animateToScreenEnd();
@@ -295,13 +285,11 @@ class _ChatDetailsState extends State<ChatDetails>
                                 .chatResponse
                                 .refresh();
                           },
-                          child: Icon(
+                          icon: Icon(
                             Icons.send,
                             color: AliceColors.ALICE_GREEN,
                             size: 20,
                           ),
-                          backgroundColor: Colors.white,
-                          elevation: 0,
                         ),
                       ],
                     ),
@@ -319,70 +307,104 @@ class _ChatDetailsState extends State<ChatDetails>
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             Container(
-                              height: 50,
+                              height: 60,
                               decoration: BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)),
                                   color: AliceColors.ALICE_GREEN),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top:5.0),
+                                    child: Icon(Icons.attachment,size: 20,color: Colors.white,),
+                                  ),
+                                  Padding(
+                                padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 5.0),
                                 child: Center(
                                     child: Text(
-                                  "Image",
+                                  "Attach",
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
+                                      color: Colors.white, fontSize: 12),
                                 )),
+                              )
+                                ],
                               ),
                             ),
                             Container(
-                              height: 50,
+                              height: 60,
                               decoration: BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)),
                                   color: AliceColors.ALICE_GREEN),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top:5.0),
+                                    child: Icon(Icons.image,size: 20,color: Colors.white,),
+                                  ),
+                                  Padding(
+                                padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 5.0),
                                 child: Center(
                                     child: Text(
                                   "Image",
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
+                                      color: Colors.white, fontSize: 12),
                                 )),
+                              )
+                                ],
                               ),
                             ),
                             Container(
-                              height: 50,
+                              height: 60,
                               decoration: BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)),
                                   color: AliceColors.ALICE_GREEN),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top:5.0),
+                                    child: Icon(Icons.message,size: 20,color: Colors.white,),
+                                  ),
+                                  Padding(
+                                padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 2.0),
                                 child: Center(
                                     child: Text(
-                                  "Image",
+                                  "Canned\nResponse",
+                                  textAlign: TextAlign.center,
+                                  maxLines: null,
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
+                                      color: Colors.white, fontSize: 12),
                                 )),
+                              )
+                                ],
                               ),
                             ),
                             Container(
-                              height: 50,
+                              height: 60,
                               decoration: BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)),
                                   color: AliceColors.ALICE_GREEN),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top:5.0),
+                                    child: Icon(Icons.note,size: 20,color: Colors.white,),
+                                  ),
+                                  Padding(
+                                padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 5.0),
                                 child: Center(
                                     child: Text(
-                                  "Image",
+                                  "Note",
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
+                                      color: Colors.white, fontSize: 12),
                                 )),
+                              )
+                                ],
                               ),
-                            )
-                          ],
+                            ),
+                            ],
                         ),
                       ),
                     ))
@@ -623,6 +645,7 @@ class _ChatDetailsState extends State<ChatDetails>
                     appBar: AppBar(
                       backgroundColor: Colors.white,
                       automaticallyImplyLeading: false,
+                      leadingWidth: 20,
                       leading: IconButton(
                           onPressed: () {
                             Get.back();
@@ -646,25 +669,76 @@ class _ChatDetailsState extends State<ChatDetails>
                       ),
                       title: Text(
                         'Ressaign Ticket',
-                        style: TextStyle(color: Colors.black, fontSize: 14),
+                        style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                       centerTitle: false,
                     ),
                     body: TabBarView(
                       children: [
-                        ListView.builder(
+                        ListView.separated(
                           itemCount: 100,
+                          separatorBuilder: (context, index) {
+                            return Divider(
+                              height: 0.5,
+                              color: Colors.grey,
+                            );
+                          },
                           itemBuilder: (context, index) {
                             return ListTile(
+                              leading: Stack(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundImage: NetworkImage(""),
+                                    radius: 25,
+                                  ),
+                                  Positioned(
+                                      top: 30,
+                                      left: 30,
+                                      child: CircleAvatar(
+                                        backgroundColor:
+                                            AliceColors.ALICE_GREEN,
+                                        radius: 10,
+                                      ))
+                                ],
+                              ),
                               title: Text(
-                                "items: $index",
+                                "Jenny Wilson",
                                 style: TextStyle(
-                                    color: Colors.black, fontSize: 14),
+                                    color: Colors.black, fontSize: 15),
+                              ),
+                              subtitle: Text(
+                                "Active now",
+                                style: TextStyle(color: Colors.grey),
                               ),
                             );
                           },
                         ),
-                        Icon(Icons.directions_transit),
+                        ListView.separated(
+                          itemCount: 100,
+                          separatorBuilder: (context, index) {
+                            return Divider(
+                              height: 0.5,
+                              color: Colors.grey,
+                            );
+                          },
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundImage: NetworkImage(""),
+                                  radius: 25,
+                                ),
+                                title: Text(
+                                  "Jenny Wilson",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 15),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),
