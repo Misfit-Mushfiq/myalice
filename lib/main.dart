@@ -8,6 +8,7 @@ import 'package:myalice/screens/inboxScreen.dart';
 import 'package:myalice/screens/loginScreen.dart';
 import 'package:myalice/screens/signUpScreen.dart';
 import 'package:myalice/screens/splashScreen.dart';
+import 'package:myalice/screens/userProfile.dart';
 import 'package:myalice/utils/routes.dart';
 
 void main() {
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: CHAT_DETAILS_PAGE, page: () => ChatDetails()),
         GetPage(name: INBOX_PAGE, page: () => Inbox()),
         GetPage(name: SIGNUP_PAGE, page: () => SignUpScreen()),
+        GetPage(name: USER_PROFILE_PAGE, page: () => UserProfile()),
       ],
     );
   }

@@ -10,6 +10,7 @@ import 'package:myalice/custom%20widgets/botButton.dart';
 import 'package:myalice/models/chatModel/chat.dart';
 import 'package:myalice/models/responseModels/chatResponse.dart';
 import 'package:myalice/utils/colors.dart';
+import 'package:myalice/utils/routes.dart';
 
 class ChatDetails extends StatefulWidget {
   @override
@@ -130,10 +131,14 @@ class _ChatDetailsState extends State<ChatDetails>
                     },
                   ),
                   SizedBox(width: 10),
-                  Icon(
-                    Icons.info_outline,
-                    color: AliceColors.ALICE_GREEN,
-                  )
+                  IconButton(
+                      onPressed: () {
+                        Get.toNamed(USER_PROFILE_PAGE);
+                      },
+                      icon: Icon(
+                        Icons.info_outline,
+                        color: AliceColors.ALICE_GREEN,
+                      ))
                 ],
               ),
             ),
@@ -227,8 +232,7 @@ class _ChatDetailsState extends State<ChatDetails>
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
-                    padding: EdgeInsets.only(
-                        bottom: 10, top: 10, right: 10),
+                    padding: EdgeInsets.only(bottom: 10, top: 10, right: 10),
                     width: double.infinity,
                     color: Colors.white,
                     child: Row(
@@ -315,18 +319,23 @@ class _ChatDetailsState extends State<ChatDetails>
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(top:5.0),
-                                    child: Icon(Icons.attachment,size: 20,color: Colors.white,),
+                                    padding: const EdgeInsets.only(top: 5.0),
+                                    child: Icon(
+                                      Icons.attachment,
+                                      size: 20,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                   Padding(
-                                padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 5.0),
-                                child: Center(
-                                    child: Text(
-                                  "Attach",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 12),
-                                )),
-                              )
+                                    padding: const EdgeInsets.fromLTRB(
+                                        8.0, 5.0, 8.0, 5.0),
+                                    child: Center(
+                                        child: Text(
+                                      "Attach",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 12),
+                                    )),
+                                  )
                                 ],
                               ),
                             ),
@@ -339,18 +348,23 @@ class _ChatDetailsState extends State<ChatDetails>
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(top:5.0),
-                                    child: Icon(Icons.image,size: 20,color: Colors.white,),
+                                    padding: const EdgeInsets.only(top: 5.0),
+                                    child: Icon(
+                                      Icons.image,
+                                      size: 20,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                   Padding(
-                                padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 5.0),
-                                child: Center(
-                                    child: Text(
-                                  "Image",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 12),
-                                )),
-                              )
+                                    padding: const EdgeInsets.fromLTRB(
+                                        8.0, 5.0, 8.0, 5.0),
+                                    child: Center(
+                                        child: Text(
+                                      "Image",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 12),
+                                    )),
+                                  )
                                 ],
                               ),
                             ),
@@ -363,20 +377,25 @@ class _ChatDetailsState extends State<ChatDetails>
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(top:5.0),
-                                    child: Icon(Icons.message,size: 20,color: Colors.white,),
+                                    padding: const EdgeInsets.only(top: 5.0),
+                                    child: Icon(
+                                      Icons.message,
+                                      size: 20,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                   Padding(
-                                padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 2.0),
-                                child: Center(
-                                    child: Text(
-                                  "Canned\nResponse",
-                                  textAlign: TextAlign.center,
-                                  maxLines: null,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 12),
-                                )),
-                              )
+                                    padding: const EdgeInsets.fromLTRB(
+                                        8.0, 0.0, 8.0, 2.0),
+                                    child: Center(
+                                        child: Text(
+                                      "Canned\nResponse",
+                                      textAlign: TextAlign.center,
+                                      maxLines: null,
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 12),
+                                    )),
+                                  )
                                 ],
                               ),
                             ),
@@ -389,22 +408,27 @@ class _ChatDetailsState extends State<ChatDetails>
                               child: Column(
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(top:5.0),
-                                    child: Icon(Icons.note,size: 20,color: Colors.white,),
+                                    padding: const EdgeInsets.only(top: 5.0),
+                                    child: Icon(
+                                      Icons.note,
+                                      size: 20,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                   Padding(
-                                padding: const EdgeInsets.fromLTRB(8.0, 5.0, 8.0, 5.0),
-                                child: Center(
-                                    child: Text(
-                                  "Note",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 12),
-                                )),
-                              )
+                                    padding: const EdgeInsets.fromLTRB(
+                                        8.0, 5.0, 8.0, 5.0),
+                                    child: Center(
+                                        child: Text(
+                                      "Note",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 12),
+                                    )),
+                                  )
                                 ],
                               ),
                             ),
-                            ],
+                          ],
                         ),
                       ),
                     ))
