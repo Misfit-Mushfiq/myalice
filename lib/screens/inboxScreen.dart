@@ -58,10 +58,15 @@ class _InboxState extends State<Inbox> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20.0, 8.0, 8.0, 8.0),
-                      child: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage("https://picsum.photos/250?image=9"),
-                        radius: 20.0,
+                      child: GestureDetector(
+                        child: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage("https://picsum.photos/250?image=9"),
+                          radius: 20.0,
+                        ),
+                        onTap: (){
+                          Get.toNamed(USER_PROFILE_PAGE);
+                        },
                       ),
                     ),
                     Expanded(

@@ -133,7 +133,7 @@ class _ChatDetailsState extends State<ChatDetails>
                 IconButton(
                     constraints: BoxConstraints(),
                     onPressed: () {
-                      Get.toNamed(USER_PROFILE_PAGE);
+                      Get.toNamed(CUSTOMER_PROFILE_PAGE);
                     },
                     icon: Icon(
                       Icons.info_outline,
