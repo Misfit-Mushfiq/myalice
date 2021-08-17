@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myalice/custom%20widgets/botButton.dart';
 import 'package:myalice/utils/colors.dart';
 
 class UserProfile extends StatefulWidget {
@@ -12,14 +13,22 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   bool active_show = false;
+  bool _pushNotification = false;
+  bool _incomingTickets = false;
+  bool _incomingMesaage = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          automaticallyImplyLeading: true,
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.white,
+          elevation: 0.0,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new),
+            icon: Icon(
+              Icons.arrow_back_ios_new,
+              color: Colors.black,
+            ),
             onPressed: () {
               Get.back();
             },
@@ -27,6 +36,7 @@ class _UserProfileState extends State<UserProfile> {
         ),
         body: SingleChildScrollView(
             child: Container(
+          color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
@@ -46,6 +56,10 @@ class _UserProfileState extends State<UserProfile> {
                     ),
                     TextButton(
                         onPressed: () {},
+                        style: TextButton.styleFrom(
+                            backgroundColor: AliceColors.ALICE_GREY,
+                            padding: EdgeInsets.all(2.0),
+                            elevation: 1.0),
                         child: Text(
                           "Team",
                           style: TextStyle(color: Colors.black),
@@ -85,7 +99,7 @@ class _UserProfileState extends State<UserProfile> {
                             ],
                           ),
                           onTap: () {
-                            print("object");
+                            showModal(context);
                           },
                         ),
                         SizedBox(
@@ -251,7 +265,7 @@ class _UserProfileState extends State<UserProfile> {
                     )
                   ],
                 ),
-                SizedBox(height:100),
+                SizedBox(height: 100),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -269,5 +283,105 @@ class _UserProfileState extends State<UserProfile> {
             ),
           ),
         )));
+  }
+
+  void showModal(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        useRootNavigator: true,
+        builder: (context) {
+          return Container(
+            color: Colors.white,
+            height: 200,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Push Notification"),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Row(
+                            children: [
+                              BottomSheetSwitch(
+                                switchValue: _pushNotification,
+                                valueChanged: (value) {
+                                  _pushNotification = value;
+                                },
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    thickness: 0.5,
+                    color: Colors.grey,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Incoming Ticket"),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Row(
+                            children: [
+                              BottomSheetSwitch(
+                                switchValue: _incomingTickets,
+                                valueChanged: (value) {
+                                  _incomingTickets = value;
+                                },
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    thickness: 0.5,
+                    color: Colors.grey,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Incoming Message"),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Row(
+                            children: [
+                              BottomSheetSwitch(
+                                switchValue: _incomingMesaage,
+                                valueChanged: (value) {
+                                  _incomingMesaage = value;
+                                },
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        });
   }
 }

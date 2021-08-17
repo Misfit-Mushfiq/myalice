@@ -105,42 +105,41 @@ class _ChatDetailsState extends State<ChatDetails>
           centerTitle: false,
           automaticallyImplyLeading: false,
           actions: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 15.0, 8.0),
-              child: Row(
-                children: [
-                  InkWell(
-                    child: Container(
-                        child: Text(
-                          'Resolve',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white, fontSize: 14),
-                        ),
-                        decoration: BoxDecoration(
-                            color: AliceColors.ALICE_GREEN,
-                            borderRadius: BorderRadius.circular(5)),
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 5)),
-                  ),
-                  SizedBox(width: 10),
-                  IconButton(
-                    icon: Icon(Icons.settings),
-                    color: AliceColors.ALICE_GREEN,
+            Row(
+              children: [
+                InkWell(
+                  child: Container(
+                      child: Text(
+                        'Resolve',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                      decoration: BoxDecoration(
+                          color: AliceColors.ALICE_GREEN,
+                          borderRadius: BorderRadius.circular(5)),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5)),
+                ),
+                SizedBox(width: 8),
+                IconButton(
+                  constraints: BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                  icon: Icon(Icons.settings),
+                  color: AliceColors.ALICE_GREEN,
+                  onPressed: () {
+                    showModal(context);
+                  },
+                ),
+                IconButton(
+                    constraints: BoxConstraints(),
                     onPressed: () {
-                      showModal(context);
+                      Get.toNamed(USER_PROFILE_PAGE);
                     },
-                  ),
-                  SizedBox(width: 10),
-                  IconButton(
-                      onPressed: () {
-                        Get.toNamed(USER_PROFILE_PAGE);
-                      },
-                      icon: Icon(
-                        Icons.info_outline,
-                        color: AliceColors.ALICE_GREEN,
-                      ))
-                ],
-              ),
+                    icon: Icon(
+                      Icons.info_outline,
+                      color: AliceColors.ALICE_GREEN,
+                    ))
+              ],
             ),
           ],
         ),

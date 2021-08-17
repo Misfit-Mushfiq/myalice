@@ -50,7 +50,7 @@ class _InboxState extends State<Inbox> {
         body: Container(
             child: Column(children: [
           Container(
-            height: 160,
+            height: MediaQuery.of(context).size.height * 0.18,
             child: Stack(children: <Widget>[
               Container(
                 // Background
@@ -196,7 +196,7 @@ class _InboxState extends State<Inbox> {
               ),
               Positioned(
                 // To take AppBar Size only
-                top: 100.0,
+                top:  MediaQuery.of(context).size.height * 0.11,
                 left: 20.0,
                 right: 20.0,
                 child: AppBar(
@@ -224,10 +224,7 @@ class _InboxState extends State<Inbox> {
                     return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
-                          child: Container(
-                              child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
+                          child: Row(
                               children: [
                                 Stack(
                                   children: [
@@ -307,7 +304,7 @@ class _InboxState extends State<Inbox> {
                                 )
                               ],
                             ),
-                          )),
+                          
                           onTap: () => Get.toNamed(CHAT_DETAILS_PAGE),
                         ));
                   },
