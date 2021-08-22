@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/custom%20widgets/botButton.dart';
 import 'package:myalice/utils/colors.dart';
+import 'package:myalice/utils/routes.dart';
 
 class CustomerProfile extends StatefulWidget {
   CustomerProfile({Key? key}) : super(key: key);
@@ -47,7 +48,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
                     ),
                     Text(
                       "Richard Cooper",
-                      style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(
                       height: 10,
@@ -59,9 +61,18 @@ class _CustomerProfileState extends State<CustomerProfile> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.facebook,color: AliceColors.ALICE_BLUE,size: 15,),
-                            SizedBox(width: 5,),
-                            Text("Online Customer Support",style: TextStyle(fontSize: 12),)
+                            Icon(
+                              Icons.facebook,
+                              color: AliceColors.ALICE_BLUE,
+                              size: 15,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              "Online Customer Support",
+                              style: TextStyle(fontSize: 12),
+                            )
                           ],
                         ),
                       ),
@@ -84,11 +95,15 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 14))),
-                              Icon((Icons.arrow_forward_ios),size: 15,color: Colors.grey,)
+                              Icon(
+                                (Icons.arrow_forward_ios),
+                                size: 15,
+                                color: Colors.grey,
+                              )
                             ],
                           ),
                           onTap: () {
-                            print("object");
+                            Get.toNamed(CUSTOMER_INFO_PAGE);
                           },
                         ),
                         SizedBox(
@@ -109,7 +124,11 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 14))),
-                              Icon((Icons.arrow_forward_ios),size: 15,color: Colors.grey,)
+                              Icon(
+                                (Icons.arrow_forward_ios),
+                                size: 15,
+                                color: Colors.grey,
+                              )
                             ],
                           ),
                           onTap: () {
@@ -134,7 +153,11 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 14))),
-                              Icon((Icons.arrow_forward_ios),size: 15,color: Colors.grey,)
+                              Icon(
+                                (Icons.arrow_forward_ios),
+                                size: 15,
+                                color: Colors.grey,
+                              )
                             ],
                           ),
                           onTap: () {
@@ -159,7 +182,11 @@ class _CustomerProfileState extends State<CustomerProfile> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 14))),
-                              Icon((Icons.arrow_forward_ios),size: 15,color: Colors.grey,)
+                              Icon(
+                                (Icons.arrow_forward_ios),
+                                size: 15,
+                                color: Colors.grey,
+                              )
                             ],
                           ),
                           onTap: () {

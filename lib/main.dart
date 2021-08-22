@@ -4,6 +4,7 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myalice/screens/chatDetails.dart';
+import 'package:myalice/screens/customerInfo.dart';
 import 'package:myalice/screens/customerProfile.dart';
 import 'package:myalice/screens/inboxScreen.dart';
 import 'package:myalice/screens/loginScreen.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: SIGNUP_PAGE, page: () => SignUpScreen()),
         GetPage(name: USER_PROFILE_PAGE, page: () => UserProfile()),
         GetPage(name: CUSTOMER_PROFILE_PAGE, page: () => CustomerProfile()),
+         GetPage(name: CUSTOMER_INFO_PAGE, page: () => CustomerInfo()),
       ],
     );
   }

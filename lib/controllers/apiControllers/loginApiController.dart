@@ -3,6 +3,7 @@ import 'package:myalice/controllers/apiControllers/baseApiController.dart';
 import 'package:myalice/models/responseModels/loginResponse.dart';
 
 class LoginApiController extends BaseApiController {
+  
   static String _loginPath = "accounts/login";
 
   Future<LoginResponse> login(String email, String password) async {
