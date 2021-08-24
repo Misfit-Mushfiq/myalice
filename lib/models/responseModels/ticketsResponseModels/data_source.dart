@@ -1,3 +1,5 @@
+import 'package:myalice/models/responseModels/ticketsResponseModels/agent.dart';
+
 import 'customer.dart';
 
 class DataSource {
@@ -9,7 +11,7 @@ class DataSource {
   String? createdAt;
   bool? isReplied;
   Customer? customer;
-  List<dynamic>? agents;
+  List<Agent>? agents;
   List<dynamic>? tags;
   List<dynamic>? groups;
   bool? isResolved;
@@ -50,7 +52,9 @@ class DataSource {
         customer: json['customer'] == null
             ? null
             : Customer.fromJson(json['customer'] as Map<String, dynamic>),
-        agents: json['agents'] as List<dynamic>?,
+        agents: (json['agents'] as List<dynamic>?)
+            ?.map((e) => Agent.fromJson(e as Map<String, dynamic>))
+            .toList(),
         tags: json['tags'] as List<dynamic>?,
         groups: json['groups'] as List<dynamic>?,
         isResolved: json['is_resolved'] as bool?,
@@ -70,7 +74,6 @@ class DataSource {
         'created_at': createdAt,
         'is_replied': isReplied,
         'customer': customer?.toJson(),
-        'agents': agents,
         'tags': tags,
         'groups': groups,
         'is_resolved': isResolved,
@@ -79,5 +82,6 @@ class DataSource {
         'is_locked': isLocked,
         'locked_at': lockedAt,
         'locked_by': lockedBy,
+        'agents': agents?.map((e) => e.toJson()).toList(),
       };
 }

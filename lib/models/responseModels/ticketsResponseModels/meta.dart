@@ -1,13 +1,19 @@
 class Meta {
-  Meta();
+  String? age;
+  String? consent;
+  String? metaDefault;
 
-  factory Meta.fromJson(Map<String, dynamic> json) {
-    // TODO: implement fromJson
-    throw UnimplementedError('Meta.fromJson($json) is not implemented');
-  }
+  Meta({this.age, this.consent, this.metaDefault});
 
-  Map<String, dynamic> toJson() {
-    // TODO: implement toJson
-    throw UnimplementedError();
-  }
+  factory Meta.fromJson(Map<String, dynamic> json) => Meta(
+        age: json['age'] as String?,
+        consent: json['consent'] as String?,
+        metaDefault: json['default'] as String?,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'age': age,
+        'consent': consent,
+        'default': metaDefault,
+      };
 }

@@ -6,7 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/models/responseModels/UserResponse.dart';
-import 'package:myalice/models/responseModels/ticketsResponseModels/tickets_response.dart';
+
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/routes.dart';
 
@@ -70,10 +70,10 @@ class _InboxState extends State<Inbox> {
                 // Background
                 child: Row(
                   children: [
-                    /* Padding(
+                    Padding(
                       padding: const EdgeInsets.fromLTRB(20.0, 8.0, 8.0, 8.0),
                       child: GestureDetector(child: ProfileImage()),
-                    ), */
+                    ),
                     Expanded(
                       child: Text(
                         "Live Chat",
@@ -238,126 +238,140 @@ class _InboxState extends State<Inbox> {
 class Tickets extends GetView<InboxController> {
   @override
   Widget build(BuildContext context) {
-    return controller.obx((state) {
-      TicketsResponse _ticketsResponse = TicketsResponse.fromJson(state.data);
-      return Expanded(
-          child: ListView.builder(
-              shrinkWrap: true,
-              padding: EdgeInsets.zero,
-              itemBuilder: (context, index) {
-                return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      child: Row(
-                        children: [
-                          Stack(
+    return Obx(() {
+      return controller.ticketDataAvailable
+          ? Expanded(
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          child: Row(
                             children: [
-                              CircleAvatar(
-                                backgroundImage: NetworkImage(""),
-                                radius: 25,
-                              ),
-                              Positioned(
-                                  top: 30,
-                                  left: 30,
-                                  child: CircleAvatar(
-                                    backgroundImage: NetworkImage(
-                                        "https://picsum.photos/250?image=9"),
-                                    radius: 10,
-                                  ))
-                            ],
-                          ),
-                          Expanded(
-                              child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      _ticketsResponse.dataSource!.elementAt(index).customer!.fullName!,
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Icon(
-                                      Icons.facebook,
-                                      color: AliceColors.ALICE_BLUE,
-                                      size: 20,
-                                    )
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Text("Welcome .........")
-                              ],
-                            ),
-                          )),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                '5 mins ago',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                              SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                              Stack(
                                 children: [
                                   CircleAvatar(
-                                    backgroundColor: AliceColors.ALICE_GREEN,
-                                    radius: 5,
+                                    backgroundImage: NetworkImage(""),
+                                    radius: 25,
                                   ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Icon(
-                                    Icons.lock,
-                                    size: 15,
-                                  )
+                                  Positioned(
+                                      top: 30,
+                                      left: 30,
+                                      child: controller
+                                            .tickets.dataSource!
+                                            .elementAt(index)
+                                            .agents!.length>0? CircleAvatar(
+                                        backgroundImage: NetworkImage(controller
+                                            .tickets.dataSource!
+                                            .elementAt(index)
+                                            .agents!
+                                            .elementAt(0)
+                                            .avatar!),
+                                        radius: 10,
+                                      ):Container())
                                 ],
                               ),
+                              Expanded(
+                                  child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          controller.tickets.dataSource!
+                                              .elementAt(index)
+                                              .customer!
+                                              .fullName!,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Icon(
+                                          Icons.facebook,
+                                          color: AliceColors.ALICE_BLUE,
+                                          size: 20,
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(controller.tickets.dataSource!.elementAt(index).customer!.lastMessageText!)
+                                  ],
+                                ),
+                              )),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '5 mins ago',
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor:
+                                            AliceColors.ALICE_GREEN,
+                                        radius: 5,
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Icon(
+                                        Icons.lock,
+                                        size: 15,
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              )
                             ],
-                          )
-                        ],
-                      ),
-                      onTap: () => Get.toNamed(CHAT_DETAILS_PAGE),
-                    ));
-              },
-              itemCount: _ticketsResponse.dataSource!.length));
+                          ),
+                          onTap: () => Get.toNamed(CHAT_DETAILS_PAGE),
+                        ));
+                  },
+                  itemCount: controller.tickets.dataSource!.length))
+          : Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: CircularProgressIndicator(),
+            );
     });
   }
 }
 
-/* class ProfileImage extends GetView<InboxController> {
+class ProfileImage extends GetView<InboxController> {
   @override
   Widget build(BuildContext context) {
-    return controller.obx((data) {
-      UserInfoResponse userInfoResponse = UserInfoResponse.fromJson(data.data);
-      return GestureDetector(
-        child: new Container(
-          width: 40.0,
-          height: 40.0,
-          decoration: new BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.blue,
-            image: new DecorationImage(
-              fit: BoxFit.fill,
-              image: new CachedNetworkImageProvider(
-                  userInfoResponse.dataSource!.avatar!),
-            ),
-          ),
-        ),
-        onTap: () {
-          Get.toNamed(USER_PROFILE_PAGE, arguments: userInfoResponse);
-        },
-      );
+    return Obx(() {
+      return controller.userDataAvailable
+          ? GestureDetector(
+              child: new Container(
+                width: 40.0,
+                height: 40.0,
+                decoration: new BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: new DecorationImage(
+                    fit: BoxFit.fill,
+                    image: new CachedNetworkImageProvider(
+                        controller.user.dataSource!.avatar!),
+                  ),
+                ),
+              ),
+              onTap: () {
+                Get.toNamed(USER_PROFILE_PAGE, arguments: controller.user);
+              },
+            )
+          : CircularProgressIndicator();
     });
   }
 }
- */

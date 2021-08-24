@@ -1,15 +1,14 @@
 import 'data_source.dart';
 
-class TicketsResponse {
+class TicketResponse {
   bool? success;
   List<DataSource>? dataSource;
   int? total;
 
-  TicketsResponse({this.success, this.dataSource, this.total});
+  TicketResponse({this.success, this.dataSource, this.total});
 
-  factory TicketsResponse.fromJson(Map<String, dynamic> json) =>
-      TicketsResponse(
-        success: json['success'] ,
+  factory TicketResponse.fromJson(Map<String, dynamic> json) => TicketResponse(
+        success: json['success'] as bool?,
         dataSource: (json['dataSource'] as List<dynamic>?)
             ?.map((e) => DataSource.fromJson(e as Map<String, dynamic>))
             .toList(),

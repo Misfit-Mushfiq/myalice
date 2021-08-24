@@ -15,7 +15,7 @@ class Customer {
   String? language;
   String? phone;
   dynamic email;
-  //Meta? meta;
+  Meta? meta;
   String? createdAt;
   String? lastMessageText;
   String? lastMessageTime;
@@ -34,7 +34,7 @@ class Customer {
     this.language,
     this.phone,
     this.email,
-    //this.meta,
+    this.meta,
     this.createdAt,
     this.lastMessageText,
     this.lastMessageTime,
@@ -56,9 +56,9 @@ class Customer {
         language: json['language'] as String?,
         phone: json['phone'] as String?,
         email: json['email'],
-/*         meta: json['meta'] == null
+        meta: json['meta'] == null
             ? null
-            : Meta.fromJson(json['meta'] as Map<String, dynamic>), */
+            : Meta.fromJson(json['meta'] as Map<String, dynamic>),
         createdAt: json['created_at'] as String?,
         lastMessageText: json['last_message_text'] as String?,
         lastMessageTime: json['last_message_time'] as String?,
@@ -78,7 +78,7 @@ class Customer {
         'language': language,
         'phone': phone,
         'email': email,
-        //'meta': meta?.toJson(),
+        'meta': meta?.toJson(),
         'created_at': createdAt,
         'last_message_text': lastMessageText,
         'last_message_time': lastMessageTime,
