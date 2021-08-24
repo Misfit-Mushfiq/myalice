@@ -94,7 +94,7 @@ class DataSource {
     adminInfo = json['admin_info'] != null
         ? new AdminInfo.fromJson(json['admin_info'])
         : null;
-    this.text= json['text'];
+    this.text = json['text'];
   }
 
   Map<String, dynamic> toJson() {

@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/interceptor.dart';
 
-class BaseApiController extends GetxController {
+class BaseApiController extends GetxController with StateMixin<dynamic> {
   static const bool MODE_DEVELOPMENT = false;
 
   static const String _baseUrl = MODE_DEVELOPMENT == true
@@ -35,9 +35,7 @@ class BaseApiController extends GetxController {
       baseUrl: _baseUrl,
       connectTimeout: 30000,
       receiveTimeout: 60000,
-      headers: {
-        _contentType: 'application/json'
-        },
+      headers: {_contentType: 'application/json'},
     );
 
     _dio = Dio(dioOptions)..interceptors.add(LoggingInterceptors());
@@ -64,7 +62,7 @@ class BaseApiController extends GetxController {
         break;
       case DioErrorType.response:
         errorDescription =
-            "Received invalid status code: ${error.response!.statusCode}";
+            "Received status code: ${error.response!.statusCode}";
         break;
       case DioErrorType.sendTimeout:
         errorDescription = "Send timeout in connection with API server";

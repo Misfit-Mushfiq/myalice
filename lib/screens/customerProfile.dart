@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myalice/custom%20widgets/botButton.dart';
+import 'package:myalice/customWidgets/botButton.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/routes.dart';
 

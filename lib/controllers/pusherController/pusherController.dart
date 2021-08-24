@@ -13,7 +13,6 @@ class PusherService extends ChatApiController {
   Channel? channel;
   PusherClient? pusher;
 
-
   Future<void> connectPusher(String channelName, String eventName) async {
     try {
       var options = PusherOptions(cluster: "ap1");
@@ -26,11 +25,11 @@ class PusherService extends ChatApiController {
       channel = pusher!.subscribe(channelName);
       channel!.bind(eventName, (event) async {
         Map<String, dynamic> text = jsonDecode(event.data);
-          Get.find<ChatApiController>()
-              .chatResponse
-              .add(DataSource(text: text['data']['text'],source: text['source'],type: text['type']));
+        Get.find<ChatApiController>().chatResponse.add(DataSource(
+            text: text['data']['text'],
+            source: text['source'],
+            type: text['type']));
       });
-      
     } on PlatformException catch (e) {
       print(e.message);
     }

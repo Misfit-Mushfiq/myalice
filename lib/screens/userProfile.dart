@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myalice/custom%20widgets/botButton.dart';
+import 'package:myalice/customWidgets/botButton.dart';
+import 'package:myalice/models/responseModels/UserResponse.dart';
 import 'package:myalice/utils/colors.dart';
 
 class UserProfile extends StatefulWidget {
@@ -16,6 +18,13 @@ class _UserProfileState extends State<UserProfile> {
   bool _pushNotification = false;
   bool _incomingTickets = false;
   bool _incomingMesaage = false;
+  late UserInfoResponse _userInfoResponse;
+
+  @override
+  void initState() {
+    super.initState();
+    _userInfoResponse = Get.arguments;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +55,14 @@ class _UserProfileState extends State<UserProfile> {
                   children: [
                     CircleAvatar(
                       radius: 30,
+                      backgroundImage: CachedNetworkImageProvider(
+                          _userInfoResponse.dataSource!.avatar!),
                     ),
                     SizedBox(
                       height: 10,
                     ),
                     Text(
-                      "Richard Cooper",
+                      _userInfoResponse.dataSource!.fullName!,
                       style: TextStyle(fontSize: 16),
                     ),
                     TextButton(
@@ -64,7 +75,7 @@ class _UserProfileState extends State<UserProfile> {
                           "Team",
                           style: TextStyle(color: Colors.black),
                         )),
-                    Text("richard.cooper@example.com"),
+                    Text(_userInfoResponse.dataSource!.email!),
                     SizedBox(
                       height: 30,
                     ),

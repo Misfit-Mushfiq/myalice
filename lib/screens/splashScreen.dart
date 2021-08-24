@@ -26,9 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     token = await _sharedPref.readString('apiToken');
     //print("API TOKEN :: "+token!);
     Timer(Duration(seconds: 3), () {
-      token == null 
-          ? Get.offNamed(LOGIN_PAGE)
-          : Get.offNamed(INBOX_PAGE);
+      token == null ? Get.offNamed(LOGIN_PAGE) : Get.offNamed(INBOX_PAGE);
     });
   }
 
