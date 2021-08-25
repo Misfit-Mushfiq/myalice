@@ -26,6 +26,8 @@ dependencies:
   smart_select: ^4.3.2
   modal_bottom_sheet: ^2.0.0
   multi_select_flutter: ^4.0.0
+  font_awesome_flutter: ^9.1.0
+  intl: ^0.17.0
   
 
 dev_dependencies:

@@ -1,8 +1,10 @@
 import 'dart:ui';
+import 'package:intl/intl.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/utils/colors.dart';
@@ -154,13 +156,21 @@ class _InboxState extends State<Inbox> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   ListTile(
-                    title: Text(_pendingSelected
-                        ? " Resolved Tickets"
-                        : " Pending Tickets",style: TextStyle(fontSize: 14),),
-                    leading:
-                        Icon(_pendingSelected?Icons.check_circle_outline:Icons.lock_clock,color: Colors.black,size: 25,),
+                    title: Text(
+                      _pendingSelected
+                          ? " Resolved Tickets"
+                          : " Pending Tickets",
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    leading: Icon(
+                      _pendingSelected
+                          ? Icons.check_circle_outline
+                          : Icons.lock_clock,
+                      color: Colors.black,
+                      size: 25,
+                    ),
                     minLeadingWidth: 0.0,
-                    contentPadding:EdgeInsets.only(left:10.0),
+                    contentPadding: EdgeInsets.only(left: 10.0),
                     onTap: () {
                       setState(() {
                         _pendingSelected = !_pendingSelected;
@@ -180,12 +190,15 @@ class _InboxState extends State<Inbox> {
                     color: Colors.grey,
                   ),
                   ListTile(
-                     contentPadding:EdgeInsets.only(left:10.0),
-                    title: Text("Filter Tickets",style: TextStyle(fontSize: 14),),
+                    contentPadding: EdgeInsets.only(left: 10.0),
+                    title: Text(
+                      "Filter Tickets",
+                      style: TextStyle(fontSize: 14),
+                    ),
                     leading: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset("assets/launch_icon/filter.svg",
-                          color: Colors.black,height: 15),
+                          color: Colors.black, height: 15),
                     ),
                     minLeadingWidth: 0.0,
                     onTap: () {
@@ -198,10 +211,16 @@ class _InboxState extends State<Inbox> {
                     color: Colors.grey,
                   ),
                   ListTile(
-                     contentPadding:EdgeInsets.only(left:10.0),
+                    contentPadding: EdgeInsets.only(left: 10.0),
                     title: _sortNew
-                        ? Text("Sort by newest",style: TextStyle(fontSize: 14),)
-                        : Text("Sort by oldest",style: TextStyle(fontSize: 14),),
+                        ? Text(
+                            "Sort by newest",
+                            style: TextStyle(fontSize: 14),
+                          )
+                        : Text(
+                            "Sort by oldest",
+                            style: TextStyle(fontSize: 14),
+                          ),
                     leading: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
@@ -295,12 +314,22 @@ class Tickets extends GetView<InboxController> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                         SizedBox(
-                                          width: 5,
+                                          width: 8,
                                         ),
-                                        Icon(
-                                          Icons.facebook,
-                                          color: AliceColors.ALICE_BLUE,
-                                          size: 20,
+                                        FaIcon(
+                                          platformIcon(controller
+                                              .tickets.dataSource!
+                                              .elementAt(index)
+                                              .customer!
+                                              .platform!
+                                              .type!),
+                                          size: 15,
+                                          color: platformColor(controller
+                                              .tickets.dataSource!
+                                              .elementAt(index)
+                                              .customer!
+                                              .platform!
+                                              .type!),
                                         )
                                       ],
                                     ),
@@ -322,17 +351,10 @@ class Tickets extends GetView<InboxController> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    "5 mins ago"
-                                    /* DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(
-                                            int.parse(controller
-                                                    .tickets.dataSource!
-                                                    .elementAt(index)
-                                                    .createdAt!) *
-                                                1000)).inDays
-                                        .toString() */
+                                    readTimestamp(int.parse(controller.tickets.dataSource!.elementAt(index).createdAt!))
                                     ,
                                     style: TextStyle(
-                                        color: Colors.grey, fontSize: 13),
+                                        color: Colors.grey, fontSize: 12),
                                   ),
                                   SizedBox(height: 10),
                                   Row(
@@ -373,6 +395,71 @@ class Tickets extends GetView<InboxController> {
               child: CircularProgressIndicator(),
             );
     });
+  }
+
+  IconData platformIcon(String name) {
+    switch (name) {
+      case "whatsapp_messenger":
+        return FontAwesomeIcons.whatsapp;
+      case "facebook_messenger":
+        return FontAwesomeIcons.facebookMessenger;
+      case "viber_messenger":
+        return FontAwesomeIcons.viber;
+      case "line_messenger":
+        return FontAwesomeIcons.line;
+      case "facebook":
+        return FontAwesomeIcons.facebook;
+      case "telegram_messenger":
+        return FontAwesomeIcons.telegram;
+      default:
+        return FontAwesomeIcons.info;
+    }
+  }
+
+  Color platformColor(String name) {
+    switch (name) {
+      case "whatsapp_messenger":
+        return AliceColors.ALICE_GREEN;
+      case "facebook_messenger":
+        return AliceColors.ALICE_BLUE;
+      case "viber_messenger":
+        return AliceColors.ALICE_VIBER;
+      case "line_messenger":
+        return AliceColors.ALICE_GREEN;
+      case "facebook":
+        return AliceColors.ALICE_GREEN;
+      case "telegram_messenger":
+        return AliceColors.ALICE_BLUE;
+      default:
+        return AliceColors.ALICE_BLUE;
+    }
+  }
+
+  String readTimestamp(int timestamp) {
+    var now = DateTime.now();
+    var format = DateFormat('HH:mm a');
+    var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+    var diff = now.difference(date);
+    var time = '';
+
+    if (diff.inSeconds <= 0 || diff.inSeconds > 0 && diff.inMinutes == 0 || diff.inMinutes > 0 && diff.inHours == 0 || diff.inHours > 0 && diff.inDays == 0) {
+      time = format.format(date);
+    } else if (diff.inDays > 0 && diff.inDays < 7) {
+      if (diff.inDays == 1) {
+        time = diff.inDays.toString() + ' DAY AGO';
+      } else {
+        time = diff.inDays.toString() + ' DAYS AGO';
+      }
+    } else {
+      if (diff.inDays == 7) {
+        time = (diff.inDays / 7).floor().toString() + ' WEEK AGO';
+      } else {
+
+        time = (diff.inDays / 7).floor().toString() + ' WEEKS AGO';
+      }
+    }
+
+    return time;
   }
 }
 
