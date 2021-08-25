@@ -20,9 +20,11 @@ class _InboxState extends State<Inbox> {
   String _ticketType = 'Pending Tickets';
   bool _pendingSelected = true;
   bool _resolvedSelected = false;
+  late InboxController _inboxController;
   @override
   void initState() {
     super.initState();
+    _inboxController = Get.put(InboxController());
   }
 
   @override
@@ -92,7 +94,7 @@ class _InboxState extends State<Inbox> {
                               size: 30,
                             ),
                             onTap: () {
-                              showModal2(context);
+                              showModal2(context, Get.find<InboxController>());
                             }))
                   ],
                 ),
@@ -103,16 +105,22 @@ class _InboxState extends State<Inbox> {
               Positioned(
                 // To take AppBar Size only
                 top: MediaQuery.of(context).size.height * 0.11,
-                left: 20.0,
-                right: 20.0,
+                left: 10.0,
+                right: 10.0,
                 child: AppBar(
-                  toolbarHeight: 50,
+                  toolbarHeight: 40,
                   backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  )),
                   leading: Icon(
                     Icons.search,
                     color: Colors.grey,
                   ),
                   primary: false,
+                  titleSpacing: 0.0,
+                  centerTitle: false,
                   title: TextField(
                       decoration: InputDecoration(
                           hintText: "Search",
@@ -139,7 +147,7 @@ class _InboxState extends State<Inbox> {
                     IconButton(
                         onPressed: () {
                           Get.back();
-                          showModal2(context);
+                          showModal2(context, Get.find<InboxController>());
                         },
                         icon: Icon(Icons.arrow_back_ios))
                   ],
@@ -159,7 +167,7 @@ class _InboxState extends State<Inbox> {
         });
   }
 
-  void showModal2(BuildContext context) {
+  void showModal2(BuildContext context, InboxController controller) {
     showModalBottomSheet(
         context: context,
         useRootNavigator: true,
@@ -220,9 +228,8 @@ class _InboxState extends State<Inbox> {
                     minLeadingWidth: 0.0,
                     onTap: () {
                       setState(() {
-                        _ticketType = "Resolve Tickets";
-                        _pendingSelected = true;
-                        _resolvedSelected = false;
+                        controller.sort = "asc";
+                        controller.getTickets("asc");
                       });
                       Navigator.of(context).pop();
                     },
@@ -253,24 +260,32 @@ class Tickets extends GetView<InboxController> {
                               Stack(
                                 children: [
                                   CircleAvatar(
-                                    backgroundImage: NetworkImage(""),
+                                    backgroundImage: NetworkImage(controller
+                                            .tickets.dataSource!
+                                            .elementAt(index)
+                                            .customer!
+                                            .avatar ??
+                                        ""),
                                     radius: 25,
                                   ),
                                   Positioned(
                                       top: 30,
                                       left: 30,
-                                      child: controller
-                                            .tickets.dataSource!
-                                            .elementAt(index)
-                                            .agents!.length>0? CircleAvatar(
-                                        backgroundImage: NetworkImage(controller
-                                            .tickets.dataSource!
-                                            .elementAt(index)
-                                            .agents!
-                                            .elementAt(0)
-                                            .avatar!),
-                                        radius: 10,
-                                      ):Container())
+                                      child: controller.tickets.dataSource!
+                                                  .elementAt(index)
+                                                  .agents!
+                                                  .length >
+                                              0
+                                          ? CircleAvatar(
+                                              backgroundImage: NetworkImage(
+                                                  controller.tickets.dataSource!
+                                                      .elementAt(index)
+                                                      .agents!
+                                                      .elementAt(0)
+                                                      .avatar!),
+                                              radius: 10,
+                                            )
+                                          : Container())
                                 ],
                               ),
                               Expanded(
@@ -287,7 +302,6 @@ class Tickets extends GetView<InboxController> {
                                               .customer!
                                               .fullName!,
                                           style: TextStyle(
-                                              fontSize: 16,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         SizedBox(
@@ -303,7 +317,13 @@ class Tickets extends GetView<InboxController> {
                                     SizedBox(
                                       height: 10,
                                     ),
-                                    Text(controller.tickets.dataSource!.elementAt(index).customer!.lastMessageText!)
+                                    Text(
+                                      controller.tickets.dataSource!
+                                          .elementAt(index)
+                                          .customer!
+                                          .lastMessageText!,
+                                      style: TextStyle(fontSize: 13),
+                                    )
                                   ],
                                 ),
                               )),
@@ -312,23 +332,40 @@ class Tickets extends GetView<InboxController> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    '5 mins ago',
-                                    style: TextStyle(color: Colors.grey),
+                                    "5 mins ago"
+                                    /* DateTime.now().difference(DateTime.fromMillisecondsSinceEpoch(
+                                            int.parse(controller
+                                                    .tickets.dataSource!
+                                                    .elementAt(index)
+                                                    .createdAt!) *
+                                                1000)).inDays
+                                        .toString() */
+                                    ,
+                                    style: TextStyle(
+                                        color: Colors.grey, fontSize: 13),
                                   ),
                                   SizedBox(height: 10),
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       CircleAvatar(
-                                        backgroundColor:
-                                            AliceColors.ALICE_GREEN,
-                                        radius: 5,
+                                        backgroundColor: controller
+                                                .tickets.dataSource!
+                                                .elementAt(index)
+                                                .isReplied!
+                                            ? AliceColors.ALICE_GREEN
+                                            : Colors.red,
+                                        radius: 4,
                                       ),
                                       SizedBox(
                                         width: 10,
                                       ),
                                       Icon(
-                                        Icons.lock,
+                                        controller.tickets.dataSource!
+                                                .elementAt(index)
+                                                .isLocked!
+                                            ? Icons.lock
+                                            : Icons.lock_open_rounded,
                                         size: 15,
                                       )
                                     ],

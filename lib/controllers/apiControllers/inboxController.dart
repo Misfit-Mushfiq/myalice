@@ -11,6 +11,14 @@ class InboxController extends BaseApiController {
 
   final SharedPref _sharedPref = SharedPref();
 
+  var _sort;
+
+  get sort => _sort;
+
+  set sort(sort) {
+    _sort = sort;
+  }
+
   var _user;
   var _ticketResponse;
 
@@ -30,7 +38,8 @@ class InboxController extends BaseApiController {
     super.onInit();
     token = await _sharedPref.readString("apiToken");
     await getUser();
-    getTickets();
+    sort = 'desc';
+    getTickets(sort);
   }
 
   Future<dynamic> getUser() async {
@@ -44,7 +53,7 @@ class InboxController extends BaseApiController {
         .whenComplete(() => _userDataAvailable.value = _user != null);
   }
 
-  Future<dynamic> getTickets() async {
+  Future<dynamic> getTickets(String order) async {
     getDio()!
         .get(_ticketsPath,
             queryParameters: {
@@ -56,7 +65,7 @@ class InboxController extends BaseApiController {
               "agents": "all",
               "groups": "all",
               "tags": "all",
-              "order": "desc"
+              "order": sort
             },
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) => response.statusCode == 200
