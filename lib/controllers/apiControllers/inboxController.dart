@@ -12,8 +12,14 @@ class InboxController extends BaseApiController {
   final SharedPref _sharedPref = SharedPref();
 
   var _sort;
+  var _resolved;
 
   get sort => _sort;
+  get resolved => _resolved;
+
+  set resolved(resolved) {
+    _resolved = resolved;
+  }
 
   set sort(sort) {
     _sort = sort;
@@ -23,12 +29,12 @@ class InboxController extends BaseApiController {
   var _ticketResponse;
 
   var _userDataAvailable = false.obs;
-  var _ticketsDataAvailable = false.obs;
+  var isticketsDataAvailable = false.obs;
 
   bool get userDataAvailable => _userDataAvailable.value;
   UserInfoResponse get user => _user;
 
-  bool get ticketDataAvailable => _ticketsDataAvailable.value;
+  bool get ticketDataAvailable => isticketsDataAvailable.value;
   TicketResponse get tickets => _ticketResponse;
 
   late String? token;
@@ -39,7 +45,8 @@ class InboxController extends BaseApiController {
     token = await _sharedPref.readString("apiToken");
     await getUser();
     sort = 'desc';
-    getTickets(sort);
+    resolved = 0;
+    getTickets(sort,resolved);
   }
 
   Future<dynamic> getUser() async {
@@ -53,11 +60,11 @@ class InboxController extends BaseApiController {
         .whenComplete(() => _userDataAvailable.value = _user != null);
   }
 
-  Future<dynamic> getTickets(String order) async {
+  Future<dynamic> getTickets(String order, int resolved) async {
     getDio()!
         .get(_ticketsPath,
             queryParameters: {
-              "resolved": 0,
+              "resolved": resolved,
               "offset": 0,
               "limit": 20,
               "search": "",
@@ -71,8 +78,8 @@ class InboxController extends BaseApiController {
         .then((response) => response.statusCode == 200
             ? _ticketResponse = TicketResponse.fromJson(response.data)
             : null)
-        .catchError((err) => print('Error!!!!! : $err'))
+        .catchError((err) => _ticketResponse.reactive)
         .whenComplete(
-            () => _ticketsDataAvailable.value = _ticketResponse != null);
+            () => isticketsDataAvailable.value = _ticketResponse != null);
   }
 }

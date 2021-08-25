@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
-import 'package:myalice/models/responseModels/UserResponse.dart';
-
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/routes.dart';
 
@@ -20,7 +18,9 @@ class _InboxState extends State<Inbox> {
   String _ticketType = 'Pending Tickets';
   bool _pendingSelected = true;
   bool _resolvedSelected = false;
+  bool _sortNew = false;
   late InboxController _inboxController;
+
   @override
   void initState() {
     super.initState();
@@ -36,33 +36,6 @@ class _InboxState extends State<Inbox> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: _inboxBottomSheet,
-        /* AppBar(
-          backgroundColor: Colors.black,
-          title: Text(
-            'Live Chat',
-            style: TextStyle(fontWeight: FontWeight.normal),
-          ),
-          centerTitle: true,
-          leading: IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.search,
-                size: 25,
-              )),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircleAvatar(
-                backgroundImage:
-                    NetworkImage("https://picsum.photos/250?image=9"),
-                radius: 16.0,
-              ),
-            ),
-          ],
-          bottom: PreferredSize(
-              child: InboxAppBarBottomSection(),
-              preferredSize: Size.fromHeight(40.0)),
-        ), */
         body: Container(
             child: Column(children: [
           Container(
@@ -171,6 +144,7 @@ class _InboxState extends State<Inbox> {
     showModalBottomSheet(
         context: context,
         useRootNavigator: true,
+        isDismissible: true,
         builder: (context) {
           return Container(
             height: 200,
@@ -180,16 +154,23 @@ class _InboxState extends State<Inbox> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   ListTile(
-                    title: Text(_resolvedSelected
-                        ? "Resolve Tickets"
-                        : "Pending Tickets"),
+                    title: Text(_pendingSelected
+                        ? " Resolved Tickets"
+                        : " Pending Tickets",style: TextStyle(fontSize: 14),),
                     leading:
-                        Icon(Icons.check_circle_outline, color: Colors.black),
+                        Icon(_pendingSelected?Icons.check_circle_outline:Icons.lock_clock,color: Colors.black,size: 25,),
                     minLeadingWidth: 0.0,
+                    contentPadding:EdgeInsets.only(left:10.0),
                     onTap: () {
                       setState(() {
                         _pendingSelected = !_pendingSelected;
                         _resolvedSelected = !_resolvedSelected;
+                        controller.isticketsDataAvailable.value = false;
+                        _resolvedSelected
+                            ? controller.resolved = 1
+                            : controller.resolved = 0;
+                        controller.getTickets(
+                            controller.sort, controller.resolved);
                       });
                       Navigator.of(context).pop();
                     },
@@ -199,11 +180,12 @@ class _InboxState extends State<Inbox> {
                     color: Colors.grey,
                   ),
                   ListTile(
-                    title: Text("Filter Tickets"),
+                     contentPadding:EdgeInsets.only(left:10.0),
+                    title: Text("Filter Tickets",style: TextStyle(fontSize: 14),),
                     leading: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset("assets/launch_icon/filter.svg",
-                          color: Colors.black),
+                          color: Colors.black,height: 15),
                     ),
                     minLeadingWidth: 0.0,
                     onTap: () {
@@ -216,7 +198,10 @@ class _InboxState extends State<Inbox> {
                     color: Colors.grey,
                   ),
                   ListTile(
-                    title: Text("Sort by newest"),
+                     contentPadding:EdgeInsets.only(left:10.0),
+                    title: _sortNew
+                        ? Text("Sort by newest",style: TextStyle(fontSize: 14),)
+                        : Text("Sort by oldest",style: TextStyle(fontSize: 14),),
                     leading: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SvgPicture.asset(
@@ -227,11 +212,16 @@ class _InboxState extends State<Inbox> {
                     ),
                     minLeadingWidth: 0.0,
                     onTap: () {
+                      Get.back();
                       setState(() {
-                        controller.sort = "asc";
-                        controller.getTickets("asc");
+                        _sortNew = !_sortNew;
+                        controller.isticketsDataAvailable.value = false;
+                        _sortNew
+                            ? controller.sort = "asc"
+                            : controller.sort = "desc";
+                        controller.getTickets(
+                            controller.sort, controller.resolved);
                       });
-                      Navigator.of(context).pop();
                     },
                   )
                 ],
