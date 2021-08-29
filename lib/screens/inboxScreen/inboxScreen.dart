@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
+import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/routes.dart';
 
@@ -22,6 +24,17 @@ class _InboxState extends State<Inbox> {
   bool _resolvedSelected = false;
   bool _sortNew = false;
   late InboxController _inboxController;
+
+  static List<Animal> _animals = [
+    Animal(id: 1, name: "Lion"),
+    Animal(id: 2, name: "Flamingo"),
+    Animal(id: 3, name: "Hippo"),
+  ];
+  final _items = _animals
+      .map((animal) => MultiSelectItem<Animal>(animal, animal.name))
+      .toList();
+  //List<Animal> _selectedAnimals = [];
+  List<Object?> _selectedAnimals2 = [];
 
   @override
   void initState() {
@@ -114,31 +127,217 @@ class _InboxState extends State<Inbox> {
         context: context,
         builder: (context) {
           return Container(
-            height: 400,
+            height: 350,
             child: Column(
               children: [
                 Row(
                   children: [
                     IconButton(
+                        padding: EdgeInsets.all(5),
                         onPressed: () {
                           Get.back();
                           showModal2(context, Get.find<InboxController>());
                         },
-                        icon: Icon(Icons.arrow_back_ios))
+                        icon: Icon(Icons.arrow_back_ios)),
+                    Text(
+                      "Filter Options",
+                      style: TextStyle(fontSize: 16),
+                    ),
                   ],
                 ),
                 ListTile(
-                  title: Text(_ticketType),
-                  leading:
-                      Icon(Icons.check_circle_outline, color: Colors.black),
+                  contentPadding: EdgeInsets.only(left: 10.0),
+                  title: Text(
+                    "Channels",
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 20,
+                  ),
+                  minLeadingWidth: 0.0,
+                  onTap: () {
+                    showFilterModal(context);
+                  },
+                ),
+                Divider(
+                  color: Colors.grey,
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.only(left: 10.0),
+                  title: Text("Time", style: TextStyle(fontSize: 14)),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
                   minLeadingWidth: 0.0,
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                )
+                ),
+                Divider(
+                  color: Colors.grey,
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.only(left: 10.0),
+                  title: Text("Assigned Agent/Group",
+                      style: TextStyle(fontSize: 14)),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
+                  minLeadingWidth: 0.0,
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                Divider(
+                  color: Colors.grey,
+                ),
+                ListTile(
+                  contentPadding: EdgeInsets.only(left: 10.0),
+                  title: Text(
+                    "Tags",
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
+                  minLeadingWidth: 0.0,
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
               ],
             ),
           );
+        });
+  }
+
+  void showFilterModal(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.white,
+        builder: (context) {
+          return Container(
+              height: 200,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          icon: Icon(
+                            Icons.arrow_back_ios_new,
+                            color: Colors.grey,
+                          )),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Expanded(
+                        child: Text("Channels"),
+                      ),
+                      InkWell(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: Colors.grey)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.add,
+                                      size: 20,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      "Add New Tags",
+                                      style: TextStyle(fontSize: 12),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              _animals.add(Animal(id: 4, name: "Lionss"));
+                            });
+                          })
+                    ],
+                  ),
+                  Expanded(
+                    child: Container(
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(left: 10, top: 0.0),
+                            child: MultiSelectChipField(
+                              items: _items,
+                              showHeader: false,
+                              height: 30,
+                              initialValue: _selectedAnimals2,
+                              chipShape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5)),
+                              decoration: BoxDecoration(),
+                              itemBuilder: (item, state) {
+                                return InkWell(
+                                  onTap: () {
+                                    _selectedAnimals2.contains(item.value)
+                                        ? _selectedAnimals2.remove(item.value)
+                                        : _selectedAnimals2.add(item.value);
+                                    state.didChange(_selectedAnimals2);
+                                  },
+                                  child:Container(
+                                  padding: EdgeInsets.zero,
+                                    margin: EdgeInsets.only(left:5,),
+                                    decoration:BoxDecoration(
+                                      color: AliceColors.ALICE_SELECTED_CHANNEL,
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: Colors.grey)),
+                                    child:  Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        FaIcon(FontAwesomeIcons.whatsapp,size: 15,),
+                                        Text(" "+item.label,style: TextStyle(fontSize: 12),)
+                                      ],
+                                  ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              onTap: (values) {
+                                _selectedAnimals2 = values;
+                              },
+                              icon: Icon(
+                                Icons.cancel,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          /* _selectedAnimals2.isEmpty
+                                  ? Container(
+                                      padding: EdgeInsets.all(10),
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        "None selected",
+                                        style: TextStyle(color: Colors.black54),
+                                      ))
+                                  : MultiSelectChipDisplay(
+                                  onTap: (value) {
+                                    setState(() {
+                                      _selectedAnimals2.remove(value);
+                                    });
+                                  },
+                                ), */
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ));
         });
   }
 
@@ -351,8 +550,10 @@ class Tickets extends GetView<InboxController> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    readTimestamp(int.parse(controller.tickets.dataSource!.elementAt(index).createdAt!))
-                                    ,
+                                    readTimestamp(int.parse(controller
+                                        .tickets.dataSource!
+                                        .elementAt(index)
+                                        .createdAt!)),
                                     style: TextStyle(
                                         color: Colors.grey, fontSize: 12),
                                   ),
@@ -442,7 +643,10 @@ class Tickets extends GetView<InboxController> {
     var diff = now.difference(date);
     var time = '';
 
-    if (diff.inSeconds <= 0 || diff.inSeconds > 0 && diff.inMinutes == 0 || diff.inMinutes > 0 && diff.inHours == 0 || diff.inHours > 0 && diff.inDays == 0) {
+    if (diff.inSeconds <= 0 ||
+        diff.inSeconds > 0 && diff.inMinutes == 0 ||
+        diff.inMinutes > 0 && diff.inHours == 0 ||
+        diff.inHours > 0 && diff.inDays == 0) {
       time = format.format(date);
     } else if (diff.inDays > 0 && diff.inDays < 7) {
       if (diff.inDays == 1) {
@@ -454,7 +658,6 @@ class Tickets extends GetView<InboxController> {
       if (diff.inDays == 7) {
         time = (diff.inDays / 7).floor().toString() + ' WEEK AGO';
       } else {
-
         time = (diff.inDays / 7).floor().toString() + ' WEEKS AGO';
       }
     }

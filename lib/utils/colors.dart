@@ -8,4 +8,6 @@ class AliceColors {
   static const ALICE_GREY = const Color(0xFFF3F4F6);
   static const ALICE_BLUE = const Color(0xFF0078CF);
   static const ALICE_VIBER = const Color(0xFF7360F2);
+  static const ALICE_SELECTED_CHANNEL= const Color(0xFFCDF0DF);
+
 }
