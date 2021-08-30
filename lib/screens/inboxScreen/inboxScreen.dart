@@ -22,6 +22,7 @@ class _InboxState extends State<Inbox> {
   String _ticketType = 'Pending Tickets';
   bool _pendingSelected = true;
   bool _resolvedSelected = false;
+  bool _channelSelected = false;
   bool _sortNew = false;
   late InboxController _inboxController;
 
@@ -243,15 +244,8 @@ class _InboxState extends State<Inbox> {
                                 padding: const EdgeInsets.all(5.0),
                                 child: Row(
                                   children: [
-                                    Icon(
-                                      Icons.add,
-                                      size: 20,
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
                                     Text(
-                                      "Add New Tags",
+                                      "Reset",
                                       style: TextStyle(fontSize: 12),
                                     )
                                   ],
@@ -263,7 +257,9 @@ class _InboxState extends State<Inbox> {
                             setState(() {
                               _animals.add(Animal(id: 4, name: "Lionss"));
                             });
-                          })
+                          }),
+                          
+                          
                     ],
                   ),
                   Expanded(
@@ -271,48 +267,59 @@ class _InboxState extends State<Inbox> {
                       child: Column(
                         children: <Widget>[
                           Container(
-                            margin: EdgeInsets.only(left: 10, top: 0.0),
+                            margin: EdgeInsets.only(left: 10, top: 10.0),
                             child: MultiSelectChipField(
                               items: _items,
                               showHeader: false,
-                              height: 30,
+                              selectedChipColor: AliceColors.ALICE_SELECTED_CHANNEL,
+                              height: 50,
+                              
                               initialValue: _selectedAnimals2,
                               chipShape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5)),
                               decoration: BoxDecoration(),
-                              itemBuilder: (item, state) {
+                              /* itemBuilder: (item, state) {
                                 return InkWell(
                                   onTap: () {
-                                    _selectedAnimals2.contains(item.value)
-                                        ? _selectedAnimals2.remove(item.value)
-                                        : _selectedAnimals2.add(item.value);
-                                    state.didChange(_selectedAnimals2);
+                                    setState(() {
+                                      _channelSelected = true;
+                                    });
                                   },
-                                  child:Container(
-                                  padding: EdgeInsets.zero,
-                                    margin: EdgeInsets.only(left:5,),
-                                    decoration:BoxDecoration(
-                                      color: AliceColors.ALICE_SELECTED_CHANNEL,
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(color: Colors.grey)),
-                                    child:  Padding(
+                                  child: Container(
+                                    padding: EdgeInsets.zero,
+                                    margin: EdgeInsets.only(
+                                      left: 5,
+                                    ),
+                                    decoration: BoxDecoration(
+                                        color: _channelSelected
+                                            ? AliceColors.ALICE_SELECTED_CHANNEL
+                                            : Colors.white,
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(color: Colors.grey)),
+                                    child: Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        FaIcon(FontAwesomeIcons.whatsapp,size: 15,),
-                                        Text(" "+item.label,style: TextStyle(fontSize: 12),)
-                                      ],
-                                  ),
+                                        children: [
+                                          FaIcon(
+                                            FontAwesomeIcons.whatsapp,
+                                            size: 15,
+                                          ),
+                                          Text(
+                                            " " + item.label,
+                                            style: TextStyle(fontSize: 12),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );
                               },
-                              onTap: (values) {
+                               */onTap: (values) {
                                 _selectedAnimals2 = values;
                               },
                               icon: Icon(
-                                Icons.cancel,
+                                Icons.ac_unit,
                                 color: Colors.white,
                               ),
                             ),
