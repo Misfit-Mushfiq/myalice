@@ -171,6 +171,7 @@ class _FilterModalState extends State<FilterModal> {
         backgroundColor: Colors.white,
         builder: (context) {
           return ChannelModal(
+            selectedAnimals: _selectedAnimals,
             onsaved: (List<Animal?> value) {
               _selectedAnimals1 = value;
             },

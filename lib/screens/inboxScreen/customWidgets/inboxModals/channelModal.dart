@@ -5,8 +5,10 @@ import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/utils/colors.dart';
 
 class ChannelModal extends StatefulWidget {
-  final Function(List<Animal?> ) onsaved;
-  ChannelModal({Key? key, required this.onsaved}) : super(key: key);
+  final List<Animal?> selectedAnimals;
+  final Function(List<Animal?>) onsaved;
+  ChannelModal({Key? key, required this.onsaved, required this.selectedAnimals})
+      : super(key: key);
 
   @override
   _ChannelModalState createState() => _ChannelModalState();
@@ -31,7 +33,8 @@ class _ChannelModalState extends State<ChannelModal> {
   final _items = _animals
       .map((animal) => MultiSelectItem<Animal>(animal, animal.name))
       .toList();
-  List<Animal?> _selectedAnimals = [];
+
+  List<Animal?> _selectedAnimals1 = [];
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(builder: (context, StateSetter state) {
@@ -79,7 +82,7 @@ class _ChannelModalState extends State<ChannelModal> {
                       ),
                       onTap: () {
                         Get.back();
-                        widget.onsaved(_selectedAnimals);
+                        widget.onsaved(_selectedAnimals1);
                       }),
                   InkWell(
                       child: Padding(
@@ -103,7 +106,8 @@ class _ChannelModalState extends State<ChannelModal> {
                       ),
                       onTap: () {
                         state(() {
-                          _selectedAnimals.clear();
+                          _selectedAnimals1.clear();
+                          widget.selectedAnimals.clear();
                         });
                       }),
                 ],
@@ -119,7 +123,7 @@ class _ChannelModalState extends State<ChannelModal> {
                           showHeader: false,
                           selectedChipColor: AliceColors.ALICE_SELECTED_CHANNEL,
                           height: 50,
-                          initialValue: _selectedAnimals,
+                          initialValue: widget.selectedAnimals,
                           chipShape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5)),
                           decoration: BoxDecoration(),
@@ -162,7 +166,7 @@ class _ChannelModalState extends State<ChannelModal> {
                               },
                                */
                           onTap: (List<Animal?> values) {
-                            _selectedAnimals = values;
+                            _selectedAnimals1 = values;
                           },
                           icon: Icon(
                             Icons.ac_unit,
