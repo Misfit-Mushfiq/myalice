@@ -40,7 +40,7 @@ class LoggingInterceptors extends InterceptorsWrapper {
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) {
     if (err.response?.statusCode == 401) {
-     // pref.Get.offNamed(LOGIN_PAGE);
+      pref.Get.offNamed(LOGIN_PAGE);
     }
     debugPrint(err.response!.statusMessage);
     debugPrint(

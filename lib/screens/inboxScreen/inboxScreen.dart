@@ -30,12 +30,21 @@ class _InboxState extends State<Inbox> {
     Animal(id: 1, name: "Lion"),
     Animal(id: 2, name: "Flamingo"),
     Animal(id: 3, name: "Hippo"),
+     Animal(id: 1, name: "Lion"),
+    Animal(id: 2, name: "Flamingo"),
+    Animal(id: 3, name: "Hippo"),
+     Animal(id: 1, name: "Lion"),
+    Animal(id: 2, name: "Flamingo"),
+    Animal(id: 3, name: "Hippo"),
+     Animal(id: 1, name: "Lion"),
+    Animal(id: 2, name: "Flamingo"),
+    Animal(id: 3, name: "Hippo"),
   ];
   final _items = _animals
       .map((animal) => MultiSelectItem<Animal>(animal, animal.name))
       .toList();
   //List<Animal> _selectedAnimals = [];
-  List<Object?> _selectedAnimals2 = [];
+  List<Animal?> _selectedAnimals2 = [];
 
   @override
   void initState() {
@@ -146,20 +155,56 @@ class _InboxState extends State<Inbox> {
                     ),
                   ],
                 ),
-                ListTile(
-                  contentPadding: EdgeInsets.only(left: 10.0),
-                  title: Text(
-                    "Channels",
-                    style: TextStyle(fontSize: 14),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: InkWell(
+                    child: Expanded(
+                        child: Container(
+                      height: 60,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("Channels",
+                              style: TextStyle(
+                                fontWeight: _selectedAnimals2.length <= 0
+                                    ? FontWeight.normal
+                                    : FontWeight.bold,
+                              )),
+                          Expanded(child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: _selectedAnimals2.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Center(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: AliceColors.ALICE_SELECTED_CHANNEL),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Text(_selectedAnimals2
+                                            .elementAt(index)!
+                                            .name,style:TextStyle(color: AliceColors.ALICE_GREEN,fontSize: 12)),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.arrow_forward_ios,size: 20,color:Colors.grey),
+                        )
+                        
+                        ],
+                        
+                      ),
+                    )),
+                    onTap: () => showFilterModal(context),
                   ),
-                  trailing: Icon(
-                    Icons.arrow_forward_ios,
-                    size: 20,
-                  ),
-                  minLeadingWidth: 0.0,
-                  onTap: () {
-                    showFilterModal(context);
-                  },
                 ),
                 Divider(
                   color: Colors.grey,
@@ -167,7 +212,10 @@ class _InboxState extends State<Inbox> {
                 ListTile(
                   contentPadding: EdgeInsets.only(left: 10.0),
                   title: Text("Time", style: TextStyle(fontSize: 14)),
-                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
+                  trailing: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.arrow_forward_ios, size: 20),
+                  ),
                   minLeadingWidth: 0.0,
                   onTap: () {
                     Navigator.of(context).pop();
@@ -180,7 +228,10 @@ class _InboxState extends State<Inbox> {
                   contentPadding: EdgeInsets.only(left: 10.0),
                   title: Text("Assigned Agent/Group",
                       style: TextStyle(fontSize: 14)),
-                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
+                  trailing: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.arrow_forward_ios, size: 20),
+                  ),
                   minLeadingWidth: 0.0,
                   onTap: () {
                     Navigator.of(context).pop();
@@ -195,7 +246,10 @@ class _InboxState extends State<Inbox> {
                     "Tags",
                     style: TextStyle(fontSize: 14),
                   ),
-                  trailing: Icon(Icons.arrow_forward_ios, size: 20),
+                  trailing: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.arrow_forward_ios, size: 20),
+                  ),
                   minLeadingWidth: 0.0,
                   onTap: () {
                     Navigator.of(context).pop();
@@ -258,8 +312,6 @@ class _InboxState extends State<Inbox> {
                               _animals.add(Animal(id: 4, name: "Lionss"));
                             });
                           }),
-                          
-                          
                     ],
                   ),
                   Expanded(
@@ -271,9 +323,9 @@ class _InboxState extends State<Inbox> {
                             child: MultiSelectChipField(
                               items: _items,
                               showHeader: false,
-                              selectedChipColor: AliceColors.ALICE_SELECTED_CHANNEL,
+                              selectedChipColor:
+                                  AliceColors.ALICE_SELECTED_CHANNEL,
                               height: 50,
-                              
                               initialValue: _selectedAnimals2,
                               chipShape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5)),
@@ -315,7 +367,8 @@ class _InboxState extends State<Inbox> {
                                   ),
                                 );
                               },
-                               */onTap: (values) {
+                               */
+                              onTap: (List<Animal?> values) {
                                 _selectedAnimals2 = values;
                               },
                               icon: Icon(
