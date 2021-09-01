@@ -12,6 +12,8 @@ class AssignedAgentModal extends StatefulWidget {
 }
 
 class _AssignedAgentModalState extends State<AssignedAgentModal> {
+  String searchTitle = "Search for agents/groups";
+  List<String> selectedAgents = [];
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -38,17 +40,30 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                   Text("Assigned Agent/Group"),
                 ],
               ),
-              DropdownSearch<String>(
-                  mode: Mode.BOTTOM_SHEET,
-                  items: ["Brazil", "Tunisia", 'Canada'],
-                  hint: "Search for agents/groups",
-                  
-                  onChanged: print,
-                  showSelectedItem:true,
-                  label: "b",
-                  
-                  showSearchBox: true),
-
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropdownSearch<String>(
+                    mode: Mode.BOTTOM_SHEET,
+                    items: ["Brazil", "Tunisia", 'Canada'],
+                    hint: "Search for agents/groups",
+                    onChanged: (value) {
+                      setState(() {
+                        selectedAgents.add(value!);
+                      });
+                    },
+                    
+                    selectedItem: "hello" ,
+                    dropdownSearchTextAlign: TextAlign.start,
+                    showSelectedItem: true,
+                    dropdownSearchDecoration: InputDecoration(
+                      labelText: "",counterText: "",prefixText: "",suffixText: "",
+                      filled: true,
+                        contentPadding: EdgeInsets.only(left: 8.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        )),
+                    showSearchBox: true),
+              ),
               /* Padding(
                 padding: EdgeInsets.fromLTRB(10.0, MediaQuery.of(context).viewInsets.top, 10.0, MediaQuery.of(context).viewInsets.bottom),
                 child: AppBar(
@@ -73,7 +88,8 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                           hintStyle:
                               TextStyle(color: Colors.grey, fontSize: 13))),
                 ),
-              ), */
+              )*/
+
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -106,6 +122,39 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                       onTap: () {},
                     ),
                   ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Expanded(
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    itemCount: selectedAgents.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: AliceColors.ALICE_SELECTED_CHANNEL),
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Text(selectedAgents.elementAt(index).tr,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.green, fontSize: 12)),
+                          ),
+                        ),
+                      );
+                    },
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 0.5,
+                        mainAxisExtent: 25.0,
+                        mainAxisSpacing: 5.0,
+                        childAspectRatio: 3),
+                  ),
                 ),
               )
             ],
