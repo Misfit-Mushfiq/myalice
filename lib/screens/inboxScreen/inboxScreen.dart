@@ -10,11 +10,13 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/screens/chatDetails.dart';
+import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/mainModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/modals.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/profileImage.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/tickets.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/routes.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class Inbox extends StatefulWidget {
   @override
@@ -25,12 +27,24 @@ class _InboxState extends State<Inbox> {
   final _inboxBottomSheet = GlobalKey<ScaffoldState>();
 
   late InboxController _inboxController;
-
+  late String ticketType;
+  late bool pendingSelected;
+  late bool resolvedSelected;
+  late bool channelSelected;
+  late bool sortNew;
+  final SharedPref _sharedPref = SharedPref();
 
   @override
   void initState() {
     super.initState();
     _inboxController = Get.put(InboxController());
+    readFilterParams();
+  }
+
+  void readFilterParams() async {
+    pendingSelected = await _sharedPref.readBool("pendingSelected") ?? true;
+    resolvedSelected = await _sharedPref.readBool("resolvedSelected") ?? false;
+    sortNew = await _sharedPref.readBool('sortNew') ?? false;
   }
 
   @override
@@ -73,7 +87,31 @@ class _InboxState extends State<Inbox> {
                               size: 30,
                             ),
                             onTap: () {
-                              CustomModals().showInboxModal(context, Get.find<InboxController>());
+                              showModalBottomSheet(
+                                  context: context,
+                                  useRootNavigator: true,
+                                  isDismissible: true,
+                                  builder: (context) {
+                                    return MainModal(
+                                      inboxController: _inboxController,
+                                      pendingSelected: pendingSelected,
+                                      resolvedSelected: resolvedSelected,
+                                      sortNew: sortNew,
+                                      onChanged: (bool pendingSelected,
+                                          bool resolvedSelected, bool sortNew) {
+                                        this.pendingSelected = pendingSelected;
+                                        this.resolvedSelected =
+                                            resolvedSelected;
+                                        this.sortNew = sortNew;
+                                      },
+                                    );
+                                  }).whenComplete(() {
+                                _sharedPref.saveBool(
+                                    "pendingSelected", pendingSelected);
+                                _sharedPref.saveBool(
+                                    "resolvedSelected", resolvedSelected);
+                                _sharedPref.saveBool("sortNew", sortNew);
+                              });
                             }))
                   ],
                 ),
@@ -112,6 +150,4 @@ class _InboxState extends State<Inbox> {
           Tickets()
         ])));
   }
-
- 
 }

@@ -4,6 +4,7 @@ import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/channelModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/mainModal.dart';
+import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/timeModal.dart';
 import 'package:myalice/utils/colors.dart';
 
 class FilterModal extends StatefulWidget {
@@ -30,7 +31,7 @@ class _FilterModalState extends State<FilterModal> {
                         padding: EdgeInsets.all(5),
                         onPressed: () {
                           Get.back();
-                          showInboxModal(context, Get.find<InboxController>());
+                          //showInboxModal(context, Get.find<InboxController>());
                         },
                         icon: Icon(Icons.arrow_back_ios)),
                     Text(
@@ -110,7 +111,7 @@ class _FilterModalState extends State<FilterModal> {
                   ),
                   minLeadingWidth: 0.0,
                   onTap: () {
-                    //showTimePicker(context);
+                    showTimePicker(context);
                   },
                 ),
                 Divider(
@@ -155,15 +156,15 @@ class _FilterModalState extends State<FilterModal> {
     });
   }
 
-  void showInboxModal(BuildContext context, InboxController controller) {
+/*   void showInboxModal(BuildContext context, InboxController controller) {
     showModalBottomSheet(
         context: context,
         useRootNavigator: true,
         isDismissible: true,
         builder: (context) {
           return MainModal(inboxController: controller);
-        });
-  }
+        }).whenComplete(() => null);
+  } */
 
   void showChannelModal(BuildContext context, StateSetter state) {
     showModalBottomSheet(
@@ -182,4 +183,16 @@ class _FilterModalState extends State<FilterModal> {
       });
     });
   }
+
+   void showTimePicker(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.white,
+        builder: (context) {
+          return TimeModal();
+        });
+  }
+
+ 
 }

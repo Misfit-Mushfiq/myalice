@@ -109,6 +109,7 @@ class _ChannelModalState extends State<ChannelModal> {
                           _selectedAnimals1.clear();
                           widget.selectedAnimals.clear();
                         });
+                        Get.back();
                       }),
                 ],
               ),

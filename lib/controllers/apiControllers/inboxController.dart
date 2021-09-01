@@ -44,9 +44,11 @@ class InboxController extends BaseApiController {
     super.onInit();
     token = await _sharedPref.readString("apiToken");
     await getUser();
-    sort = 'desc';
+    await _sharedPref.saveBool("sortNew", false);
+    await _sharedPref.saveBool("resolvedSelected", false);
+    sort = await _sharedPref.readBool("sortNew") ? "asc" : "desc";
     resolved = 0;
-    getTickets(sort,resolved);
+    getTickets(sort, resolved);
   }
 
   Future<dynamic> getUser() async {
