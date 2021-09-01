@@ -140,7 +140,7 @@ class _InboxState extends State<Inbox> {
                   centerTitle: false,
                   title: TextField(
                       decoration: InputDecoration(
-                          hintText: "Search",
+                          hintText: "Search Here",
                           border: InputBorder.none,
                           hintStyle: TextStyle(color: Colors.grey))),
                 ),

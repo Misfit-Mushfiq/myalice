@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/screens/chatDetails.dart';
+import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/assignedModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/channelModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/mainModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/timeModal.dart';
@@ -127,7 +128,7 @@ class _FilterModalState extends State<FilterModal> {
                   ),
                   minLeadingWidth: 0.0,
                   onTap: () {
-                    Navigator.of(context).pop();
+                    showAssignedModal(context,state);
                   },
                 ),
                 Divider(
@@ -166,6 +167,16 @@ class _FilterModalState extends State<FilterModal> {
         }).whenComplete(() => null);
   } */
 
+  void showAssignedModal(BuildContext context, StateSetter state) {
+    showModalBottomSheet(
+        context: context,
+        isDismissible: true,
+        isScrollControlled: true,
+        builder: (context) {
+          return AssignedAgentModal();
+        });
+  }
+
   void showChannelModal(BuildContext context, StateSetter state) {
     showModalBottomSheet(
         context: context,
@@ -184,7 +195,7 @@ class _FilterModalState extends State<FilterModal> {
     });
   }
 
-   void showTimePicker(BuildContext context) {
+  void showTimePicker(BuildContext context) {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -193,6 +204,4 @@ class _FilterModalState extends State<FilterModal> {
           return TimeModal();
         });
   }
-
- 
 }
