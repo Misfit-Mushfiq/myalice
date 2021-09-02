@@ -5,6 +5,7 @@ import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/assignedModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/channelModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/mainModal.dart';
+import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/tagsModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/timeModal.dart';
 import 'package:myalice/utils/colors.dart';
 
@@ -19,6 +20,7 @@ class _FilterModalState extends State<FilterModal> {
   List<Animal?> _selectedAnimals = [];
   List<Animal?> _selectedAnimals1 = [];
   List<String> _seletedAgents = [];
+  List<String> _tags = [];
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(builder: (context, StateSetter state) {
@@ -129,7 +131,7 @@ class _FilterModalState extends State<FilterModal> {
                   ),
                   minLeadingWidth: 0.0,
                   onTap: () {
-                    showAssignedModal(context, state,_seletedAgents);
+                    showAssignedModal(context, state, _seletedAgents);
                   },
                 ),
                 Divider(
@@ -147,7 +149,7 @@ class _FilterModalState extends State<FilterModal> {
                   ),
                   minLeadingWidth: 0.0,
                   onTap: () {
-                    Navigator.of(context).pop();
+                    showTagsModal(context, state, _tags);
                   },
                 ),
               ],
@@ -168,13 +170,29 @@ class _FilterModalState extends State<FilterModal> {
         }).whenComplete(() => null);
   } */
 
-  void showAssignedModal(BuildContext context, StateSetter state,List<String> selectedAgents) {
+  void showAssignedModal(
+      BuildContext context, StateSetter state, List<String> selectedAgents) {
     showModalBottomSheet(
         context: context,
         isDismissible: true,
         isScrollControlled: true,
         builder: (context) {
-          return AssignedAgentModal(selectedAgents: selectedAgents,);
+          return AssignedAgentModal(
+            selectedAgents: selectedAgents,
+          );
+        });
+  }
+
+  void showTagsModal(
+      BuildContext context, StateSetter state, List<String> tags) {
+    showModalBottomSheet(
+        context: context,
+        isDismissible: true,
+        isScrollControlled: true,
+        builder: (context) {
+          return TagsModal(
+            tags: tags,
+          );
         });
   }
 

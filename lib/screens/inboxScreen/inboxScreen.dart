@@ -11,7 +11,7 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/mainModal.dart';
-import 'package:myalice/screens/inboxScreen/customWidgets/modals.dart';
+import 'package:myalice/screens/inboxScreen/customWidgets/customModals.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/profileImage.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/tickets.dart';
 import 'package:myalice/utils/colors.dart';

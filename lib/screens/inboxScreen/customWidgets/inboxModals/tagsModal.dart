@@ -1,20 +1,17 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/utils/colors.dart';
 
-class AssignedAgentModal extends StatefulWidget {
-  List<String> selectedAgents = [];
-  AssignedAgentModal({Key? key, required this.selectedAgents})
-      : super(key: key);
+class TagsModal extends StatefulWidget {
+  List<String> tags = [];
+  TagsModal({Key? key, required this.tags}) : super(key: key);
 
   @override
-  _AssignedAgentModalState createState() => _AssignedAgentModalState();
+  _TagsModalState createState() => _TagsModalState();
 }
 
-class _AssignedAgentModalState extends State<AssignedAgentModal> {
-  String searchTitle = "Search for agents/groups";
+class _TagsModalState extends State<TagsModal> {
   bool assignedAgents = true;
   @override
   Widget build(BuildContext context) {
@@ -39,7 +36,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                   SizedBox(
                     width: 5,
                   ),
-                  Expanded(child: Text("Assigned Agent/Group")),
+                  Expanded(child: Text("Tags")),
                   InkWell(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0.0, 8.0, 8.0, 8.0),
@@ -61,7 +58,6 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                         ),
                       ),
                       onTap: () {}),
-               
                   InkWell(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -84,21 +80,30 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                         ),
                       ),
                       onTap: () {}),
-                   ],
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: DropdownSearch<String>(
                     mode: Mode.BOTTOM_SHEET,
                     items: ["Brazil", "Tunisia", 'Canada'],
-                    hint: "Search for agents/groups",
+                    hint: "Search for tags",
                     onChanged: (value) {
                       setState(() {
-                        widget.selectedAgents.add(value!);
+                        widget.tags.add(value!);
                         assignedAgents = false;
                       });
                     },
-                     popupItemBuilder: (context, String? tag, bool selected) {
+                    searchFieldProps: TextFieldProps(
+                        decoration: InputDecoration(
+                            hintText: "Search for tags",
+                            contentPadding: EdgeInsets.only(left: 8.0),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ))),
+                    dropdownSearchTextAlign: TextAlign.start,
+                    showSelectedItem: true,
+                    popupItemBuilder: (context, String? tag, bool selected) {
                       return Container(
                         child: ListTile(
                           title: Text(tag!),
@@ -106,15 +111,6 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                         ),
                       );
                     },
-                    searchFieldProps: TextFieldProps(
-                        decoration: InputDecoration(
-                            hintText: "Search for agents/groups",
-                            contentPadding: EdgeInsets.only(left: 8.0),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ))),
-                    dropdownSearchTextAlign: TextAlign.start,
-                    showSelectedItem: true,
                     emptyBuilder: (context, String? text) {
                       return Scaffold(
                         body: Container(
@@ -134,7 +130,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                             width: 5,
                           ),
                           Text(
-                            "Search for agents/groups",
+                            "Search for tags",
                             style: TextStyle(color: Colors.grey),
                           )
                         ],
@@ -148,73 +144,12 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                     showSearchBox: true),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    InkWell(
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: assignedAgents
-                                ? AliceColors.ALICE_SELECTED_CHANNEL
-                                : AliceColors.ALICE_GREY),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("All Assigned Agents",
-                              style: TextStyle(
-                                  color: assignedAgents
-                                      ? Colors.green
-                                      : Colors.black)),
-                        ),
-                      ),
-                      onTap: () {
-                        setState(() {
-                          assignedAgents = true;
-                          widget.selectedAgents.clear();
-                        });
-                      },
-                    ),
-                    InkWell(
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: widget.selectedAgents.length <= 0
-                                ? assignedAgents
-                                    ? AliceColors.ALICE_GREY
-                                    : AliceColors.ALICE_SELECTED_CHANNEL
-                                : AliceColors.ALICE_GREY),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Assigned To None",
-                            style: TextStyle(
-                                color: widget.selectedAgents.length <= 0
-                                    ? assignedAgents
-                                        ? Colors.black
-                                        : Colors.green
-                                    : Colors.black),
-                          ),
-                        ),
-                      ),
-                      onTap: () {
-                        setState(() {
-                          assignedAgents = false;
-                          widget.selectedAgents.clear();
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Expanded(
                   child: GridView.builder(
                     shrinkWrap: true,
                     padding: EdgeInsets.zero,
-                    itemCount: widget.selectedAgents.length,
+                    itemCount: widget.tags.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.only(left: 8.0),
@@ -229,10 +164,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                        widget.selectedAgents
-                                            .elementAt(index)
-                                            .tr,
+                                    Text(widget.tags.elementAt(index).tr,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Colors.green, fontSize: 12)),
@@ -244,7 +176,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                                   ]),
                               onTap: () {
                                 setState(() {
-                                  widget.selectedAgents.removeAt(index);
+                                  widget.tags.removeAt(index);
                                 });
                               },
                             ),
@@ -267,5 +199,4 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
       ],
     );
   }
-
 }

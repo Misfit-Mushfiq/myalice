@@ -59,32 +59,7 @@ class _ChannelModalState extends State<ChannelModal> {
                   Expanded(
                     child: Text("Channels"),
                   ),
-                  InkWell(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: AliceColors.ALICE_GREEN),
-                          child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Filter",
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.white),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      onTap: () {
-                        Get.back();
-                        widget.onsaved(_selectedAnimals1);
-                      }),
-                  InkWell(
+                   InkWell(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0.0, 8.0, 8.0, 8.0),
                         child: Container(
@@ -111,7 +86,33 @@ class _ChannelModalState extends State<ChannelModal> {
                         });
                         Get.back();
                       }),
-                ],
+                
+                  InkWell(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: AliceColors.ALICE_GREEN),
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Filter",
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.white),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        Get.back();
+                        widget.onsaved(_selectedAnimals1);
+                      }),
+                 ],
               ),
               Expanded(
                 child: Container(
