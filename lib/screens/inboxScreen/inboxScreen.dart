@@ -1,21 +1,12 @@
 import 'dart:ui';
-import 'package:intl/intl.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
-import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/mainModal.dart';
-import 'package:myalice/screens/inboxScreen/customWidgets/customModals.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/profileImage.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/tickets.dart';
 import 'package:myalice/utils/colors.dart';
-import 'package:myalice/utils/routes.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
 class Inbox extends StatefulWidget {
@@ -27,12 +18,13 @@ class _InboxState extends State<Inbox> {
   final _inboxBottomSheet = GlobalKey<ScaffoldState>();
 
   late InboxController _inboxController;
-  late String ticketType;
   late bool pendingSelected;
   late bool resolvedSelected;
   late bool channelSelected;
   late bool sortNew;
   final SharedPref _sharedPref = SharedPref();
+
+  var ticketType = "PENDING TICKETS".obs;
 
   @override
   void initState() {
@@ -57,7 +49,8 @@ class _InboxState extends State<Inbox> {
     return Scaffold(
         key: _inboxBottomSheet,
         body: Container(
-            child: Column(children: [
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
             height: MediaQuery.of(context).size.height * 0.18,
             child: Stack(children: <Widget>[
@@ -103,6 +96,11 @@ class _InboxState extends State<Inbox> {
                                         this.resolvedSelected =
                                             resolvedSelected;
                                         this.sortNew = sortNew;
+                                        pendingSelected
+                                            ? ticketType.value =
+                                                "PENDING TICKETS"
+                                            : ticketType.value =
+                                                "RESOLVED TICKETS";
                                       },
                                     );
                                   }).whenComplete(() {
@@ -139,6 +137,14 @@ class _InboxState extends State<Inbox> {
                   titleSpacing: 0.0,
                   centerTitle: false,
                   title: TextField(
+                      onChanged: (String text) {
+                        _inboxController.getTickets(
+                            sortNew ? "desc" : "", resolvedSelected ? 1 : 0,text).whenComplete((){
+                              setState(() {
+                                
+                              });
+                            });
+                      },
                       decoration: InputDecoration(
                           hintText: "Search Here",
                           border: InputBorder.none,
@@ -146,6 +152,13 @@ class _InboxState extends State<Inbox> {
                 ),
               )
             ]),
+          ),
+          Container(
+            margin: const EdgeInsets.only(left: 10.0, top: 5, bottom: 5),
+            child: Obx(() {
+              return Text(ticketType.value,
+                  style: TextStyle(color: Colors.grey, fontSize: 10));
+            }),
           ),
           Tickets()
         ])));

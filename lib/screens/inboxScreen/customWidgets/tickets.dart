@@ -221,4 +221,3 @@ class Tickets extends GetView<InboxController> {
     return time;
   }
 }
-

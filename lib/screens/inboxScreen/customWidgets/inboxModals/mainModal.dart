@@ -59,7 +59,7 @@ class _MainModalState extends State<MainModal> {
                       ? widget.inboxController.resolved = 1
                       : widget.inboxController.resolved = 0;
                   widget.inboxController.getTickets(widget.inboxController.sort,
-                      widget.inboxController.resolved);
+                      widget.inboxController.resolved, "");
                 });
 
                 widget.onChanged(widget.pendingSelected,
@@ -122,7 +122,8 @@ class _MainModalState extends State<MainModal> {
                         : widget.inboxController.sort = "desc";
                     widget.inboxController.getTickets(
                         widget.inboxController.sort,
-                        widget.inboxController.resolved);
+                        widget.inboxController.resolved,
+                        "");
                   });
                   widget.onChanged(widget.pendingSelected,
                       widget.resolvedSelected, widget.sortNew);

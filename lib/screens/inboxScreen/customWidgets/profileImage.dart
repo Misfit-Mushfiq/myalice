@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/utils/routes.dart';
+
 class ProfileImage extends GetView<InboxController> {
   @override
   Widget build(BuildContext context) {

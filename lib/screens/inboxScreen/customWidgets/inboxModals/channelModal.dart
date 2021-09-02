@@ -59,7 +59,7 @@ class _ChannelModalState extends State<ChannelModal> {
                   Expanded(
                     child: Text("Channels"),
                   ),
-                   InkWell(
+                  InkWell(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0.0, 8.0, 8.0, 8.0),
                         child: Container(
@@ -86,7 +86,6 @@ class _ChannelModalState extends State<ChannelModal> {
                         });
                         Get.back();
                       }),
-                
                   InkWell(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -112,7 +111,7 @@ class _ChannelModalState extends State<ChannelModal> {
                         Get.back();
                         widget.onsaved(_selectedAnimals1);
                       }),
-                 ],
+                ],
               ),
               Expanded(
                 child: Container(

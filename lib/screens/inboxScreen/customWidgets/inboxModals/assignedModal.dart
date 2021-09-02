@@ -61,7 +61,6 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                         ),
                       ),
                       onTap: () {}),
-               
                   InkWell(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -84,7 +83,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                         ),
                       ),
                       onTap: () {}),
-                   ],
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -98,7 +97,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                         assignedAgents = false;
                       });
                     },
-                     popupItemBuilder: (context, String? tag, bool selected) {
+                    popupItemBuilder: (context, String? tag, bool selected) {
                       return Container(
                         child: ListTile(
                           title: Text(tag!),
@@ -267,5 +266,4 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
       ],
     );
   }
-
 }
