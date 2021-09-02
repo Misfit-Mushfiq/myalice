@@ -18,6 +18,7 @@ class FilterModal extends StatefulWidget {
 class _FilterModalState extends State<FilterModal> {
   List<Animal?> _selectedAnimals = [];
   List<Animal?> _selectedAnimals1 = [];
+  List<String> _seletedAgents = [];
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(builder: (context, StateSetter state) {
@@ -128,7 +129,7 @@ class _FilterModalState extends State<FilterModal> {
                   ),
                   minLeadingWidth: 0.0,
                   onTap: () {
-                    showAssignedModal(context,state);
+                    showAssignedModal(context, state,_seletedAgents);
                   },
                 ),
                 Divider(
@@ -167,13 +168,13 @@ class _FilterModalState extends State<FilterModal> {
         }).whenComplete(() => null);
   } */
 
-  void showAssignedModal(BuildContext context, StateSetter state) {
+  void showAssignedModal(BuildContext context, StateSetter state,List<String> selectedAgents) {
     showModalBottomSheet(
         context: context,
         isDismissible: true,
         isScrollControlled: true,
         builder: (context) {
-          return AssignedAgentModal();
+          return AssignedAgentModal(selectedAgents: selectedAgents,);
         });
   }
 
