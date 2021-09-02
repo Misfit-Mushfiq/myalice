@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
+import 'package:myalice/models/projectsModels/projects.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/mainModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/profileImage.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/tickets.dart';
@@ -23,6 +24,7 @@ class _InboxState extends State<Inbox> {
   late bool channelSelected;
   late bool sortNew;
   final SharedPref _sharedPref = SharedPref();
+  late Projects _projects;
 
   var ticketType = "PENDING TICKETS".obs;
 
@@ -37,6 +39,7 @@ class _InboxState extends State<Inbox> {
     pendingSelected = await _sharedPref.readBool("pendingSelected") ?? true;
     resolvedSelected = await _sharedPref.readBool("resolvedSelected") ?? false;
     sortNew = await _sharedPref.readBool('sortNew') ?? false;
+    _projects = await _inboxController.getProjects();
   }
 
   @override
@@ -86,7 +89,10 @@ class _InboxState extends State<Inbox> {
                                   isDismissible: true,
                                   builder: (context) {
                                     return MainModal(
-                                      inboxController: _inboxController,
+                                      inboxController:
+                                          Get.find<InboxController>(),
+                                      selectedAnimals:
+                                          _projects.dataSource!,
                                       pendingSelected: pendingSelected,
                                       resolvedSelected: resolvedSelected,
                                       sortNew: sortNew,
@@ -138,12 +144,12 @@ class _InboxState extends State<Inbox> {
                   centerTitle: false,
                   title: TextField(
                       onChanged: (String text) {
-                        _inboxController.getTickets(
-                            sortNew ? "desc" : "", resolvedSelected ? 1 : 0,text).whenComplete((){
-                              setState(() {
-                                
-                              });
-                            });
+                        _inboxController
+                            .getTickets(sortNew ? "desc" : "",
+                                resolvedSelected ? 1 : 0, text)
+                            .whenComplete(() {
+                          setState(() {});
+                        });
                       },
                       decoration: InputDecoration(
                           hintText: "Search Here",

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/baseApiController.dart';
+import 'package:myalice/models/projectsModels/projects.dart';
 import 'package:myalice/models/responseModels/UserResponse.dart';
 import 'package:myalice/models/responseModels/ticketsResponseModels/ticketResponse.dart';
 import 'package:myalice/utils/shared_pref.dart';
@@ -8,6 +9,7 @@ import 'package:myalice/utils/shared_pref.dart';
 class InboxController extends BaseApiController {
   static String _accountPath = "accounts/info";
   static String _ticketsPath = "crm/projects/81/tickets";
+  static String _projectsPath = "bots/projects";
 
   final SharedPref _sharedPref = SharedPref();
 
@@ -27,6 +29,7 @@ class InboxController extends BaseApiController {
 
   var _user;
   var _ticketResponse;
+  var _projectResponse;
 
   var _userDataAvailable = false.obs;
   var isticketsDataAvailable = false.obs;
@@ -37,6 +40,8 @@ class InboxController extends BaseApiController {
   bool get ticketDataAvailable => isticketsDataAvailable.value;
   TicketResponse get tickets => _ticketResponse;
 
+
+
   late String? token;
 
   @override
@@ -44,6 +49,7 @@ class InboxController extends BaseApiController {
     super.onInit();
     token = await _sharedPref.readString("apiToken");
     await getUser();
+    await getProjects();
     await _sharedPref.saveBool("sortNew", false);
     await _sharedPref.saveBool("resolvedSelected", false);
     sort = await _sharedPref.readBool("sortNew") ? "asc" : "desc";
@@ -83,5 +89,16 @@ class InboxController extends BaseApiController {
         .catchError((err) => _ticketResponse)
         .whenComplete(
             () => isticketsDataAvailable.value = _ticketResponse != null);
+  }
+
+  Future<dynamic> getProjects() async {
+    getDio()!
+        .get(_projectsPath,
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((response) => response.statusCode == 200
+            ? _projectResponse = Projects.fromJson(response.data)
+            : null)
+        .whenComplete(
+            () => _projectResponse);
   }
 }

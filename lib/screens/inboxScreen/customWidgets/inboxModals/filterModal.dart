@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
+import 'package:myalice/models/projectsModels/data_source.dart';
 import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/assignedModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/channelModal.dart';
@@ -10,15 +11,15 @@ import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/timeModal.
 import 'package:myalice/utils/colors.dart';
 
 class FilterModal extends StatefulWidget {
-  FilterModal({Key? key}) : super(key: key);
+  List<ChannelDataSource?> selectedAnimals ;
+  FilterModal({Key? key,required this.selectedAnimals}) : super(key: key);
 
   @override
   _FilterModalState createState() => _FilterModalState();
 }
 
 class _FilterModalState extends State<FilterModal> {
-  List<Animal?> _selectedAnimals = [];
-  List<Animal?> _selectedAnimals1 = [];
+  List<ChannelDataSource?> _selectedAnimals1 = [];
   List<String> _seletedAgents = [];
   List<String> _tags = [];
   @override
@@ -54,14 +55,14 @@ class _FilterModalState extends State<FilterModal> {
                         children: [
                           Text("Channels",
                               style: TextStyle(
-                                fontWeight: _selectedAnimals.length <= 0
+                                fontWeight: widget.selectedAnimals.length <= 0
                                     ? FontWeight.normal
                                     : FontWeight.bold,
                               )),
                           Expanded(
                             child: GridView.builder(
                               shrinkWrap: true,
-                              itemCount: _selectedAnimals.length,
+                              itemCount: _selectedAnimals1.length,
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: const EdgeInsets.only(left: 8.0),
@@ -73,9 +74,9 @@ class _FilterModalState extends State<FilterModal> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Text(
-                                          _selectedAnimals
+                                          _selectedAnimals1
                                               .elementAt(index)!
-                                              .name,
+                                              .name!,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: Colors.green,
@@ -202,14 +203,14 @@ class _FilterModalState extends State<FilterModal> {
         backgroundColor: Colors.white,
         builder: (context) {
           return ChannelModal(
-            selectedAnimals: _selectedAnimals,
-            onsaved: (List<Animal?> value) {
-              _selectedAnimals1 = value;
+            selectedAnimals: widget.selectedAnimals,
+            onsaved: (List<ChannelDataSource?> valubbe) {
+              _selectedAnimals1 = valubbe;
             },
           );
         }).whenComplete(() {
       state(() {
-        _selectedAnimals = _selectedAnimals1;
+        widget.selectedAnimals = _selectedAnimals1;
       });
     });
   }

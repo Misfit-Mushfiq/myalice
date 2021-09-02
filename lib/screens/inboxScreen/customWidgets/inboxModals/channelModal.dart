@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:myalice/models/projectsModels/data_source.dart';
 import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/utils/colors.dart';
 
 class ChannelModal extends StatefulWidget {
-  final List<Animal?> selectedAnimals;
-  final Function(List<Animal?>) onsaved;
+  final List<ChannelDataSource?> selectedAnimals;
+  final Function(List<ChannelDataSource?>) onsaved;
   ChannelModal({Key? key, required this.onsaved, required this.selectedAnimals})
       : super(key: key);
 
@@ -15,28 +16,14 @@ class ChannelModal extends StatefulWidget {
 }
 
 class _ChannelModalState extends State<ChannelModal> {
-  static List<Animal> _animals = [
-    Animal(id: 1, name: "Lion"),
-    Animal(id: 2, name: "Flamingo"),
-    Animal(id: 3, name: "Hippo"),
-    Animal(id: 1, name: "Lion"),
-    Animal(id: 2, name: "Flamingo"),
-    Animal(id: 3, name: "Hippo"),
-    Animal(id: 1, name: "Lion"),
-    Animal(id: 2, name: "Flamingo"),
-    Animal(id: 3, name: "Hippo"),
-    Animal(id: 1, name: "Lion"),
-    Animal(id: 2, name: "Flamingo"),
-    Animal(id: 3, name: "Hippo"),
-  ];
 
-  final _items = _animals
-      .map((animal) => MultiSelectItem<Animal>(animal, animal.name))
-      .toList();
-
-  List<Animal?> _selectedAnimals1 = [];
+  List<ChannelDataSource?> _selectedAnimals1 = [];
   @override
   Widget build(BuildContext context) {
+
+      final _items = widget.selectedAnimals
+      .map((animal) => MultiSelectItem<ChannelDataSource>(animal!, animal.name!))
+      .toList();
     return StatefulBuilder(builder: (context, StateSetter state) {
       return Container(
           height: 200,
@@ -81,7 +68,7 @@ class _ChannelModalState extends State<ChannelModal> {
                       ),
                       onTap: () {
                         state(() {
-                          _selectedAnimals1.clear();
+                          _selectedAnimals1!.clear();
                           widget.selectedAnimals.clear();
                         });
                         Get.back();
@@ -166,7 +153,7 @@ class _ChannelModalState extends State<ChannelModal> {
                                 );
                               },
                                */
-                          onTap: (List<Animal?> values) {
+                          onTap: (List<ChannelDataSource?> values) {
                             _selectedAnimals1 = values;
                           },
                           icon: Icon(

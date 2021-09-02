@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
+import 'package:myalice/models/projectsModels/data_source.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/filterModal.dart';
 
 class MainModal extends StatefulWidget {
   InboxController inboxController;
+  List<ChannelDataSource?> selectedAnimals;
   bool pendingSelected;
   bool resolvedSelected;
   bool sortNew;
@@ -17,7 +19,7 @@ class MainModal extends StatefulWidget {
       required this.pendingSelected,
       required this.resolvedSelected,
       required this.sortNew,
-      required this.onChanged})
+      required this.onChanged,required this.selectedAnimals})
       : super(key: key);
 
   @override
@@ -86,7 +88,7 @@ class _MainModalState extends State<MainModal> {
               minLeadingWidth: 0.0,
               onTap: () {
                 Get.back();
-                showFilterModal(context);
+                showFilterModal(context, widget.selectedAnimals);
               },
             ),
             Divider(
@@ -135,14 +137,15 @@ class _MainModalState extends State<MainModal> {
     );
   }
 
-  void showFilterModal(BuildContext context) {
+  void showFilterModal(BuildContext context, List<ChannelDataSource?> selectedAnimals) {
     showModalBottomSheet(
         context: context,
         enableDrag: true,
         isScrollControlled: true,
         useRootNavigator: true,
         builder: (context) {
-          return FilterModal();
+          return FilterModal(
+              selectedAnimals: selectedAnimals);
         });
   }
 }
