@@ -1,7 +1,7 @@
 class NlpInfo {
   NlpInfo();
 
-   NlpInfo.fromJson(Map<String, dynamic> json) {
+  NlpInfo.fromJson(Map<String, dynamic> json) {
     // TODO: implement fromJson
     //throw UnimplementedError('NlpInfo.fromJson($json) is not implemented');
   }

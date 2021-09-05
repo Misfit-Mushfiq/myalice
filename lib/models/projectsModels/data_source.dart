@@ -3,7 +3,7 @@ import 'nlp_info.dart';
 import 'platform.dart';
 import 'subscription_plan.dart';
 
-class ChannelDataSource {
+class ProjectDataSource {
   int? id;
   String? name;
   dynamic description;
@@ -25,7 +25,7 @@ class ChannelDataSource {
   bool? hasEcommerceConnected;
   String? ecommercePlatformType;
 
-  ChannelDataSource({
+  ProjectDataSource({
     this.id,
     this.name,
     this.description,
@@ -48,7 +48,8 @@ class ChannelDataSource {
     this.ecommercePlatformType,
   });
 
-  factory ChannelDataSource.fromJson(Map<String, dynamic> json) => ChannelDataSource(
+  factory ProjectDataSource.fromJson(Map<String, dynamic> json) =>
+      ProjectDataSource(
         id: json['id'] as int?,
         name: json['name'] as String?,
         description: json['description'],

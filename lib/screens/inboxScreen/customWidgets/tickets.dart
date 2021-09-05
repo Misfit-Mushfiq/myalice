@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/utils/colors.dart';
+import 'package:myalice/utils/platform_icon.dart';
 import 'package:myalice/utils/routes.dart';
 
 class Tickets extends GetView<InboxController> {
@@ -159,43 +160,7 @@ class Tickets extends GetView<InboxController> {
     });
   }
 
-  IconData platformIcon(String name) {
-    switch (name) {
-      case "whatsapp_messenger":
-        return FontAwesomeIcons.whatsapp;
-      case "facebook_messenger":
-        return FontAwesomeIcons.facebookMessenger;
-      case "viber_messenger":
-        return FontAwesomeIcons.viber;
-      case "line_messenger":
-        return FontAwesomeIcons.line;
-      case "facebook":
-        return FontAwesomeIcons.facebook;
-      case "telegram_messenger":
-        return FontAwesomeIcons.telegram;
-      default:
-        return FontAwesomeIcons.info;
-    }
-  }
-
-  Color platformColor(String name) {
-    switch (name) {
-      case "whatsapp_messenger":
-        return AliceColors.ALICE_GREEN;
-      case "facebook_messenger":
-        return AliceColors.ALICE_BLUE;
-      case "viber_messenger":
-        return AliceColors.ALICE_VIBER;
-      case "line_messenger":
-        return AliceColors.ALICE_GREEN;
-      case "facebook":
-        return AliceColors.ALICE_GREEN;
-      case "telegram_messenger":
-        return AliceColors.ALICE_BLUE;
-      default:
-        return AliceColors.ALICE_BLUE;
-    }
-  }
+ 
 
   String readTimestamp(int timestamp) {
     var now = DateTime.now();

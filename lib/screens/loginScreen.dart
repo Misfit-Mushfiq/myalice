@@ -84,9 +84,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       contentPadding: EdgeInsets.symmetric(
-                      vertical: 0.0,
-                      horizontal: 20.0,
-                    ),
+                        vertical: 0.0,
+                        horizontal: 20.0,
+                      ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
@@ -254,7 +254,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     duration: Duration(milliseconds: 1500),
                   ),
                 ),
-             SizedBox(
+              SizedBox(
                 height: 8.0,
               ),
               Padding(

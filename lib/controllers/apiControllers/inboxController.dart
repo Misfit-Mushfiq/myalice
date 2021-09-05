@@ -1,15 +1,18 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/baseApiController.dart';
+import 'package:myalice/models/channels/channels.dart';
 import 'package:myalice/models/projectsModels/projects.dart';
 import 'package:myalice/models/responseModels/UserResponse.dart';
 import 'package:myalice/models/responseModels/ticketsResponseModels/ticketResponse.dart';
 import 'package:myalice/utils/shared_pref.dart';
+import 'package:pusher_client/pusher_client.dart';
 
 class InboxController extends BaseApiController {
   static String _accountPath = "accounts/info";
   static String _ticketsPath = "crm/projects/81/tickets";
   static String _projectsPath = "bots/projects";
+  static String _channelsPath = "bots/projects/81/platforms/list";
 
   final SharedPref _sharedPref = SharedPref();
 
@@ -94,7 +97,16 @@ class InboxController extends BaseApiController {
         .get(_projectsPath,
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) => response.statusCode == 200
-            ? _projectResponse = Projects.fromJson(response.data)
+            ? Projects.fromJson(response.data)
+            : null);
+  }
+
+  Future<Channels?> getChannels() async {
+    return getDio()!
+        .get(_channelsPath,
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((response) => response.statusCode == 200
+            ? Channels.fromJson(response.data)
             : null);
   }
 }

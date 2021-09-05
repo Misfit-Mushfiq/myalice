@@ -274,7 +274,9 @@ class _UserProfileState extends State<UserProfile> {
                                 style:
                                     TextStyle(color: Colors.grey, fontSize: 12),
                               ),
-                              SizedBox(width: 10,),
+                              SizedBox(
+                                width: 10,
+                              ),
                               Icon((Icons.arrow_forward_ios),
                                   size: 15, color: Colors.grey)
                             ],

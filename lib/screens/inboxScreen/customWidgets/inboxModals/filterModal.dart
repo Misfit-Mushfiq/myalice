@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
+import 'package:myalice/models/channels/channels.dart';
+import 'package:myalice/models/channels/data_source.dart';
 import 'package:myalice/models/projectsModels/data_source.dart';
+import 'package:myalice/models/projectsModels/projects.dart';
 import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/assignedModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/channelModal.dart';
@@ -11,8 +14,8 @@ import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/timeModal.
 import 'package:myalice/utils/colors.dart';
 
 class FilterModal extends StatefulWidget {
-  List<ChannelDataSource?> selectedChannels;
-  FilterModal({Key? key, required this.selectedChannels}) : super(key: key);
+  Channels channels;
+  FilterModal({Key? key, required this.channels}) : super(key: key);
 
   @override
   _FilterModalState createState() => _FilterModalState();
@@ -64,23 +67,24 @@ class _FilterModalState extends State<FilterModal> {
                               shrinkWrap: true,
                               itemCount: _selectedChannels1.length,
                               itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color:
-                                            AliceColors.ALICE_SELECTED_CHANNEL),
+                                return Container(
+                                  margin: EdgeInsets.only(left: 8.0),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color:
+                                          AliceColors.ALICE_SELECTED_CHANNEL),
+                                  child: Expanded(
                                     child: Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Text(
-                                          _selectedChannels1
-                                              .elementAt(index)!
-                                              .name!,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Colors.green,
-                                              fontSize: 12)),
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: Center(
+                                        child: Text(
+                                            _selectedChannels1
+                                                .elementAt(index)!
+                                                .title!,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.green, fontSize: 10)),
+                                      ),
                                     ),
                                   ),
                                 );
@@ -90,7 +94,7 @@ class _FilterModalState extends State<FilterModal> {
                                       crossAxisCount: 4,
                                       crossAxisSpacing: 0.5,
                                       mainAxisSpacing: 5.0,
-                                      childAspectRatio: 3),
+                                      childAspectRatio: 2.5),
                             ),
                           ),
                           Padding(
@@ -101,7 +105,8 @@ class _FilterModalState extends State<FilterModal> {
                         ],
                       ),
                     )),
-                    onTap: () => showChannelModal(context, state),
+                    onTap: () =>
+                        showChannelModal(context, state, widget.channels),
                   ),
                 ),
                 Divider(
@@ -197,20 +202,22 @@ class _FilterModalState extends State<FilterModal> {
         });
   }
 
-  void showChannelModal(BuildContext context, StateSetter state) {
+  void showChannelModal(
+      BuildContext context, StateSetter state, Channels channels) {
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.white,
         builder: (context) {
           return ChannelModal(
-        //    selectedChannels: widget.selectedChannels,
+            //    selectedChannels: widget.selectedChannels,
+            channels: channels,
             onsaved: (List<ChannelDataSource?> value) {
               _selectedChannels1 = value;
             },
           );
         }).whenComplete(() {
       state(() {
-        widget.selectedChannels = _selectedChannels1;
+        //widget.selectedChannels = _selectedChannels1;
       });
     });
   }

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
-import 'package:myalice/models/projectsModels/projects.dart';
+import 'package:myalice/models/channels/channels.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/mainModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/profileImage.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/tickets.dart';
@@ -24,7 +24,7 @@ class _InboxState extends State<Inbox> {
   late bool channelSelected;
   late bool sortNew;
   final SharedPref _sharedPref = SharedPref();
-  late Projects _projects;
+  late Channels _channels;
 
   var ticketType = "PENDING TICKETS".obs;
 
@@ -39,7 +39,7 @@ class _InboxState extends State<Inbox> {
     pendingSelected = await _sharedPref.readBool("pendingSelected") ?? true;
     resolvedSelected = await _sharedPref.readBool("resolvedSelected") ?? false;
     sortNew = await _sharedPref.readBool('sortNew') ?? false;
-    _projects = (await _inboxController.getProjects())!;
+    _channels = (await _inboxController.getChannels())!;
   }
 
   @override
@@ -89,9 +89,9 @@ class _InboxState extends State<Inbox> {
                                   isDismissible: true,
                                   builder: (context) {
                                     return MainModal(
+                                      channels: _channels,
                                       inboxController:
                                           Get.find<InboxController>(),
-                                      selectedChannels: _projects.dataSource!,
                                       pendingSelected: pendingSelected,
                                       resolvedSelected: resolvedSelected,
                                       sortNew: sortNew,
@@ -163,7 +163,10 @@ class _InboxState extends State<Inbox> {
             margin: const EdgeInsets.only(left: 10.0, top: 15, bottom: 5),
             child: Obx(() {
               return Text(ticketType.value,
-                  style: TextStyle(color: Colors.grey, fontSize: 10,fontWeight: FontWeight.bold));
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold));
             }),
           ),
           Tickets()

@@ -1,15 +1,15 @@
 import 'data_source.dart';
 
-class Projects {
+class Channels {
   bool? success;
-  List<ProjectDataSource>? dataSource;
+  List<ChannelDataSource>? dataSource;
 
-  Projects({this.success, this.dataSource});
+  Channels({this.success, this.dataSource});
 
-  factory Projects.fromJson(Map<String, dynamic> json) => Projects(
+  factory Channels.fromJson(Map<String, dynamic> json) => Channels(
         success: json['success'] as bool?,
         dataSource: (json['dataSource'] as List<dynamic>?)
-            ?.map((e) => ProjectDataSource.fromJson(e as Map<String, dynamic>))
+            ?.map((e) => ChannelDataSource.fromJson(e as Map<String, dynamic>))
             .toList(),
       );
 
