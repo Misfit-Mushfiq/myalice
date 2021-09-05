@@ -41,13 +41,18 @@ class Tickets extends GetView<InboxController> {
                                                   .length >
                                               0
                                           ? CircleAvatar(
-                                              backgroundImage: NetworkImage(
-                                                  controller.tickets.dataSource!
-                                                      .elementAt(index)
-                                                      .agents!
-                                                      .elementAt(0)
-                                                      .avatar!),
+                                              child: CircleAvatar(
+                                                backgroundImage: NetworkImage(
+                                                    controller
+                                                        .tickets.dataSource!
+                                                        .elementAt(index)
+                                                        .agents!
+                                                        .elementAt(0)
+                                                        .avatar!),
+                                                radius: 8,
+                                              ),
                                               radius: 10,
+                                              backgroundColor: Colors.white,
                                             )
                                           : Container())
                                 ],

@@ -45,8 +45,8 @@ class _ChatDetailsState extends State<ChatDetails>
   final _items = _animals
       .map((animal) => MultiSelectItem<Animal>(animal, animal.name))
       .toList();
-  //List<Animal> _selectedAnimals = [];
-  List<Object?> _selectedAnimals2 = [];
+  //List<Animal> _selectedChannels = [];
+  List<Object?> _selectedChannels2 = [];
 
   @override
   void initState() {
@@ -603,7 +603,7 @@ class _ChatDetailsState extends State<ChatDetails>
                             child: MultiSelectChipField(
                               items: _items,
                               showHeader: false,
-                              initialValue: _selectedAnimals2,
+                              initialValue: _selectedChannels2,
                               headerColor: Colors.white,
                               chipShape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5)),
@@ -611,7 +611,7 @@ class _ChatDetailsState extends State<ChatDetails>
                               selectedChipColor: AliceColors.ALICE_GREEN,
                               selectedTextStyle: TextStyle(color: Colors.white),
                               onTap: (values) {
-                                _selectedAnimals2 = values;
+                                _selectedChannels2 = values;
                               },
                               icon: Icon(
                                 Icons.cancel,
@@ -619,7 +619,7 @@ class _ChatDetailsState extends State<ChatDetails>
                               ),
                             ),
                           ),
-                          /* _selectedAnimals2.isEmpty
+                          /* _selectedChannels2.isEmpty
                                   ? Container(
                                       padding: EdgeInsets.all(10),
                                       alignment: Alignment.centerLeft,
@@ -630,7 +630,7 @@ class _ChatDetailsState extends State<ChatDetails>
                                   : MultiSelectChipDisplay(
                                   onTap: (value) {
                                     setState(() {
-                                      _selectedAnimals2.remove(value);
+                                      _selectedChannels2.remove(value);
                                     });
                                   },
                                 ), */

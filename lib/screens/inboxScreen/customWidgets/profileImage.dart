@@ -14,6 +14,10 @@ class ProfileImage extends GetView<InboxController> {
                 width: 40.0,
                 height: 40.0,
                 decoration: new BoxDecoration(
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 2.0,
+                  ),
                   shape: BoxShape.circle,
                   image: new DecorationImage(
                     fit: BoxFit.fill,

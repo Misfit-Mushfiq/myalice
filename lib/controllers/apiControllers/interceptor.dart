@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart' as pref;
+import 'package:myalice/models/responseModels/loginResponse.dart';
 import 'package:myalice/utils/routes.dart';
 
 class LoggingInterceptors extends InterceptorsWrapper {
@@ -41,6 +43,8 @@ class LoggingInterceptors extends InterceptorsWrapper {
   void onError(DioError err, ErrorInterceptorHandler handler) {
     if (err.response?.statusCode == 401) {
       pref.Get.offNamed(LOGIN_PAGE);
+      pref.Get.snackbar(err.response!.statusMessage!,
+          LoginResponse.fromJson(err.response!.data!).detail!,backgroundColor: Colors.red,colorText: Colors.white,snackPosition: pref.SnackPosition.BOTTOM,margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),borderRadius:50.0,snackStyle: pref.SnackStyle.FLOATING ,);
     }
     debugPrint(err.response!.statusMessage);
     debugPrint(

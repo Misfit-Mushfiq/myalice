@@ -40,7 +40,10 @@ class _LoginScreenState extends State<LoginScreen> {
               Text(
                 LOGIN_SCREEN_TITLE,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w800,
+                    fontFamily: "inter"),
               ),
               SizedBox(
                 height: 25.0,
@@ -56,10 +59,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     validator: (value) {
                       return GetUtils.isEmail(value!)
                           ? null
-                          : "Please enter valid Email";
+                          : "Please enter valid Email\n";
                     },
                     decoration: InputDecoration(
                       hintText: "Email address",
+                      errorStyle: TextStyle(fontSize: 12, height: 0.5),
                       focusedErrorBorder: OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Colors.red,
@@ -80,13 +84,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       contentPadding: EdgeInsets.symmetric(
-                        vertical: 0.0,
-                        horizontal: 20.0,
-                      ),
+                      vertical: 0.0,
+                      horizontal: 20.0,
+                    ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Colors.grey,
-                          width: 1.0,
+                          width: 0.5,
                         ),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(10.0),
@@ -96,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: AliceColors.ALICE_GREEN,
-                          width: 2.0,
+                          width: 1.0,
                         ),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(10.0),
@@ -118,6 +122,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     hintText: "Password",
+                    focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.red,
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10.0),
+                          topRight: Radius.circular(10.0),
+                        )),
                     errorBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.red,
@@ -132,7 +145,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       vertical: 0.0,
                       horizontal: 20.0,
                     ),
-                    border: OutlineInputBorder(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.grey,
+                        width: 0.5,
+                      ),
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(10.0),
                         bottomRight: Radius.circular(10.0),
@@ -141,7 +158,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: AliceColors.ALICE_GREEN,
-                        width: 2.0,
+                        width: 1.0,
                       ),
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(10.0),
@@ -184,7 +201,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ), */
                     style: ElevatedButton.styleFrom(
-                        primary: AliceColors.ALICE_GREEN),
+                        primary: AliceColors.ALICE_GREEN,
+                        elevation: 0.0,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
+                        ))),
                     child: Padding(
                       padding: EdgeInsets.all(
                         16.0,
@@ -197,48 +219,43 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     //color: AliceColors.ALICE_GREEN,
                     onPressed: () {
-                      setState(() {
-                        showLoader = !showLoader;
-                      });
-                      Get.find<LoginApiController>()
-                          .login(
-                              _emailController.text, _passwordController.text)
-                          .then((value) {
-                        if (value.success!) {
-                          _sharedPref.saveString("apiToken", value.access);
-                          //Get.offNamed('chatDetailsPage');
-                          Get.offNamed(INBOX_PAGE);
-                        } else {
-                          final snackBar = SnackBar(
-                            content: const Text("Error"),
-                            action: SnackBarAction(
-                              label: 'Undo',
-                              onPressed: () {
-                                // Some code to undo the change.
-                              },
-                            ),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        }
-                      });
+                      if (_emailController.text.isNotEmpty &&
+                          _passwordController.text.isNotEmpty) {
+                        Get.find<LoginApiController>()
+                            .login(
+                                _emailController.text, _passwordController.text)
+                            .then((value) {
+                          if (value.success!) {
+                            setState(() {
+                              showLoader = !showLoader;
+                            });
+                            _sharedPref.saveString("apiToken", value.access);
+                            //Get.offNamed('chatDetailsPage');
+                            Get.offNamed(INBOX_PAGE);
+                          }
+                        });
+                      }
                     },
                   ),
                 ),
               ),
               if (showLoader)
-                SpinKitChasingDots(
-                  itemBuilder: (BuildContext context, int index) {
-                    return DecoratedBox(
-                      decoration: BoxDecoration(
-                          color: index.isEven ? Colors.yellow : Colors.green,
-                          shape: BoxShape.circle),
-                    );
-                  },
-                  size: 30,
-                  duration: Duration(milliseconds: 1500),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SpinKitChasingDots(
+                    itemBuilder: (BuildContext context, int index) {
+                      return DecoratedBox(
+                        decoration: BoxDecoration(
+                            color: index.isEven ? Colors.yellow : Colors.green,
+                            shape: BoxShape.circle),
+                      );
+                    },
+                    size: 30,
+                    duration: Duration(milliseconds: 1500),
+                  ),
                 ),
-              SizedBox(
-                height: 20.0,
+             SizedBox(
+                height: 8.0,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(
@@ -250,7 +267,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     GestureDetector(
                       child: Text(
                         'Need to sign up?',
-                        style: TextStyle(color: AliceColors.ALICE_BLUE),
+                        style: TextStyle(
+                            color: AliceColors.ALICE_BLUE,
+                            fontWeight: FontWeight.bold),
                       ),
                       onTap: () {
                         Get.toNamed(SIGNUP_PAGE);
@@ -258,8 +277,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     GestureDetector(
                       child: Text(
-                        'Forgot Password?',
-                        style: TextStyle(color: AliceColors.ALICE_BLUE),
+                        'Forgot your Password?',
+                        style: TextStyle(
+                            color: AliceColors.ALICE_BLUE,
+                            fontWeight: FontWeight.bold),
                       ),
                       onTap: () {},
                     ),

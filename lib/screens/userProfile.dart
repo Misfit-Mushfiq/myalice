@@ -106,7 +106,8 @@ class _UserProfileState extends State<UserProfile> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 16))),
-                              Icon((Icons.arrow_forward_ios))
+                              Icon((Icons.arrow_forward_ios),
+                                  size: 15, color: Colors.grey)
                             ],
                           ),
                           onTap: () {
@@ -178,7 +179,8 @@ class _UserProfileState extends State<UserProfile> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 16))),
-                              Icon((Icons.arrow_forward_ios))
+                              Icon((Icons.arrow_forward_ios),
+                                  size: 15, color: Colors.grey)
                             ],
                           ),
                           onTap: () {
@@ -207,7 +209,8 @@ class _UserProfileState extends State<UserProfile> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 16))),
-                              Icon((Icons.arrow_forward_ios))
+                              Icon((Icons.arrow_forward_ios),
+                                  size: 15, color: Colors.grey)
                             ],
                           ),
                           onTap: () {
@@ -236,7 +239,8 @@ class _UserProfileState extends State<UserProfile> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 16))),
-                              Icon((Icons.arrow_forward_ios))
+                              Icon((Icons.arrow_forward_ios),
+                                  size: 15, color: Colors.grey)
                             ],
                           ),
                           onTap: () {
@@ -265,7 +269,14 @@ class _UserProfileState extends State<UserProfile> {
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 16))),
-                              Icon((Icons.arrow_forward_ios))
+                              Text(
+                                "Version 1.0.10",
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 12),
+                              ),
+                              SizedBox(width: 10,),
+                              Icon((Icons.arrow_forward_ios),
+                                  size: 15, color: Colors.grey)
                             ],
                           ),
                           onTap: () {

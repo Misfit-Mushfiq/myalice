@@ -29,7 +29,7 @@ class InboxController extends BaseApiController {
 
   var _user;
   var _ticketResponse;
-  var _projectResponse;
+  late Projects _projectResponse;
 
   var _userDataAvailable = false.obs;
   var isticketsDataAvailable = false.obs;
@@ -39,8 +39,6 @@ class InboxController extends BaseApiController {
 
   bool get ticketDataAvailable => isticketsDataAvailable.value;
   TicketResponse get tickets => _ticketResponse;
-
-
 
   late String? token;
 
@@ -91,14 +89,12 @@ class InboxController extends BaseApiController {
             () => isticketsDataAvailable.value = _ticketResponse != null);
   }
 
-  Future<dynamic> getProjects() async {
-    getDio()!
+  Future<Projects?> getProjects() async {
+    return getDio()!
         .get(_projectsPath,
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) => response.statusCode == 200
             ? _projectResponse = Projects.fromJson(response.data)
-            : null)
-        .whenComplete(
-            () => _projectResponse);
+            : null);
   }
 }

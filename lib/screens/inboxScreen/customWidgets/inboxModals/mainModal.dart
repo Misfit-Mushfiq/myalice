@@ -7,7 +7,7 @@ import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/filterModa
 
 class MainModal extends StatefulWidget {
   InboxController inboxController;
-  List<ChannelDataSource?> selectedAnimals;
+  List<ChannelDataSource?> selectedChannels;
   bool pendingSelected;
   bool resolvedSelected;
   bool sortNew;
@@ -19,7 +19,8 @@ class MainModal extends StatefulWidget {
       required this.pendingSelected,
       required this.resolvedSelected,
       required this.sortNew,
-      required this.onChanged,required this.selectedAnimals})
+      required this.onChanged,
+      required this.selectedChannels})
       : super(key: key);
 
   @override
@@ -88,7 +89,7 @@ class _MainModalState extends State<MainModal> {
               minLeadingWidth: 0.0,
               onTap: () {
                 Get.back();
-                showFilterModal(context, widget.selectedAnimals);
+                showFilterModal(context, widget.selectedChannels);
               },
             ),
             Divider(
@@ -137,15 +138,15 @@ class _MainModalState extends State<MainModal> {
     );
   }
 
-  void showFilterModal(BuildContext context, List<ChannelDataSource?> selectedAnimals) {
+  void showFilterModal(
+      BuildContext context, List<ChannelDataSource?> selectedChannels) {
     showModalBottomSheet(
         context: context,
         enableDrag: true,
         isScrollControlled: true,
         useRootNavigator: true,
         builder: (context) {
-          return FilterModal(
-              selectedAnimals: selectedAnimals);
+          return FilterModal(selectedChannels: selectedChannels);
         });
   }
 }

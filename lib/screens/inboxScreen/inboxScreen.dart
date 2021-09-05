@@ -39,7 +39,7 @@ class _InboxState extends State<Inbox> {
     pendingSelected = await _sharedPref.readBool("pendingSelected") ?? true;
     resolvedSelected = await _sharedPref.readBool("resolvedSelected") ?? false;
     sortNew = await _sharedPref.readBool('sortNew') ?? false;
-    _projects = await _inboxController.getProjects();
+    _projects = (await _inboxController.getProjects())!;
   }
 
   @override
@@ -58,11 +58,11 @@ class _InboxState extends State<Inbox> {
             height: MediaQuery.of(context).size.height * 0.18,
             child: Stack(children: <Widget>[
               Container(
-                // Background
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(20.0, 8.0, 8.0, 8.0),
+                      padding: const EdgeInsets.fromLTRB(20.0, 12.0, 8.0, 8.0),
                       child: GestureDetector(child: ProfileImage()),
                     ),
                     Expanded(
@@ -75,7 +75,7 @@ class _InboxState extends State<Inbox> {
                       ),
                     ),
                     Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(0.0),
                         child: GestureDetector(
                             child: Icon(
                               Icons.more_vert,
@@ -91,8 +91,7 @@ class _InboxState extends State<Inbox> {
                                     return MainModal(
                                       inboxController:
                                           Get.find<InboxController>(),
-                                      selectedAnimals:
-                                          _projects.dataSource!,
+                                      selectedChannels: _projects.dataSource!,
                                       pendingSelected: pendingSelected,
                                       resolvedSelected: resolvedSelected,
                                       sortNew: sortNew,
@@ -120,12 +119,12 @@ class _InboxState extends State<Inbox> {
                   ],
                 ),
                 color: AliceColors.ALICE_GREEN,
-                height: MediaQuery.of(context).size.height * 0.14,
+                height: MediaQuery.of(context).size.height * 0.15,
                 width: MediaQuery.of(context).size.width,
               ),
               Positioned(
                 // To take AppBar Size only
-                top: MediaQuery.of(context).size.height * 0.11,
+                top: MediaQuery.of(context).size.height * 0.12,
                 left: 10.0,
                 right: 10.0,
                 child: AppBar(
@@ -139,6 +138,7 @@ class _InboxState extends State<Inbox> {
                     Icons.search,
                     color: Colors.grey,
                   ),
+                  leadingWidth: 40,
                   primary: false,
                   titleSpacing: 0.0,
                   centerTitle: false,
@@ -160,10 +160,10 @@ class _InboxState extends State<Inbox> {
             ]),
           ),
           Container(
-            margin: const EdgeInsets.only(left: 10.0, top: 5, bottom: 5),
+            margin: const EdgeInsets.only(left: 10.0, top: 15, bottom: 5),
             child: Obx(() {
               return Text(ticketType.value,
-                  style: TextStyle(color: Colors.grey, fontSize: 10));
+                  style: TextStyle(color: Colors.grey, fontSize: 10,fontWeight: FontWeight.bold));
             }),
           ),
           Tickets()

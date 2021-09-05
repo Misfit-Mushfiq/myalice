@@ -11,15 +11,15 @@ import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/timeModal.
 import 'package:myalice/utils/colors.dart';
 
 class FilterModal extends StatefulWidget {
-  List<ChannelDataSource?> selectedAnimals ;
-  FilterModal({Key? key,required this.selectedAnimals}) : super(key: key);
+  List<ChannelDataSource?> selectedChannels;
+  FilterModal({Key? key, required this.selectedChannels}) : super(key: key);
 
   @override
   _FilterModalState createState() => _FilterModalState();
 }
 
 class _FilterModalState extends State<FilterModal> {
-  List<ChannelDataSource?> _selectedAnimals1 = [];
+  List<ChannelDataSource?> _selectedChannels1 = [];
   List<String> _seletedAgents = [];
   List<String> _tags = [];
   @override
@@ -55,14 +55,14 @@ class _FilterModalState extends State<FilterModal> {
                         children: [
                           Text("Channels",
                               style: TextStyle(
-                                fontWeight: widget.selectedAnimals.length <= 0
+                                fontWeight: _selectedChannels1.length <= 0
                                     ? FontWeight.normal
                                     : FontWeight.bold,
                               )),
                           Expanded(
                             child: GridView.builder(
                               shrinkWrap: true,
-                              itemCount: _selectedAnimals1.length,
+                              itemCount: _selectedChannels1.length,
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: const EdgeInsets.only(left: 8.0),
@@ -74,7 +74,7 @@ class _FilterModalState extends State<FilterModal> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Text(
-                                          _selectedAnimals1
+                                          _selectedChannels1
                                               .elementAt(index)!
                                               .name!,
                                           textAlign: TextAlign.center,
@@ -203,14 +203,14 @@ class _FilterModalState extends State<FilterModal> {
         backgroundColor: Colors.white,
         builder: (context) {
           return ChannelModal(
-            selectedAnimals: widget.selectedAnimals,
-            onsaved: (List<ChannelDataSource?> valubbe) {
-              _selectedAnimals1 = valubbe;
+        //    selectedChannels: widget.selectedChannels,
+            onsaved: (List<ChannelDataSource?> value) {
+              _selectedChannels1 = value;
             },
           );
         }).whenComplete(() {
       state(() {
-        widget.selectedAnimals = _selectedAnimals1;
+        widget.selectedChannels = _selectedChannels1;
       });
     });
   }
