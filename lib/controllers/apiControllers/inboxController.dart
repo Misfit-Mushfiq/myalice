@@ -61,7 +61,7 @@ class InboxController extends BaseApiController {
     await _sharedPref.saveBool("resolvedSelected", false);
     sort = await _sharedPref.readBool("sortNew") ? "asc" : "desc";
     resolved = 0;
-    getTickets(sort, resolved, "");
+    getTickets(sort, resolved, "",[],[],[],[]);
   }
 
   Future<dynamic> getUser() async {
@@ -75,7 +75,7 @@ class InboxController extends BaseApiController {
         .whenComplete(() => _userDataAvailable.value = _user != null);
   }
 
-  Future<dynamic> getTickets(String order, int resolved, String search) async {
+  Future<dynamic> getTickets(String order, int resolved, String search,List<String> channels,List<String?> agents,List<String?> groups,List<String?> tags) async {
     getDio()!
         .get(_ticketsPath,
             queryParameters: {
@@ -83,10 +83,10 @@ class InboxController extends BaseApiController {
               "offset": 0,
               "limit": 20,
               "search": search,
-              "channels": "all",
-              "agents": "all",
-              "groups": "all",
-              "tags": "all",
+              "channels": channels.length==0?"all":channels.join(','),
+              "agents": agents.length==0?"all":agents.join(','),
+              "groups": groups.length==0?"all":groups.join(','),
+              "tags": tags.length==0?"all":tags.join(','),
               "order": order
             },
             options: Options(headers: {"Authorization": "Token $token"}))

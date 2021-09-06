@@ -72,7 +72,7 @@ class _MainModalState extends State<MainModal> {
                       ? widget.inboxController.resolved = 1
                       : widget.inboxController.resolved = 0;
                   widget.inboxController.getTickets(widget.inboxController.sort,
-                      widget.inboxController.resolved, "");
+                      widget.inboxController.resolved, "",[],[],[],[]);
                 });
 
                 widget.onChanged(widget.pendingSelected,
@@ -98,7 +98,6 @@ class _MainModalState extends State<MainModal> {
               ),
               minLeadingWidth: 0.0,
               onTap: () {
-                Get.back();
                 showFilterModal(
                     context, widget.channels, widget.agents, widget.groups,widget.tags);
               },
@@ -137,7 +136,7 @@ class _MainModalState extends State<MainModal> {
                     widget.inboxController.getTickets(
                         widget.inboxController.sort,
                         widget.inboxController.resolved,
-                        "");
+                        "",[],[],[],[]);
                   });
                   widget.onChanged(widget.pendingSelected,
                       widget.resolvedSelected, widget.sortNew);
@@ -158,7 +157,9 @@ class _MainModalState extends State<MainModal> {
         useRootNavigator: true,
         builder: (context) {
           return FilterModal(
-              channels: channels, groups: groups, agents: agents,tags:tags);
-        });
+              channels: channels, groups: groups, agents: agents,tags:tags,sortNew: widget.sortNew,resolvedSelected: widget.resolvedSelected,);
+        }).whenComplete(() {setState(() {
+          
+        });});
   }
 }

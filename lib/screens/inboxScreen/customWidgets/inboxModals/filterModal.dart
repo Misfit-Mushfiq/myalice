@@ -21,12 +21,16 @@ class FilterModal extends StatefulWidget {
   AvailableGroups groups;
   AssignedAgents agents;
   Tags tags;
+  bool sortNew;
+  bool resolvedSelected;
   FilterModal(
       {Key? key,
       required this.channels,
       required this.agents,
       required this.groups,
-      required this.tags})
+      required this.tags,
+      required this.sortNew,
+      required this.resolvedSelected})
       : super(key: key);
 
   @override
@@ -35,6 +39,8 @@ class FilterModal extends StatefulWidget {
 
 class _FilterModalState extends State<FilterModal> {
   List<ChannelDataSource?> _selectedChannels1 = [];
+  List<String?> _selectedAgents = [];
+  List<String?> _selectedTags = [];
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(builder: (context, StateSetter state) {
@@ -52,10 +58,72 @@ class _FilterModalState extends State<FilterModal> {
                           //showInboxModal(context, Get.find<InboxController>());
                         },
                         icon: Icon(Icons.arrow_back_ios)),
-                    Text(
-                      "Filter Options",
-                      style: TextStyle(fontSize: 16),
+                    Expanded(
+                      child: Text(
+                        "Filter Options",
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
+                    if (_selectedChannels1.length > 0 ||
+                        _selectedAgents.length > 0 ||
+                        _selectedTags.length > 0)
+                      Row(
+                        children: [
+                          InkWell(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    0.0, 8.0, 8.0, 8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(color: Colors.grey)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "Reset",
+                                          style: TextStyle(fontSize: 12),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              onTap: () {
+                                Get.back();
+                              }),
+                          InkWell(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: AliceColors.ALICE_GREEN),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "Filter",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.white),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              onTap: () {
+                                Get.back();
+                                Get.find<InboxController>().getTickets(
+                                    widget.sortNew ? "desc" : "",
+                                    widget.resolvedSelected ? 1 : 0,
+                                    "", [], _selectedAgents, [], _selectedTags);
+                              }),
+                        ],
+                      )
                   ],
                 ),
                 Padding(
@@ -138,19 +206,67 @@ class _FilterModalState extends State<FilterModal> {
                 Divider(
                   color: Colors.grey,
                 ),
-                ListTile(
-                  contentPadding: EdgeInsets.only(left: 10.0),
-                  title: Text("Assigned Agent/Group",
-                      style: TextStyle(fontSize: 14)),
-                  trailing: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.arrow_forward_ios, size: 20),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: InkWell(
+                    child: Expanded(
+                        child: Container(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("Assigned Agents/Groups",
+                              style: TextStyle(
+                                fontWeight: _selectedAgents.length <= 0
+                                    ? FontWeight.normal
+                                    : FontWeight.bold,
+                              )),
+                          Expanded(
+                            child: GridView.builder(
+                              shrinkWrap: true,
+                              itemCount: _selectedAgents.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: EdgeInsets.only(left: 8.0),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color:
+                                          AliceColors.ALICE_SELECTED_CHANNEL),
+                                  child: Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: Center(
+                                        child: Text(
+                                            _selectedAgents
+                                                .elementAt(index)!
+                                                .tr,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.green,
+                                                fontSize: 10)),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 0.5,
+                                      mainAxisSpacing: 5.0,
+                                      childAspectRatio: 2.5),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(Icons.arrow_forward_ios,
+                                size: 20, color: Colors.grey),
+                          )
+                        ],
+                      ),
+                    )),
+                    onTap: () => showAssignedModal(
+                        context, state, widget.agents, widget.groups),
                   ),
-                  minLeadingWidth: 0.0,
-                  onTap: () {
-                    showAssignedModal(
-                        context, state, widget.agents, widget.groups);
-                  },
                 ),
                 Divider(
                   color: Colors.grey,
@@ -178,16 +294,6 @@ class _FilterModalState extends State<FilterModal> {
     });
   }
 
-/*   void showInboxModal(BuildContext context, InboxController controller) {
-    showModalBottomSheet(
-        context: context,
-        useRootNavigator: true,
-        isDismissible: true,
-        builder: (context) {
-          return MainModal(inboxController: controller);
-        }).whenComplete(() => null);
-  } */
-
   void showAssignedModal(BuildContext context, StateSetter state,
       AssignedAgents agents, AvailableGroups availableGroups) {
     showModalBottomSheet(
@@ -195,12 +301,19 @@ class _FilterModalState extends State<FilterModal> {
         isDismissible: true,
         isScrollControlled: true,
         builder: (context) {
-          return AssignedAgentModal(agents: agents, groups: availableGroups);
-        });
+          return AssignedAgentModal(
+            agents: agents,
+            groups: availableGroups,
+            onsaved: (List<String>? value) {
+              _selectedAgents = value!;
+            },
+          );
+        }).whenComplete(() {
+      setState(() {});
+    });
   }
 
-  void showTagsModal(
-      BuildContext context, StateSetter state,Tags tags) {
+  void showTagsModal(BuildContext context, StateSetter state, Tags tags) {
     showModalBottomSheet(
         context: context,
         isDismissible: true,

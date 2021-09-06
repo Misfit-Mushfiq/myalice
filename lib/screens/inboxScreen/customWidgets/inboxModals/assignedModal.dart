@@ -10,7 +10,12 @@ import 'package:myalice/utils/colors.dart';
 class AssignedAgentModal extends StatefulWidget {
   AvailableGroups groups;
   AssignedAgents agents;
-  AssignedAgentModal({Key? key, required this.groups, required this.agents})
+  final Function(List<String>?) onsaved;
+  AssignedAgentModal(
+      {Key? key,
+      required this.groups,
+      required this.agents,
+      required this.onsaved})
       : super(key: key);
 
   @override
@@ -20,14 +25,16 @@ class AssignedAgentModal extends StatefulWidget {
 class _AssignedAgentModalState extends State<AssignedAgentModal> {
   String searchTitle = "Search for agents/groups";
   bool assignedAgents = true;
-  List<String> _selectedAgents = [];
-  List<String>? _availableAgents = [];
+  List<AssignedAgentsDataSource> _selectedAgents = [];
+  List<String> _selectedAgentsID = [];
+  List<AssignedAgentsDataSource>? _availableAgents = [];
   @override
   void initState() {
-    for (int a = 0; a < widget.agents.dataSource!.length; a++) {
+    _availableAgents = widget.agents.dataSource;
+    /* for (int a = 0; a < widget.agents.dataSource!.length; a++) {
       _availableAgents!
           .add(widget.agents.dataSource!.elementAt(a).admin!.fullName!);
-    }
+    } */
     super.initState();
   }
 
@@ -98,25 +105,30 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                           ),
                         ),
                       ),
-                      onTap: () {}),
+                      onTap: () {
+                        Get.back();
+                        widget.onsaved(_selectedAgentsID);
+                      }),
                 ],
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: DropdownSearch<String>(
+                child: DropdownSearch<AssignedAgentsDataSource>(
                     mode: Mode.BOTTOM_SHEET,
                     items: _availableAgents,
                     hint: "Search for agents/groups",
                     onChanged: (value) {
                       setState(() {
                         _selectedAgents.add(value!);
+                        _selectedAgentsID.add(value.admin!.id.toString());
                         assignedAgents = false;
                       });
                     },
-                    popupItemBuilder: (context, String? agents, bool selected) {
+                    popupItemBuilder: (context,
+                        AssignedAgentsDataSource? agents, bool selected) {
                       return Container(
                         child: ListTile(
-                          title: Text(agents!),
+                          title: Text(agents!.admin!.fullName!),
                           trailing: selected ? Icon(Icons.check) : null,
                         ),
                       );
@@ -137,7 +149,8 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                         ),
                       );
                     },
-                    dropdownBuilder: (BuildContext context, String? agens,
+                    dropdownBuilder: (BuildContext context,
+                        AssignedAgentsDataSource? agents,
                         String itemDesignation) {
                       return Row(
                         children: [
@@ -246,7 +259,11 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Text(_selectedAgents.elementAt(index).tr,
+                                      Text(
+                                          _selectedAgents
+                                              .elementAt(index)
+                                              .admin!
+                                              .fullName!,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               color: Colors.green,

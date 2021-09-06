@@ -126,6 +126,9 @@ class _InboxState extends State<Inbox> {
                                 _sharedPref.saveBool(
                                     "resolvedSelected", resolvedSelected);
                                 _sharedPref.saveBool("sortNew", sortNew);
+                                setState(() {
+                                  
+                                });
                               });
                             }))
                   ],
@@ -158,7 +161,7 @@ class _InboxState extends State<Inbox> {
                       onChanged: (String text) {
                         _inboxController
                             .getTickets(sortNew ? "desc" : "",
-                                resolvedSelected ? 1 : 0, text)
+                                resolvedSelected ? 1 : 0, text,[],[],[],[])
                             .whenComplete(() {
                           setState(() {});
                         });
