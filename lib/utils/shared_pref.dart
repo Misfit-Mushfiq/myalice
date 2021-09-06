@@ -13,6 +13,12 @@ class SharedPref {
     return prefs.getString(key);
   }
 
+
+   readStringList(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    return  prefs.getStringList(key);
+  }
+
   readInt(String key) async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getInt(key);
@@ -36,6 +42,11 @@ class SharedPref {
   saveString(String key, value) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(key, value);
+  }
+
+  saveStringList(String key, List<String> list) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setStringList(key, list);
   }
 
   saveInt(String key, value) async {

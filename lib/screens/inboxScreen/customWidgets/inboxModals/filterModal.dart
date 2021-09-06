@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/models/availableAgents/assigned_agents.dart';
+import 'package:myalice/models/availableAgents/data_source.dart';
 import 'package:myalice/models/availableGroups/available_groups.dart';
 import 'package:myalice/models/channels/channels.dart';
 import 'package:myalice/models/channels/data_source.dart';
@@ -15,6 +16,7 @@ import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/mainModal.
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/tagsModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/timeModal.dart';
 import 'package:myalice/utils/colors.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class FilterModal extends StatefulWidget {
   Channels channels;
@@ -39,8 +41,22 @@ class FilterModal extends StatefulWidget {
 
 class _FilterModalState extends State<FilterModal> {
   List<ChannelDataSource?> _selectedChannels1 = [];
-  List<String?> _selectedAgents = [];
+  List<AssignedAgentsDataSource?> _selectedAgents = [];
+  List<String?> _selectedAgentsID = [];
   List<String?> _selectedTags = [];
+  SharedPref _pref = SharedPref();
+  @override
+  void initState() {
+    getSelectedAgents();
+    super.initState();
+  }
+
+  getSelectedAgents() async {
+    _selectedAgents = AssignedAgentsDataSource.decode( await _pref.readString("selectedAgents"));
+    setState(() {
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(builder: (context, StateSetter state) {
@@ -120,7 +136,11 @@ class _FilterModalState extends State<FilterModal> {
                                 Get.find<InboxController>().getTickets(
                                     widget.sortNew ? "desc" : "",
                                     widget.resolvedSelected ? 1 : 0,
-                                    "", [], _selectedAgents, [], _selectedTags);
+                                    "",
+                                    [],
+                                    _selectedAgentsID,
+                                    [],
+                                    _selectedTags);
                               }),
                         ],
                       )
@@ -238,7 +258,8 @@ class _FilterModalState extends State<FilterModal> {
                                         child: Text(
                                             _selectedAgents
                                                 .elementAt(index)!
-                                                .tr,
+                                                .admin!
+                                                .fullName!,
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 color: Colors.green,
@@ -304,8 +325,12 @@ class _FilterModalState extends State<FilterModal> {
           return AssignedAgentModal(
             agents: agents,
             groups: availableGroups,
-            onsaved: (List<String>? value) {
+            onsaved: (List<AssignedAgentsDataSource>? value) {
               _selectedAgents = value!;
+              for (int a = 0; a < value.length; a++) {
+                _selectedAgentsID
+                    .add(value.elementAt(a).admin!.id!.toString());
+              }
             },
           );
         }).whenComplete(() {

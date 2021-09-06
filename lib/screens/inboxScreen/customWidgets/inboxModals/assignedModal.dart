@@ -6,11 +6,13 @@ import 'package:myalice/models/availableAgents/data_source.dart';
 import 'package:myalice/models/availableGroups/available_groups.dart';
 import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/utils/colors.dart';
+import 'package:myalice/utils/shared_pref.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AssignedAgentModal extends StatefulWidget {
   AvailableGroups groups;
   AssignedAgents agents;
-  final Function(List<String>?) onsaved;
+  final Function(List<AssignedAgentsDataSource>?) onsaved;
   AssignedAgentModal(
       {Key? key,
       required this.groups,
@@ -28,6 +30,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
   List<AssignedAgentsDataSource> _selectedAgents = [];
   List<String> _selectedAgentsID = [];
   List<AssignedAgentsDataSource>? _availableAgents = [];
+  final SharedPref _sharedPref = SharedPref();
   @override
   void initState() {
     _availableAgents = widget.agents.dataSource;
@@ -107,7 +110,8 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                       ),
                       onTap: () {
                         Get.back();
-                        widget.onsaved(_selectedAgentsID);
+                        widget.onsaved(_selectedAgents);
+                        _sharedPref.saveString("selectedAgents", AssignedAgentsDataSource.encode(_selectedAgents));
                       }),
                 ],
               ),

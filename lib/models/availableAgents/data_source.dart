@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'admin.dart';
 import 'role.dart';
 
@@ -48,4 +50,32 @@ class AssignedAgentsDataSource {
         'browser_notification_on': browserNotificationOn,
         'is_deletable': isDeletable,
       };
+
+  static Map<String, dynamic> toMap(
+          AssignedAgentsDataSource assignedAgentsDataSource) =>
+      {
+        'id': assignedAgentsDataSource.id,
+        'admin': assignedAgentsDataSource.admin?.toJson(),
+        'role': assignedAgentsDataSource.role?.toJson(),
+        'groups': assignedAgentsDataSource.groups,
+        'ticket_sound_on': assignedAgentsDataSource.ticketSoundOn,
+        'message_sound_on': assignedAgentsDataSource.messageSoundOn,
+        'browser_notification_on':
+            assignedAgentsDataSource.browserNotificationOn,
+        'is_deletable': assignedAgentsDataSource.isDeletable,
+      };
+
+ static String encode(List<AssignedAgentsDataSource> assignedAgentsDataSourceList) =>
+      json.encode(
+        assignedAgentsDataSourceList
+            .map<Map<String, dynamic>>((assignedAgentsDataSource) =>
+                AssignedAgentsDataSource.toMap(assignedAgentsDataSource))
+            .toList(),
+      );
+
+ static List<AssignedAgentsDataSource> decode(String assignedAgentsDataSource) =>
+      (json.decode(assignedAgentsDataSource) as List<dynamic>)
+          .map<AssignedAgentsDataSource>(
+              (item) => AssignedAgentsDataSource.fromJson(item))
+          .toList();
 }
