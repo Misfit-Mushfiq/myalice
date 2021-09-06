@@ -12,20 +12,20 @@ class AliceColors {
 }
 
 Color platformColor(String name) {
-    switch (name) {
-      case "whatsapp_messenger":
-        return AliceColors.ALICE_GREEN;
-      case "facebook_messenger":
-        return AliceColors.ALICE_BLUE;
-      case "viber_messenger":
-        return AliceColors.ALICE_VIBER;
-      case "line_messenger":
-        return AliceColors.ALICE_GREEN;
-      case "facebook":
-        return AliceColors.ALICE_GREEN;
-      case "telegram_messenger":
-        return AliceColors.ALICE_BLUE;
-      default:
-        return AliceColors.ALICE_BLUE;
-    }
+  switch (name) {
+    case "whatsapp_messenger":
+      return AliceColors.ALICE_GREEN;
+    case "facebook_messenger":
+      return AliceColors.ALICE_BLUE;
+    case "viber_messenger":
+      return AliceColors.ALICE_VIBER;
+    case "line_messenger":
+      return AliceColors.ALICE_GREEN;
+    case "facebook":
+      return AliceColors.ALICE_GREEN;
+    case "telegram_messenger":
+      return AliceColors.ALICE_BLUE;
+    default:
+      return AliceColors.ALICE_BLUE;
   }
+}

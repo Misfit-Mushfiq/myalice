@@ -3,7 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
+import 'package:myalice/models/availableAgents/assigned_agents.dart';
+import 'package:myalice/models/availableGroups/available_groups.dart';
 import 'package:myalice/models/channels/channels.dart';
+import 'package:myalice/models/tags/tags.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/mainModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/profileImage.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/tickets.dart';
@@ -25,6 +28,9 @@ class _InboxState extends State<Inbox> {
   late bool sortNew;
   final SharedPref _sharedPref = SharedPref();
   late Channels _channels;
+  late AssignedAgents _agents;
+  late AvailableGroups _groups;
+  late Tags _tags;
 
   var ticketType = "PENDING TICKETS".obs;
 
@@ -40,6 +46,9 @@ class _InboxState extends State<Inbox> {
     resolvedSelected = await _sharedPref.readBool("resolvedSelected") ?? false;
     sortNew = await _sharedPref.readBool('sortNew') ?? false;
     _channels = (await _inboxController.getChannels())!;
+    _agents = (await _inboxController.getAvailableAgents())!;
+    _groups = (await _inboxController.getAvailableGroups())!;
+    _tags = (await _inboxController.getTicketTags())!;
   }
 
   @override
@@ -90,6 +99,9 @@ class _InboxState extends State<Inbox> {
                                   builder: (context) {
                                     return MainModal(
                                       channels: _channels,
+                                      agents: _agents,
+                                      groups: _groups,
+                                      tags:_tags,
                                       inboxController:
                                           Get.find<InboxController>(),
                                       pendingSelected: pendingSelected,

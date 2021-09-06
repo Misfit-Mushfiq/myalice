@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
+import 'package:myalice/models/availableAgents/assigned_agents.dart';
+import 'package:myalice/models/availableGroups/available_groups.dart';
 import 'package:myalice/models/channels/channels.dart';
 import 'package:myalice/models/channels/data_source.dart';
 import 'package:myalice/models/projectsModels/data_source.dart';
 import 'package:myalice/models/projectsModels/projects.dart';
+import 'package:myalice/models/tags/tags.dart';
 import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/assignedModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/channelModal.dart';
@@ -15,7 +18,16 @@ import 'package:myalice/utils/colors.dart';
 
 class FilterModal extends StatefulWidget {
   Channels channels;
-  FilterModal({Key? key, required this.channels}) : super(key: key);
+  AvailableGroups groups;
+  AssignedAgents agents;
+  Tags tags;
+  FilterModal(
+      {Key? key,
+      required this.channels,
+      required this.agents,
+      required this.groups,
+      required this.tags})
+      : super(key: key);
 
   @override
   _FilterModalState createState() => _FilterModalState();
@@ -23,8 +35,6 @@ class FilterModal extends StatefulWidget {
 
 class _FilterModalState extends State<FilterModal> {
   List<ChannelDataSource?> _selectedChannels1 = [];
-  List<String> _seletedAgents = [];
-  List<String> _tags = [];
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(builder: (context, StateSetter state) {
@@ -83,7 +93,8 @@ class _FilterModalState extends State<FilterModal> {
                                                 .title!,
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
-                                                color: Colors.green, fontSize: 10)),
+                                                color: Colors.green,
+                                                fontSize: 10)),
                                       ),
                                     ),
                                   ),
@@ -137,7 +148,8 @@ class _FilterModalState extends State<FilterModal> {
                   ),
                   minLeadingWidth: 0.0,
                   onTap: () {
-                    showAssignedModal(context, state, _seletedAgents);
+                    showAssignedModal(
+                        context, state, widget.agents, widget.groups);
                   },
                 ),
                 Divider(
@@ -155,7 +167,7 @@ class _FilterModalState extends State<FilterModal> {
                   ),
                   minLeadingWidth: 0.0,
                   onTap: () {
-                    showTagsModal(context, state, _tags);
+                    showTagsModal(context, state, widget.tags);
                   },
                 ),
               ],
@@ -176,21 +188,19 @@ class _FilterModalState extends State<FilterModal> {
         }).whenComplete(() => null);
   } */
 
-  void showAssignedModal(
-      BuildContext context, StateSetter state, List<String> selectedAgents) {
+  void showAssignedModal(BuildContext context, StateSetter state,
+      AssignedAgents agents, AvailableGroups availableGroups) {
     showModalBottomSheet(
         context: context,
         isDismissible: true,
         isScrollControlled: true,
         builder: (context) {
-          return AssignedAgentModal(
-            selectedAgents: selectedAgents,
-          );
+          return AssignedAgentModal(agents: agents, groups: availableGroups);
         });
   }
 
   void showTagsModal(
-      BuildContext context, StateSetter state, List<String> tags) {
+      BuildContext context, StateSetter state,Tags tags) {
     showModalBottomSheet(
         context: context,
         isDismissible: true,

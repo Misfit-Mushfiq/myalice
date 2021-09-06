@@ -1,10 +1,11 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myalice/models/tags/tags.dart';
 import 'package:myalice/utils/colors.dart';
 
 class TagsModal extends StatefulWidget {
-  List<String> tags = [];
+  Tags tags;
   TagsModal({Key? key, required this.tags}) : super(key: key);
 
   @override
@@ -13,6 +14,16 @@ class TagsModal extends StatefulWidget {
 
 class _TagsModalState extends State<TagsModal> {
   bool assignedAgents = true;
+  List<String>? _tags = [];
+  List<String> _selectedTags = [];
+  @override
+  void initState() {
+    for (int a = 0; a < widget.tags.dataSource!.length; a++) {
+      _tags!.add(widget.tags.dataSource!.elementAt(a).name!);
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -86,11 +97,11 @@ class _TagsModalState extends State<TagsModal> {
                 padding: const EdgeInsets.all(8.0),
                 child: DropdownSearch<String>(
                     mode: Mode.BOTTOM_SHEET,
-                    items: ["Brazil", "Tunisia", 'Canada'],
+                    items: _tags,
                     hint: "Search for tags",
                     onChanged: (value) {
                       setState(() {
-                        widget.tags.add(value!);
+                        _selectedTags.add(value!);
                         assignedAgents = false;
                       });
                     },
@@ -149,7 +160,7 @@ class _TagsModalState extends State<TagsModal> {
                   child: GridView.builder(
                     shrinkWrap: true,
                     padding: EdgeInsets.zero,
-                    itemCount: widget.tags.length,
+                    itemCount: _selectedTags.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.only(left: 8.0),
@@ -164,7 +175,7 @@ class _TagsModalState extends State<TagsModal> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(widget.tags.elementAt(index).tr,
+                                    Text(_selectedTags.elementAt(index).tr,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Colors.green, fontSize: 12)),
@@ -176,7 +187,7 @@ class _TagsModalState extends State<TagsModal> {
                                   ]),
                               onTap: () {
                                 setState(() {
-                                  widget.tags.removeAt(index);
+                                  _selectedTags.removeAt(index);
                                 });
                               },
                             ),

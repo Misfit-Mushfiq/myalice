@@ -160,8 +160,6 @@ class Tickets extends GetView<InboxController> {
     });
   }
 
- 
-
   String readTimestamp(int timestamp) {
     var now = DateTime.now();
     var format = DateFormat('HH:mm a');

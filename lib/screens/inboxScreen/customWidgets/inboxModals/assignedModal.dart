@@ -1,12 +1,16 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myalice/models/availableAgents/assigned_agents.dart';
+import 'package:myalice/models/availableAgents/data_source.dart';
+import 'package:myalice/models/availableGroups/available_groups.dart';
 import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/utils/colors.dart';
 
 class AssignedAgentModal extends StatefulWidget {
-  List<String> selectedAgents = [];
-  AssignedAgentModal({Key? key, required this.selectedAgents})
+  AvailableGroups groups;
+  AssignedAgents agents;
+  AssignedAgentModal({Key? key, required this.groups, required this.agents})
       : super(key: key);
 
   @override
@@ -16,8 +20,20 @@ class AssignedAgentModal extends StatefulWidget {
 class _AssignedAgentModalState extends State<AssignedAgentModal> {
   String searchTitle = "Search for agents/groups";
   bool assignedAgents = true;
+  List<String> _selectedAgents = [];
+  List<String>? _availableAgents = [];
+  @override
+  void initState() {
+    for (int a = 0; a < widget.agents.dataSource!.length; a++) {
+      _availableAgents!
+          .add(widget.agents.dataSource!.elementAt(a).admin!.fullName!);
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    widget.agents.dataSource!.map((e) => e.admin!.fullName!);
     return Wrap(
       children: [
         Container(
@@ -89,18 +105,18 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                 padding: const EdgeInsets.all(8.0),
                 child: DropdownSearch<String>(
                     mode: Mode.BOTTOM_SHEET,
-                    items: ["Brazil", "Tunisia", 'Canada'],
+                    items: _availableAgents,
                     hint: "Search for agents/groups",
                     onChanged: (value) {
                       setState(() {
-                        widget.selectedAgents.add(value!);
+                        _selectedAgents.add(value!);
                         assignedAgents = false;
                       });
                     },
-                    popupItemBuilder: (context, String? tag, bool selected) {
+                    popupItemBuilder: (context, String? agents, bool selected) {
                       return Container(
                         child: ListTile(
-                          title: Text(tag!),
+                          title: Text(agents!),
                           trailing: selected ? Icon(Icons.check) : null,
                         ),
                       );
@@ -113,7 +129,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                               borderRadius: BorderRadius.circular(5),
                             ))),
                     dropdownSearchTextAlign: TextAlign.start,
-                    showSelectedItem: true,
+                    showSelectedItem: false,
                     emptyBuilder: (context, String? text) {
                       return Scaffold(
                         body: Container(
@@ -121,7 +137,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                         ),
                       );
                     },
-                    dropdownBuilder: (BuildContext context, String? item,
+                    dropdownBuilder: (BuildContext context, String? agens,
                         String itemDesignation) {
                       return Row(
                         children: [
@@ -171,7 +187,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                       onTap: () {
                         setState(() {
                           assignedAgents = true;
-                          widget.selectedAgents.clear();
+                          _selectedAgents.clear();
                         });
                       },
                     ),
@@ -179,7 +195,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                       child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
-                            color: widget.selectedAgents.length <= 0
+                            color: _selectedAgents.length <= 0
                                 ? assignedAgents
                                     ? AliceColors.ALICE_GREY
                                     : AliceColors.ALICE_SELECTED_CHANNEL
@@ -189,7 +205,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                           child: Text(
                             "Assigned To None",
                             style: TextStyle(
-                                color: widget.selectedAgents.length <= 0
+                                color: _selectedAgents.length <= 0
                                     ? assignedAgents
                                         ? Colors.black
                                         : Colors.green
@@ -200,7 +216,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                       onTap: () {
                         setState(() {
                           assignedAgents = false;
-                          widget.selectedAgents.clear();
+                          _selectedAgents.clear();
                         });
                       },
                     ),
@@ -213,46 +229,47 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                   child: GridView.builder(
                     shrinkWrap: true,
                     padding: EdgeInsets.zero,
-                    itemCount: widget.selectedAgents.length,
+                    itemCount: _selectedAgents.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.only(left: 8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: AliceColors.ALICE_SELECTED_CHANNEL),
-                          child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: InkWell(
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                        widget.selectedAgents
-                                            .elementAt(index)
-                                            .tr,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.green, fontSize: 12)),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Icon(Icons.close,
-                                        size: 10, color: Colors.green)
-                                  ]),
-                              onTap: () {
-                                setState(() {
-                                  widget.selectedAgents.removeAt(index);
-                                });
-                              },
+                        child: Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: AliceColors.ALICE_SELECTED_CHANNEL),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: InkWell(
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(_selectedAgents.elementAt(index).tr,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.green,
+                                              fontSize: 12)),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Icon(Icons.close,
+                                          size: 10, color: Colors.green)
+                                    ]),
+                                onTap: () {
+                                  setState(() {
+                                    _selectedAgents.removeAt(index);
+                                  });
+                                },
+                              ),
                             ),
                           ),
                         ),
                       );
                     },
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
+                        crossAxisCount: 2,
                         crossAxisSpacing: 0.5,
                         mainAxisExtent: 25.0,
                         mainAxisSpacing: 5.0,

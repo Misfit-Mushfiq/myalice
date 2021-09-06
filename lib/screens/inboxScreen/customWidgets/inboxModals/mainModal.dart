@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
+import 'package:myalice/models/availableAgents/assigned_agents.dart';
+import 'package:myalice/models/availableGroups/available_groups.dart';
 import 'package:myalice/models/channels/channels.dart';
 import 'package:myalice/models/projectsModels/projects.dart';
+import 'package:myalice/models/tags/tags.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/filterModal.dart';
 
 class MainModal extends StatefulWidget {
   Channels channels;
+  AvailableGroups groups;
+  AssignedAgents agents;
+  Tags tags;
   InboxController inboxController;
   bool pendingSelected;
   bool resolvedSelected;
@@ -21,7 +27,10 @@ class MainModal extends StatefulWidget {
       required this.resolvedSelected,
       required this.sortNew,
       required this.onChanged,
-      required this.channels})
+      required this.channels,
+      required this.agents,
+      required this.groups,
+      required this.tags})
       : super(key: key);
 
   @override
@@ -90,7 +99,8 @@ class _MainModalState extends State<MainModal> {
               minLeadingWidth: 0.0,
               onTap: () {
                 Get.back();
-                showFilterModal(context, widget.channels);
+                showFilterModal(
+                    context, widget.channels, widget.agents, widget.groups,widget.tags);
               },
             ),
             Divider(
@@ -139,7 +149,8 @@ class _MainModalState extends State<MainModal> {
     );
   }
 
-  void showFilterModal(BuildContext context, Channels channels) {
+  void showFilterModal(BuildContext context, Channels channels,
+      AssignedAgents agents, AvailableGroups groups,Tags tags) {
     showModalBottomSheet(
         context: context,
         enableDrag: true,
@@ -147,8 +158,7 @@ class _MainModalState extends State<MainModal> {
         useRootNavigator: true,
         builder: (context) {
           return FilterModal(
-            channels: channels,
-          );
+              channels: channels, groups: groups, agents: agents,tags:tags);
         });
   }
 }

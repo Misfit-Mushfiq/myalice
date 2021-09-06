@@ -1,10 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/baseApiController.dart';
+import 'package:myalice/models/availableAgents/assigned_agents.dart';
+import 'package:myalice/models/availableGroups/available_groups.dart';
 import 'package:myalice/models/channels/channels.dart';
 import 'package:myalice/models/projectsModels/projects.dart';
 import 'package:myalice/models/responseModels/UserResponse.dart';
 import 'package:myalice/models/responseModels/ticketsResponseModels/ticketResponse.dart';
+import 'package:myalice/models/tags/tags.dart';
 import 'package:myalice/utils/shared_pref.dart';
 import 'package:pusher_client/pusher_client.dart';
 
@@ -13,6 +16,9 @@ class InboxController extends BaseApiController {
   static String _ticketsPath = "crm/projects/81/tickets";
   static String _projectsPath = "bots/projects";
   static String _channelsPath = "bots/projects/81/platforms/list";
+  static String _availableAgentsPath = "bots/projects/81/access";
+  static String _availableGroupsPath = "bots/projects/81/groups";
+  static String _ticketsTagsPath = "crm/projects/81/ticket-tags";
 
   final SharedPref _sharedPref = SharedPref();
 
@@ -107,6 +113,33 @@ class InboxController extends BaseApiController {
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) => response.statusCode == 200
             ? Channels.fromJson(response.data)
+            : null);
+  }
+
+  Future<AssignedAgents?> getAvailableAgents() async {
+    return getDio()!
+        .get(_availableAgentsPath,
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((response) => response.statusCode == 200
+            ? AssignedAgents.fromJson(response.data)
+            : null);
+  }
+
+  Future<AvailableGroups?> getAvailableGroups() async {
+    return getDio()!
+        .get(_availableGroupsPath,
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((response) => response.statusCode == 200
+            ? AvailableGroups.fromJson(response.data)
+            : null);
+  }
+
+  Future<Tags?> getTicketTags() async {
+    return getDio()!
+        .get(_ticketsTagsPath,
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((response) => response.statusCode == 200
+            ? Tags.fromJson(response.data)
             : null);
   }
 }

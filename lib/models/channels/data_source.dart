@@ -63,7 +63,8 @@ class ChannelDataSource {
     this.iceBreaker,
   });
 
-  factory ChannelDataSource.fromJson(Map<String, dynamic> json) => ChannelDataSource(
+  factory ChannelDataSource.fromJson(Map<String, dynamic> json) =>
+      ChannelDataSource(
         id: json['id'] as int?,
         project: json['project'] == null
             ? null

@@ -167,8 +167,9 @@ class _ChannelModalState extends State<ChannelModal> {
                     icon: Icon(
                       platformIcon(
                           widget.channels.dataSource!.elementAt(2).type!),
-                          color: platformColor(widget.channels.dataSource!.elementAt(2).type!),
-                          size: 5,
+                      color: platformColor(
+                          widget.channels.dataSource!.elementAt(2).type!),
+                      size: 5,
                     ),
                   )),
             ],
@@ -177,6 +178,4 @@ class _ChannelModalState extends State<ChannelModal> {
       );
     });
   }
-
-  
 }
