@@ -6,7 +6,7 @@ import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/models/responseModels/channels/channels.dart';
 import 'package:myalice/models/responseModels/channels/data_source.dart';
 
-import 'package:myalice/screens/chatDetails.dart';
+import 'package:myalice/screens/chatDetails/chatDetails.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/platform_icon.dart';
 import 'package:myalice/utils/shared_pref.dart';

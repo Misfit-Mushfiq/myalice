@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
 import 'package:myalice/models/responseModels/availableAgents/data_source.dart';
 import 'package:myalice/models/responseModels/availableGroups/available_groups.dart';
-import 'package:myalice/screens/chatDetails.dart';
+import 'package:myalice/screens/chatDetails/chatDetails.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/shared_pref.dart';
 import 'package:shared_preferences/shared_preferences.dart';

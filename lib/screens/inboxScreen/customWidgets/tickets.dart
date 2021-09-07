@@ -3,11 +3,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
+import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/platform_icon.dart';
 import 'package:myalice/utils/routes.dart';
 
 class Tickets extends GetView<InboxController> {
+  final Tags tags;
+  Tickets(
+      {Key? key,
+      required this.tags})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -149,7 +155,7 @@ class Tickets extends GetView<InboxController> {
                               )
                             ],
                           ),
-                          onTap: () => Get.toNamed(CHAT_DETAILS_PAGE),
+                          onTap: () => Get.toNamed(CHAT_DETAILS_PAGE,arguments: tags),
                         ));
                   },
                   itemCount: controller.tickets.dataSource!.length))

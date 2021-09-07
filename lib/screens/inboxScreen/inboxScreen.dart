@@ -215,7 +215,7 @@ class _InboxState extends State<Inbox> {
                       fontWeight: FontWeight.bold));
             }),
           ),
-          Tickets()
+          Tickets(tags:_tags)
         ])));
   }
 }

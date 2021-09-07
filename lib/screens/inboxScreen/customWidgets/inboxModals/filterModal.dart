@@ -8,7 +8,7 @@ import 'package:myalice/models/responseModels/channels/channels.dart';
 import 'package:myalice/models/responseModels/channels/data_source.dart';
 import 'package:myalice/models/responseModels/tags/data_source.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
-import 'package:myalice/screens/chatDetails.dart';
+import 'package:myalice/screens/chatDetails/chatDetails.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/assignedModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/channelModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/mainModal.dart';

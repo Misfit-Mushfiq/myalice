@@ -9,22 +9,14 @@ import 'package:myalice/controllers/pusherController/pusherController.dart';
 import 'package:myalice/customWidgets/botButton.dart';
 import 'package:myalice/models/chatModel/chat.dart';
 import 'package:myalice/models/responseModels/chatResponse.dart';
+import 'package:myalice/models/responseModels/tags/data_source.dart';
+import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/routes.dart';
 
 class ChatDetails extends StatefulWidget {
   @override
   _ChatDetailsState createState() => _ChatDetailsState();
-}
-
-class Animal {
-  final int id;
-  final String name;
-
-  Animal({
-    required this.id,
-    required this.name,
-  });
 }
 
 class _ChatDetailsState extends State<ChatDetails>
@@ -36,15 +28,10 @@ class _ChatDetailsState extends State<ChatDetails>
   bool _visiblity = false;
   bool _botEnabled = false;
   final _chatboxBottomSheet = GlobalKey<ScaffoldState>();
+  late Tags _tags;
+  late var _items;
+  List<TagsDataSource>? _tagsLlist = [];
 
-  static List<Animal> _animals = [
-    Animal(id: 1, name: "Lion"),
-    Animal(id: 2, name: "Flamingo"),
-    Animal(id: 3, name: "Hippo"),
-  ];
-  final _items = _animals
-      .map((animal) => MultiSelectItem<Animal>(animal, animal.name))
-      .toList();
   //List<Animal> _selectedChannels = [];
   List<Object?> _selectedChannels2 = [];
 
@@ -56,14 +43,20 @@ class _ChatDetailsState extends State<ChatDetails>
 
   @override
   void dispose() {
-    // _sharedPref.remove('apiToken');
     Get.find<ChatApiController>().closeDB();
     super.dispose();
   }
 
   Future<void> init() async {
+    _tags = Get.arguments;
+    _tagsLlist = _tags.dataSource;
     pusherService = PusherService();
-    await pusherService.connectPusher('chat-C_593', "messages");
+    _items = _tags.dataSource!
+        .map((channel) =>
+            MultiSelectItem<TagsDataSource>(channel, channel.name!))
+        .toList()
+        .obs;
+    await pusherService.connectPusher('chat-C_650', "messages");
   }
 
   void animateToScreenEnd() {
@@ -540,7 +533,6 @@ class _ChatDetailsState extends State<ChatDetails>
         backgroundColor: Colors.white,
         builder: (context) {
           return Container(
-              height: 200,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -589,20 +581,21 @@ class _ChatDetailsState extends State<ChatDetails>
                           ),
                           onTap: () {
                             setState(() {
-                              _animals.add(Animal(id: 4, name: "Lionss"));
+                             // _animals.add(Animal(id: 4, name: "Lionss"));
                             });
                           })
                     ],
                   ),
-                  Expanded(
-                    child: Container(
+                  Wrap(
+                    children: [
+                      Container(
                       child: Column(
                         children: <Widget>[
                           Container(
-                            margin: EdgeInsets.only(left: 10, top: 0.0),
                             child: MultiSelectChipField(
                               items: _items,
                               showHeader: false,
+                              scroll: false,
                               initialValue: _selectedChannels2,
                               headerColor: Colors.white,
                               chipShape: RoundedRectangleBorder(
@@ -636,7 +629,8 @@ class _ChatDetailsState extends State<ChatDetails>
                                 ), */
                         ],
                       ),
-                    ),
+                    )
+                    ] ,
                   )
                 ],
               ));
