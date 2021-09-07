@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'nlp_info.dart';
 import 'persistent_menu.dart';
 import 'project.dart';
@@ -131,4 +133,53 @@ class ChannelDataSource {
         'secondary_id': secondaryId,
         'ice_breaker': iceBreaker,
       };
+
+  static Map<String, dynamic> toMap(ChannelDataSource channelDataSource) => {
+        'id': channelDataSource.id,
+        'project': channelDataSource.project?.toJson(),
+        'primary_id': channelDataSource.primaryId,
+        'primary_color': channelDataSource.primaryColor,
+        'access_token': channelDataSource.accessToken,
+        'title': channelDataSource.title,
+        'description': channelDataSource.description,
+        'name': channelDataSource.name,
+        'type': channelDataSource.type,
+        'username': channelDataSource.username,
+        'url': channelDataSource.url,
+        'avatar': channelDataSource.avatar,
+        'cover': channelDataSource.cover,
+        'nlp_engine': channelDataSource.nlpEngine,
+        'nlp_info': channelDataSource.nlpInfo?.toJson(),
+        'nlp_confidence': channelDataSource.nlpConfidence,
+        'is_connected': channelDataSource.isConnected,
+        'whitelisted_domains': channelDataSource.whitelistedDomains,
+        'persistent_menu':
+            channelDataSource.persistentMenu?.map((e) => e.toJson()).toList(),
+        'secondary_receiver_id': channelDataSource.secondaryReceiverId,
+        'monthly_active_users': channelDataSource.monthlyActiveUsers,
+        'ticket_count': channelDataSource.ticketCount,
+        'customer_count': channelDataSource.customerCount,
+        'main_type': channelDataSource.mainType,
+        'is_ecommerce_plugin_channel':
+            channelDataSource.isEcommercePluginChannel,
+        'is_archived': channelDataSource.isArchived,
+        'secondary_id': channelDataSource.secondaryId,
+        'ice_breaker': channelDataSource.iceBreaker,
+      };
+
+  static String encode(List<ChannelDataSource> channelDataSourceList) =>
+      json.encode(
+        channelDataSourceList
+            .map<Map<String, dynamic>>((channelDataSource) =>
+                ChannelDataSource.toMap(channelDataSource))
+            .toList(),
+      );
+
+  static List<ChannelDataSource> decode(String channelDataSource) {
+    return channelDataSource != null
+        ? (json.decode(channelDataSource) ?? [])
+            .map<ChannelDataSource>((item) => ChannelDataSource.fromJson(item))
+            .toList()
+        : [];
+  }
 }

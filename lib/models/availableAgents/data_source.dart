@@ -65,7 +65,8 @@ class AssignedAgentsDataSource {
         'is_deletable': assignedAgentsDataSource.isDeletable,
       };
 
- static String encode(List<AssignedAgentsDataSource> assignedAgentsDataSourceList) =>
+  static String encode(
+          List<AssignedAgentsDataSource> assignedAgentsDataSourceList) =>
       json.encode(
         assignedAgentsDataSourceList
             .map<Map<String, dynamic>>((assignedAgentsDataSource) =>
@@ -73,9 +74,13 @@ class AssignedAgentsDataSource {
             .toList(),
       );
 
- static List<AssignedAgentsDataSource> decode(String assignedAgentsDataSource) =>
-      (json.decode(assignedAgentsDataSource) as List<dynamic>)
-          .map<AssignedAgentsDataSource>(
-              (item) => AssignedAgentsDataSource.fromJson(item))
-          .toList();
+  static List<AssignedAgentsDataSource> decode(
+      String assignedAgentsDataSource) {
+    return assignedAgentsDataSource != null
+        ? (json.decode(assignedAgentsDataSource) ?? [])
+            .map<AssignedAgentsDataSource>(
+                (item) => AssignedAgentsDataSource.fromJson(item))
+            .toList()
+        : [];
+  }
 }

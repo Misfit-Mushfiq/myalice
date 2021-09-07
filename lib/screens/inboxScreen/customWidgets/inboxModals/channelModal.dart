@@ -10,6 +10,7 @@ import 'package:myalice/models/projectsModels/projects.dart';
 import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/platform_icon.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class ChannelModal extends StatefulWidget {
   //final List<ChannelDataSource?> selectedChannels;
@@ -23,11 +24,18 @@ class ChannelModal extends StatefulWidget {
 }
 
 class _ChannelModalState extends State<ChannelModal> {
-  List<ChannelDataSource?> _selectedChannels1 = [];
+  List<ChannelDataSource> _selectedChannels = [];
   int _index = 0;
+  SharedPref _pref = SharedPref();
   @override
   void initState() {
+    getSelectedChannels();
     super.initState();
+  }
+
+  getSelectedChannels() async {
+    _selectedChannels =
+        ChannelDataSource.decode(await _pref.readString("selectedChannels"));
   }
 
   @override
@@ -79,7 +87,8 @@ class _ChannelModalState extends State<ChannelModal> {
                   ),
                   onTap: () {
                     state(() {
-                      _selectedChannels1.clear();
+                      _selectedChannels.clear();
+
                     });
                     Get.back();
                   }),
@@ -106,7 +115,8 @@ class _ChannelModalState extends State<ChannelModal> {
                   ),
                   onTap: () {
                     Get.back();
-                    widget.onsaved(_selectedChannels1);
+                    widget.onsaved(_selectedChannels);
+                    _pref.saveString("selectedChannels", ChannelDataSource.encode(_selectedChannels));
                   }),
             ],
           ),
@@ -116,7 +126,7 @@ class _ChannelModalState extends State<ChannelModal> {
                   margin: EdgeInsets.only(left: 10, top: 10.0),
                   child: MultiSelectChipField(
                     items: _items,
-                    initialValue: _selectedChannels1,
+                    initialValue: _selectedChannels,
                     showHeader: false,
                     scroll: false,
                     selectedChipColor: AliceColors.ALICE_SELECTED_CHANNEL,
@@ -161,8 +171,8 @@ class _ChannelModalState extends State<ChannelModal> {
                                 );
                               },
                                */
-                    onTap: (List<ChannelDataSource?> values) {
-                      _selectedChannels1 = values;
+                    onTap: (List<ChannelDataSource> values) {
+                      _selectedChannels = values;
                     },
                     icon: Icon(
                       platformIcon(

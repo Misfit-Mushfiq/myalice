@@ -62,57 +62,58 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                         Icons.arrow_back_ios_new,
                         color: Colors.grey,
                       )),
-                  SizedBox(
-                    width: 5,
-                  ),
                   Expanded(child: Text("Assigned Agent/Group")),
-                  InkWell(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0.0, 8.0, 8.0, 8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              border: Border.all(color: Colors.grey)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Reset",
-                                  style: TextStyle(fontSize: 12),
-                                )
-                              ],
+                  Row(
+                    children: [
+                      InkWell(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(color: Colors.grey)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Reset",
+                                    style: TextStyle(fontSize: 12),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      onTap: () {}),
-                  InkWell(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: AliceColors.ALICE_GREEN),
+                          onTap: () {}),
+                      InkWell(
                           child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Filter",
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.white),
-                                )
-                              ],
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color: AliceColors.ALICE_GREEN),
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Filter",
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.white),
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      onTap: () {
-                        Get.back();
-                        widget.onsaved(_selectedAgents);
-                        _sharedPref.saveString("selectedAgents", AssignedAgentsDataSource.encode(_selectedAgents));
-                      }),
+                          onTap: () {
+                            Get.back();
+                            widget.onsaved(_selectedAgents);
+                            _sharedPref.saveString(
+                                "selectedAgents",
+                                AssignedAgentsDataSource.encode(
+                                    _selectedAgents));
+                          }),
+                    ],
+                  )
                 ],
               ),
               Padding(
@@ -240,64 +241,48 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Expanded(
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.zero,
-                    itemCount: _selectedAgents.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                color: AliceColors.ALICE_SELECTED_CHANNEL),
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: InkWell(
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                          _selectedAgents
-                                              .elementAt(index)
-                                              .admin!
-                                              .fullName!,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Colors.green,
-                                              fontSize: 12)),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Icon(Icons.close,
-                                          size: 10, color: Colors.green)
-                                    ]),
-                                onTap: () {
-                                  setState(() {
-                                    _selectedAgents.removeAt(index);
-                                  });
-                                },
-                              ),
+              GridView.builder(
+                shrinkWrap: true,
+                padding: EdgeInsets.all(8),
+                
+                itemCount: _selectedAgents.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: AliceColors.ALICE_SELECTED_CHANNEL),
+                    child: InkWell(
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                                _selectedAgents
+                                    .elementAt(index)
+                                    .admin!
+                                    .fullName!,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.green, fontSize: 12)),
+                            SizedBox(
+                              width: 5,
                             ),
-                          ),
-                        ),
-                      );
-                    },
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 0.5,
-                        mainAxisExtent: 25.0,
-                        mainAxisSpacing: 5.0,
-                        childAspectRatio: 3),
-                  ),
-                ),
-              )
+                            Icon(Icons.close, size: 10, color: Colors.green)
+                          ]),
+                      onTap: () {
+                        setState(() {
+                          _selectedAgents.removeAt(index);
+                        });
+                      },
+                    ),
+                  );
+                },
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10.0,
+                    mainAxisExtent: 30.0,
+                    mainAxisSpacing: 10.0),
+              ),
             ],
           ),
         )

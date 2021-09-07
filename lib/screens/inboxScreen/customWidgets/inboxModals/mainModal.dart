@@ -5,7 +5,6 @@ import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/models/availableAgents/assigned_agents.dart';
 import 'package:myalice/models/availableGroups/available_groups.dart';
 import 'package:myalice/models/channels/channels.dart';
-import 'package:myalice/models/projectsModels/projects.dart';
 import 'package:myalice/models/tags/tags.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/filterModal.dart';
 

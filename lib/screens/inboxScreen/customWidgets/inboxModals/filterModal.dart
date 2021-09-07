@@ -40,7 +40,7 @@ class FilterModal extends StatefulWidget {
 }
 
 class _FilterModalState extends State<FilterModal> {
-  List<ChannelDataSource?> _selectedChannels1 = [];
+  List<ChannelDataSource?> _selectedChannels = [];
   List<AssignedAgentsDataSource?> _selectedAgents = [];
   List<String?> _selectedAgentsID = [];
   List<String?> _selectedTags = [];
@@ -52,13 +52,16 @@ class _FilterModalState extends State<FilterModal> {
   }
 
   getSelectedAgents() async {
-    _selectedAgents = AssignedAgentsDataSource.decode( await _pref.readString("selectedAgents"));
-    setState(() {
-    });
+    _selectedAgents = AssignedAgentsDataSource.decode(
+        await _pref.readString("selectedAgents"));
+    _selectedChannels = ChannelDataSource.decode(
+        await _pref.readString("selectedChannels"));
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    getSelectedAgents();
     return StatefulBuilder(builder: (context, StateSetter state) {
       return Wrap(
         children: [
@@ -80,7 +83,7 @@ class _FilterModalState extends State<FilterModal> {
                         style: TextStyle(fontSize: 16),
                       ),
                     ),
-                    if (_selectedChannels1.length > 0 ||
+                    if (_selectedChannels.length > 0 ||
                         _selectedAgents.length > 0 ||
                         _selectedTags.length > 0)
                       Row(
@@ -108,6 +111,11 @@ class _FilterModalState extends State<FilterModal> {
                               ),
                               onTap: () {
                                 Get.back();
+                                _selectedAgents.clear();
+                                _pref.remove("selectedAgents");
+                                _selectedChannels.clear();
+                                _pref.remove("selectedChannels");
+                                _selectedAgentsID.clear();
                               }),
                           InkWell(
                               child: Padding(
@@ -149,53 +157,51 @@ class _FilterModalState extends State<FilterModal> {
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0),
                   child: InkWell(
-                    child: Expanded(
-                        child: Container(
-                      child: Row(
+                    child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text("Channels",
                               style: TextStyle(
-                                fontWeight: _selectedChannels1.length <= 0
+                                fontWeight: _selectedChannels.length <= 0
                                     ? FontWeight.normal
                                     : FontWeight.bold,
                               )),
-                          Expanded(
-                            child: GridView.builder(
-                              shrinkWrap: true,
-                              itemCount: _selectedChannels1.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: EdgeInsets.only(left: 8.0),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color:
-                                          AliceColors.ALICE_SELECTED_CHANNEL),
-                                  child: Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: Center(
-                                        child: Text(
-                                            _selectedChannels1
-                                                .elementAt(index)!
-                                                .title!,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.green,
-                                                fontSize: 10)),
+                           Flexible(
+                             flex: 1,
+                             fit: FlexFit.tight,
+                             child: GridView.builder(
+                                shrinkWrap: true,
+                                itemCount: _selectedChannels.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    margin: EdgeInsets.only(left: 8.0),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        color:
+                                            AliceColors.ALICE_SELECTED_CHANNEL),
+                                    child:  Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Center(
+                                          child: Text(
+                                              _selectedChannels
+                                                  .elementAt(index)!
+                                                  .title!,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.green,
+                                                  fontSize: 10)),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                );
-                              },
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 4,
-                                      crossAxisSpacing: 0.5,
-                                      mainAxisSpacing: 5.0,
-                                      childAspectRatio: 2.5),
-                            ),
-                          ),
+                                  );
+                                },
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 4,
+                                        crossAxisSpacing: 0.5,
+                                        mainAxisSpacing: 5.0,
+                                        childAspectRatio: 2.5),
+                              ),
+                           ),                       
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(Icons.arrow_forward_ios,
@@ -203,7 +209,7 @@ class _FilterModalState extends State<FilterModal> {
                           )
                         ],
                       ),
-                    )),
+                    
                     onTap: () =>
                         showChannelModal(context, state, widget.channels),
                   ),
@@ -229,9 +235,7 @@ class _FilterModalState extends State<FilterModal> {
                 Padding(
                   padding: const EdgeInsets.only(left: 10.0),
                   child: InkWell(
-                    child: Expanded(
-                        child: Container(
-                      child: Row(
+                    child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text("Assigned Agents/Groups",
@@ -240,7 +244,9 @@ class _FilterModalState extends State<FilterModal> {
                                     ? FontWeight.normal
                                     : FontWeight.bold,
                               )),
-                          Expanded(
+                          Flexible(
+                            flex: 1,
+                            fit: FlexFit.tight,
                             child: GridView.builder(
                               shrinkWrap: true,
                               itemCount: _selectedAgents.length,
@@ -251,8 +257,7 @@ class _FilterModalState extends State<FilterModal> {
                                       borderRadius: BorderRadius.circular(5),
                                       color:
                                           AliceColors.ALICE_SELECTED_CHANNEL),
-                                  child: Expanded(
-                                    child: Padding(
+                                  child: Padding(
                                       padding: const EdgeInsets.all(2.0),
                                       child: Center(
                                         child: Text(
@@ -266,7 +271,7 @@ class _FilterModalState extends State<FilterModal> {
                                                 fontSize: 10)),
                                       ),
                                     ),
-                                  ),
+                                 
                                 );
                               },
                               gridDelegate:
@@ -284,7 +289,7 @@ class _FilterModalState extends State<FilterModal> {
                           )
                         ],
                       ),
-                    )),
+                   
                     onTap: () => showAssignedModal(
                         context, state, widget.agents, widget.groups),
                   ),
@@ -326,15 +331,14 @@ class _FilterModalState extends State<FilterModal> {
             agents: agents,
             groups: availableGroups,
             onsaved: (List<AssignedAgentsDataSource>? value) {
-              _selectedAgents = value!;
-              for (int a = 0; a < value.length; a++) {
-                _selectedAgentsID
-                    .add(value.elementAt(a).admin!.id!.toString());
+              //_selectedAgents = value!;
+              for (int a = 0; a < value!.length; a++) {
+                _selectedAgentsID.add(value.elementAt(a).admin!.id!.toString());
               }
             },
           );
         }).whenComplete(() {
-      setState(() {});
+      state(() {});
     });
   }
 
@@ -360,12 +364,12 @@ class _FilterModalState extends State<FilterModal> {
             //    selectedChannels: widget.selectedChannels,
             channels: channels,
             onsaved: (List<ChannelDataSource?> value) {
-              _selectedChannels1 = value;
+              //_selectedChannels = value;
             },
           );
         }).whenComplete(() {
       state(() {
-        //widget.selectedChannels = _selectedChannels1;
+        setState(() {});
       });
     });
   }
