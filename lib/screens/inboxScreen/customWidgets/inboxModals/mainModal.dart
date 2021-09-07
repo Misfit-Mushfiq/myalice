@@ -7,6 +7,7 @@ import 'package:myalice/models/availableGroups/available_groups.dart';
 import 'package:myalice/models/channels/channels.dart';
 import 'package:myalice/models/tags/tags.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/filterModal.dart';
+import 'package:myalice/screens/inboxScreen/inboxScreen.dart';
 
 class MainModal extends StatefulWidget {
   Channels channels;
@@ -71,7 +72,7 @@ class _MainModalState extends State<MainModal> {
                       ? widget.inboxController.resolved = 1
                       : widget.inboxController.resolved = 0;
                   widget.inboxController.getTickets(widget.inboxController.sort,
-                      widget.inboxController.resolved, "",[],[],[],[]);
+                      widget.inboxController.resolved, "", [], [], [], []);
                 });
 
                 widget.onChanged(widget.pendingSelected,
@@ -97,8 +98,8 @@ class _MainModalState extends State<MainModal> {
               ),
               minLeadingWidth: 0.0,
               onTap: () {
-                showFilterModal(
-                    context, widget.channels, widget.agents, widget.groups,widget.tags);
+                showFilterModal(context, widget.channels, widget.agents,
+                    widget.groups, widget.tags);
               },
             ),
             Divider(
@@ -135,7 +136,7 @@ class _MainModalState extends State<MainModal> {
                     widget.inboxController.getTickets(
                         widget.inboxController.sort,
                         widget.inboxController.resolved,
-                        "",[],[],[],[]);
+                        "", [], [], [], []);
                   });
                   widget.onChanged(widget.pendingSelected,
                       widget.resolvedSelected, widget.sortNew);
@@ -148,17 +149,22 @@ class _MainModalState extends State<MainModal> {
   }
 
   void showFilterModal(BuildContext context, Channels channels,
-      AssignedAgents agents, AvailableGroups groups,Tags tags) {
+      AssignedAgents agents, AvailableGroups groups, Tags tags) {
     showModalBottomSheet(
         context: context,
         enableDrag: true,
         isScrollControlled: true,
-        useRootNavigator: true,
         builder: (context) {
           return FilterModal(
-              channels: channels, groups: groups, agents: agents,tags:tags,sortNew: widget.sortNew,resolvedSelected: widget.resolvedSelected,);
-        }).whenComplete(() {setState(() {
-          
-        });});
+            channels: channels,
+            groups: groups,
+            agents: agents,
+            tags: tags,
+            sortNew: widget.sortNew,
+            resolvedSelected: widget.resolvedSelected,
+          );
+        }).whenComplete(() {
+      Get.back();
+    });
   }
 }

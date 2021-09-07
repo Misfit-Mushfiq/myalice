@@ -51,6 +51,10 @@ class _InboxState extends State<Inbox> {
     _tags = (await _inboxController.getTicketTags())!;
   }
 
+  void a() {
+    setState(() {});
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -93,41 +97,47 @@ class _InboxState extends State<Inbox> {
                             ),
                             onTap: () {
                               showModalBottomSheet(
-                                  context: context,
-                                  useRootNavigator: true,
-                                  isDismissible: true,
-                                  builder: (context) {
-                                    return MainModal(
-                                      channels: _channels,
-                                      agents: _agents,
-                                      groups: _groups,
-                                      tags:_tags,
-                                      inboxController:
-                                          Get.find<InboxController>(),
-                                      pendingSelected: pendingSelected,
-                                      resolvedSelected: resolvedSelected,
-                                      sortNew: sortNew,
-                                      onChanged: (bool pendingSelected,
-                                          bool resolvedSelected, bool sortNew) {
-                                        this.pendingSelected = pendingSelected;
-                                        this.resolvedSelected =
-                                            resolvedSelected;
-                                        this.sortNew = sortNew;
-                                        pendingSelected
-                                            ? ticketType.value =
-                                                "PENDING TICKETS"
-                                            : ticketType.value =
-                                                "RESOLVED TICKETS";
-                                      },
-                                    );
-                                  }).whenComplete(() {
+                                      context: context,
+                                      useRootNavigator: true,
+                                      isDismissible: true,
+                                      builder: (context) {
+                                        return MainModal(
+                                          channels: _channels,
+                                          agents: _agents,
+                                          groups: _groups,
+                                          tags: _tags,
+                                          inboxController:
+                                              Get.find<InboxController>(),
+                                          pendingSelected: pendingSelected,
+                                          resolvedSelected: resolvedSelected,
+                                          sortNew: sortNew,
+                                          onChanged: (bool pendingSelected,
+                                              bool resolvedSelected,
+                                              bool sortNew) {
+                                            this.pendingSelected =
+                                                pendingSelected;
+                                            this.resolvedSelected =
+                                                resolvedSelected;
+                                            this.sortNew = sortNew;
+                                            pendingSelected
+                                                ? ticketType.value =
+                                                    "PENDING TICKETS"
+                                                : ticketType.value =
+                                                    "RESOLVED TICKETS";
+                                          },
+                                        );
+                                      })
+                                  .then((value) => print(value))
+                                  .whenComplete(() {
                                 _sharedPref.saveBool(
                                     "pendingSelected", pendingSelected);
                                 _sharedPref.saveBool(
                                     "resolvedSelected", resolvedSelected);
                                 _sharedPref.saveBool("sortNew", sortNew);
-                                setState(() {
-                                  
+                                Future.delayed(
+                                    const Duration(milliseconds: 300), () {
+                                  setState(() {});
+                                  print("OKIZ");
                                 });
                               });
                             }))
@@ -159,10 +169,10 @@ class _InboxState extends State<Inbox> {
                   centerTitle: false,
                   title: TextField(
                       onChanged: (String text) {
-                        _inboxController
-                            .getTickets(sortNew ? "desc" : "",
-                                resolvedSelected ? 1 : 0, text,[],[],[],[])
-                            .whenComplete(() {
+                        _inboxController.getTickets(
+                            sortNew ? "desc" : "",
+                            resolvedSelected ? 1 : 0,
+                            text, [], [], [], []).whenComplete(() {
                           setState(() {});
                         });
                       },

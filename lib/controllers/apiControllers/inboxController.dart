@@ -75,7 +75,7 @@ class InboxController extends BaseApiController {
         .whenComplete(() => _userDataAvailable.value = _user != null);
   }
 
-  Future<dynamic> getTickets(String order, int resolved, String search,List<String> channels,List<String?> agents,List<String?> groups,List<String?> tags) async {
+  Future<dynamic> getTickets(String order, int resolved, String search,List<String?> channels,List<String?> agents,List<String?> groups,List<String?> tags) async {
     getDio()!
         .get(_ticketsPath,
             queryParameters: {

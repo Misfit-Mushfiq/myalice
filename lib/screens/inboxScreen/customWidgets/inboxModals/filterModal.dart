@@ -8,6 +8,7 @@ import 'package:myalice/models/channels/channels.dart';
 import 'package:myalice/models/channels/data_source.dart';
 import 'package:myalice/models/projectsModels/data_source.dart';
 import 'package:myalice/models/projectsModels/projects.dart';
+import 'package:myalice/models/tags/data_source.dart';
 import 'package:myalice/models/tags/tags.dart';
 import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/assignedModal.dart';
@@ -42,8 +43,10 @@ class FilterModal extends StatefulWidget {
 class _FilterModalState extends State<FilterModal> {
   List<ChannelDataSource?> _selectedChannels = [];
   List<AssignedAgentsDataSource?> _selectedAgents = [];
+  List<TagsDataSource?> _selectedTags = [];
   List<String?> _selectedAgentsID = [];
-  List<String?> _selectedTags = [];
+  List<String?> _selectedChannelsID = [];
+  List<String?> _selectedTagsID = [];
   SharedPref _pref = SharedPref();
   @override
   void initState() {
@@ -54,8 +57,10 @@ class _FilterModalState extends State<FilterModal> {
   getSelectedAgents() async {
     _selectedAgents = AssignedAgentsDataSource.decode(
         await _pref.readString("selectedAgents"));
-    _selectedChannels = ChannelDataSource.decode(
-        await _pref.readString("selectedChannels"));
+    _selectedChannels =
+        ChannelDataSource.decode(await _pref.readString("selectedChannels"));
+    _selectedTags =
+        TagsDataSource.decode(await _pref.readString("selectedTags"));
     setState(() {});
   }
 
@@ -112,10 +117,26 @@ class _FilterModalState extends State<FilterModal> {
                               onTap: () {
                                 Get.back();
                                 _selectedAgents.clear();
-                                _pref.remove("selectedAgents");
-                                _selectedChannels.clear();
-                                _pref.remove("selectedChannels");
                                 _selectedAgentsID.clear();
+
+                                _selectedTags.clear();
+                                _selectedTagsID.clear();
+
+                                _selectedChannels.clear();
+                                _selectedChannelsID.clear();
+
+                                _pref.remove("selectedAgents");
+                                _pref.remove("selectedChannels");
+                                _pref.remove("selectedTags");
+
+                                Get.find<InboxController>().getTickets(
+                                    widget.sortNew ? "desc" : "",
+                                    widget.resolvedSelected ? 1 : 0,
+                                    "",
+                                    _selectedChannelsID,
+                                    _selectedAgentsID,
+                                    [],
+                                    _selectedTagsID);
                               }),
                           InkWell(
                               child: Padding(
@@ -140,15 +161,15 @@ class _FilterModalState extends State<FilterModal> {
                                 ),
                               ),
                               onTap: () {
-                                Get.back();
+                                Navigator.pop(context, true);
                                 Get.find<InboxController>().getTickets(
                                     widget.sortNew ? "desc" : "",
                                     widget.resolvedSelected ? 1 : 0,
                                     "",
-                                    [],
+                                    _selectedChannelsID,
                                     _selectedAgentsID,
                                     [],
-                                    _selectedTags);
+                                    _selectedTagsID);
                               }),
                         ],
                       )
@@ -158,58 +179,55 @@ class _FilterModalState extends State<FilterModal> {
                   padding: const EdgeInsets.only(left: 10.0),
                   child: InkWell(
                     child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text("Channels",
-                              style: TextStyle(
-                                fontWeight: _selectedChannels.length <= 0
-                                    ? FontWeight.normal
-                                    : FontWeight.bold,
-                              )),
-                           Flexible(
-                             flex: 1,
-                             fit: FlexFit.tight,
-                             child: GridView.builder(
-                                shrinkWrap: true,
-                                itemCount: _selectedChannels.length,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    margin: EdgeInsets.only(left: 8.0),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color:
-                                            AliceColors.ALICE_SELECTED_CHANNEL),
-                                    child:  Padding(
-                                        padding: const EdgeInsets.all(2.0),
-                                        child: Center(
-                                          child: Text(
-                                              _selectedChannels
-                                                  .elementAt(index)!
-                                                  .title!,
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: Colors.green,
-                                                  fontSize: 10)),
-                                        ),
-                                      ),
-                                  );
-                                },
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 4,
-                                        crossAxisSpacing: 0.5,
-                                        mainAxisSpacing: 5.0,
-                                        childAspectRatio: 2.5),
-                              ),
-                           ),                       
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.arrow_forward_ios,
-                                size: 20, color: Colors.grey),
-                          )
-                        ],
-                      ),
-                    
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("Channels",
+                            style: TextStyle(
+                              fontWeight: _selectedChannels.length <= 0
+                                  ? FontWeight.normal
+                                  : FontWeight.bold,
+                            )),
+                        Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            itemCount: _selectedChannels.length,
+                            padding: EdgeInsets.all(8.0),
+                            itemBuilder: (context, index) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: AliceColors.ALICE_SELECTED_CHANNEL),
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Text(
+                                        _selectedChannels
+                                            .elementAt(index)!
+                                            .title!,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.green, fontSize: 10)),
+                                  ),
+                                ),
+                              );
+                            },
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    crossAxisSpacing: 8.0,
+                                    mainAxisExtent: 30.0,
+                                    mainAxisSpacing: 8.0),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.arrow_forward_ios,
+                              size: 20, color: Colors.grey),
+                        )
+                      ],
+                    ),
                     onTap: () =>
                         showChannelModal(context, state, widget.channels),
                   ),
@@ -236,60 +254,56 @@ class _FilterModalState extends State<FilterModal> {
                   padding: const EdgeInsets.only(left: 10.0),
                   child: InkWell(
                     child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text("Assigned Agents/Groups",
-                              style: TextStyle(
-                                fontWeight: _selectedAgents.length <= 0
-                                    ? FontWeight.normal
-                                    : FontWeight.bold,
-                              )),
-                          Flexible(
-                            flex: 1,
-                            fit: FlexFit.tight,
-                            child: GridView.builder(
-                              shrinkWrap: true,
-                              itemCount: _selectedAgents.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: EdgeInsets.only(left: 8.0),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color:
-                                          AliceColors.ALICE_SELECTED_CHANNEL),
-                                  child: Padding(
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: Center(
-                                        child: Text(
-                                            _selectedAgents
-                                                .elementAt(index)!
-                                                .admin!
-                                                .fullName!,
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Colors.green,
-                                                fontSize: 10)),
-                                      ),
-                                    ),
-                                 
-                                );
-                              },
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: 0.5,
-                                      mainAxisSpacing: 5.0,
-                                      childAspectRatio: 2.5),
-                            ),
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("Assigned Agents/Groups",
+                            style: TextStyle(
+                              fontWeight: _selectedAgents.length <= 0
+                                  ? FontWeight.normal
+                                  : FontWeight.bold,
+                            )),
+                        Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            itemCount: _selectedAgents.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: EdgeInsets.only(left: 8.0),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: AliceColors.ALICE_SELECTED_CHANNEL),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Center(
+                                    child: Text(
+                                        _selectedAgents
+                                            .elementAt(index)!
+                                            .admin!
+                                            .fullName!,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.green, fontSize: 10)),
+                                  ),
+                                ),
+                              );
+                            },
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 0.5,
+                                    mainAxisSpacing: 5.0,
+                                    childAspectRatio: 2.5),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Icon(Icons.arrow_forward_ios,
-                                size: 20, color: Colors.grey),
-                          )
-                        ],
-                      ),
-                   
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.arrow_forward_ios,
+                              size: 20, color: Colors.grey),
+                        )
+                      ],
+                    ),
                     onTap: () => showAssignedModal(
                         context, state, widget.agents, widget.groups),
                   ),
@@ -297,20 +311,61 @@ class _FilterModalState extends State<FilterModal> {
                 Divider(
                   color: Colors.grey,
                 ),
-                ListTile(
-                  contentPadding: EdgeInsets.only(left: 10.0),
-                  title: Text(
-                    "Tags",
-                    style: TextStyle(fontSize: 14),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: InkWell(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("Tags",
+                            style: TextStyle(
+                              fontWeight: _selectedTags.length <= 0
+                                  ? FontWeight.normal
+                                  : FontWeight.bold,
+                            )),
+                        Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            
+                            padding:EdgeInsets.all(8.0),
+                            itemCount: _selectedTags.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: AliceColors.ALICE_SELECTED_CHANNEL),
+                                child: Center(
+                                    child: Text(
+                                        _selectedTags
+                                            .elementAt(index)!
+                                            .name!,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.green, fontSize: 10)),
+                                  ),
+                              );
+                            },
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 3,
+                                    crossAxisSpacing: 8.0,
+                                    mainAxisSpacing: 8.0,
+                                    
+                                    mainAxisExtent: 25.0),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.arrow_forward_ios,
+                              size: 20, color: Colors.grey),
+                        )
+                      ],
+                    ),
+                    onTap: () => showTagsModal(
+                        context, state, widget.tags),
                   ),
-                  trailing: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.arrow_forward_ios, size: 20),
-                  ),
-                  minLeadingWidth: 0.0,
-                  onTap: () {
-                    showTagsModal(context, state, widget.tags);
-                  },
                 ),
               ],
             ),
@@ -331,7 +386,6 @@ class _FilterModalState extends State<FilterModal> {
             agents: agents,
             groups: availableGroups,
             onsaved: (List<AssignedAgentsDataSource>? value) {
-              //_selectedAgents = value!;
               for (int a = 0; a < value!.length; a++) {
                 _selectedAgentsID.add(value.elementAt(a).admin!.id!.toString());
               }
@@ -350,6 +404,11 @@ class _FilterModalState extends State<FilterModal> {
         builder: (context) {
           return TagsModal(
             tags: tags,
+            onSaved: (List<TagsDataSource>? tags) {
+              for (int a = 0; a < tags!.length; a++) {
+                _selectedTagsID.add(tags.elementAt(a).id.toString());
+              }
+            },
           );
         });
   }
@@ -364,7 +423,9 @@ class _FilterModalState extends State<FilterModal> {
             //    selectedChannels: widget.selectedChannels,
             channels: channels,
             onsaved: (List<ChannelDataSource?> value) {
-              //_selectedChannels = value;
+              for (int a = 0; a < value.length; a++) {
+                _selectedChannelsID.add(value.elementAt(a)!.id.toString());
+              }
             },
           );
         }).whenComplete(() {

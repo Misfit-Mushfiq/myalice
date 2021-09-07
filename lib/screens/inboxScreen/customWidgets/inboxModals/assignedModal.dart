@@ -34,10 +34,6 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
   @override
   void initState() {
     _availableAgents = widget.agents.dataSource;
-    /* for (int a = 0; a < widget.agents.dataSource!.length; a++) {
-      _availableAgents!
-          .add(widget.agents.dataSource!.elementAt(a).admin!.fullName!);
-    } */
     super.initState();
   }
 
@@ -244,7 +240,6 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
               GridView.builder(
                 shrinkWrap: true,
                 padding: EdgeInsets.all(8),
-                
                 itemCount: _selectedAgents.length,
                 itemBuilder: (context, index) {
                   return Container(

@@ -1,12 +1,16 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myalice/models/tags/data_source.dart';
 import 'package:myalice/models/tags/tags.dart';
 import 'package:myalice/utils/colors.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class TagsModal extends StatefulWidget {
   Tags tags;
-  TagsModal({Key? key, required this.tags}) : super(key: key);
+  final Function(List<TagsDataSource>? tags) onSaved;
+  TagsModal({Key? key, required this.tags, required this.onSaved})
+      : super(key: key);
 
   @override
   _TagsModalState createState() => _TagsModalState();
@@ -14,18 +18,18 @@ class TagsModal extends StatefulWidget {
 
 class _TagsModalState extends State<TagsModal> {
   bool assignedAgents = true;
-  List<String>? _tags = [];
-  List<String> _selectedTags = [];
+  List<TagsDataSource>? _tags = [];
+  List<TagsDataSource> _selectedTags = [];
+  SharedPref _sharedPref = SharedPref();
   @override
   void initState() {
-    for (int a = 0; a < widget.tags.dataSource!.length; a++) {
-      _tags!.add(widget.tags.dataSource!.elementAt(a).name!);
-    }
+    _tags = widget.tags.dataSource;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    widget.tags.dataSource!.map((e) => e.name);
     return Wrap(
       children: [
         Container(
@@ -90,19 +94,23 @@ class _TagsModalState extends State<TagsModal> {
                           ),
                         ),
                       ),
-                      onTap: () {}),
+                      onTap: () {
+                        Get.back();
+                        widget.onSaved(_selectedTags);
+                        _sharedPref.saveString("selectedTags",
+                            TagsDataSource.encode(_selectedTags));
+                      }),
                 ],
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: DropdownSearch<String>(
+                child: DropdownSearch<TagsDataSource>(
                     mode: Mode.BOTTOM_SHEET,
                     items: _tags,
                     hint: "Search for tags",
                     onChanged: (value) {
                       setState(() {
                         _selectedTags.add(value!);
-                        assignedAgents = false;
                       });
                     },
                     searchFieldProps: TextFieldProps(
@@ -113,11 +121,12 @@ class _TagsModalState extends State<TagsModal> {
                               borderRadius: BorderRadius.circular(5),
                             ))),
                     dropdownSearchTextAlign: TextAlign.start,
-                    showSelectedItem: true,
-                    popupItemBuilder: (context, String? tag, bool selected) {
+                    showSelectedItem: false,
+                    popupItemBuilder:
+                        (context, TagsDataSource? tag, bool selected) {
                       return Container(
                         child: ListTile(
-                          title: Text(tag!),
+                          title: Text(tag!.name!),
                           trailing: selected ? Icon(Icons.check) : null,
                         ),
                       );
@@ -129,8 +138,8 @@ class _TagsModalState extends State<TagsModal> {
                         ),
                       );
                     },
-                    dropdownBuilder: (BuildContext context, String? item,
-                        String itemDesignation) {
+                    dropdownBuilder: (BuildContext context,
+                        TagsDataSource? item, String itemDesignation) {
                       return Row(
                         children: [
                           Icon(
@@ -175,7 +184,7 @@ class _TagsModalState extends State<TagsModal> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(_selectedTags.elementAt(index).tr,
+                                    Text(_selectedTags.elementAt(index).name!,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Colors.green, fontSize: 12)),
