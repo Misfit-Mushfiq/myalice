@@ -61,7 +61,15 @@ class InboxController extends BaseApiController {
     await _sharedPref.saveBool("resolvedSelected", false);
     sort = await _sharedPref.readBool("sortNew") ? "asc" : "desc";
     resolved = 0;
-    getTickets(sort, resolved, "",[],[],[],[]);
+    getTickets(
+        order: sort,
+        resolved: resolved,
+        search: "",
+        channels: [],
+        agents: [],
+        groups: [],
+        tags: [],
+        dates: []);
   }
 
   Future<dynamic> getUser() async {
@@ -75,7 +83,15 @@ class InboxController extends BaseApiController {
         .whenComplete(() => _userDataAvailable.value = _user != null);
   }
 
-  Future<dynamic> getTickets(String order, int resolved, String search,List<String?> channels,List<String?> agents,List<String?> groups,List<String?> tags) async {
+  Future<dynamic> getTickets(
+      {required String order,
+      required int resolved,
+      required String search,
+      required List<String?> channels,
+      required List<String?> agents,
+      required List<String?> groups,
+      required List<String?> tags,
+      required List<String> dates}) async {
     getDio()!
         .get(_ticketsPath,
             queryParameters: {
@@ -83,11 +99,13 @@ class InboxController extends BaseApiController {
               "offset": 0,
               "limit": 20,
               "search": search,
-              "channels": channels.length==0?"all":channels.join(','),
-              "agents": agents.length==0?"all":agents.join(','),
-              "groups": groups.length==0?"all":groups.join(','),
-              "tags": tags.length==0?"all":tags.join(','),
-              "order": order
+              "channels": channels.length == 0 ? "all" : channels.join(','),
+              "agents": agents.length == 0 ? "all" : agents.join(','),
+              "groups": groups.length == 0 ? "all" : groups.join(','),
+              "tags": tags.length == 0 ? "all" : tags.join(','),
+              "order": order,
+              "start": dates.length > 0 ? dates.elementAt(0) : "",
+              "end": dates.length > 0 ? dates.elementAt(1) : ""
             },
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) => response.statusCode == 200
@@ -138,8 +156,7 @@ class InboxController extends BaseApiController {
     return getDio()!
         .get(_ticketsTagsPath,
             options: Options(headers: {"Authorization": "Token $token"}))
-        .then((response) => response.statusCode == 200
-            ? Tags.fromJson(response.data)
-            : null);
+        .then((response) =>
+            response.statusCode == 200 ? Tags.fromJson(response.data) : null);
   }
 }

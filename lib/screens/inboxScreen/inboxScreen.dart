@@ -170,9 +170,14 @@ class _InboxState extends State<Inbox> {
                   title: TextField(
                       onChanged: (String text) {
                         _inboxController.getTickets(
-                            sortNew ? "desc" : "",
-                            resolvedSelected ? 1 : 0,
-                            text, [], [], [], []).whenComplete(() {
+                            order: sortNew ? "desc" : "",
+                            resolved: resolvedSelected ? 1 : 0,
+                            search: text,
+                            channels: [],
+                            agents: [],
+                            groups: [],
+                            tags: [],
+                            dates: []).whenComplete(() {
                           setState(() {});
                         });
                       },

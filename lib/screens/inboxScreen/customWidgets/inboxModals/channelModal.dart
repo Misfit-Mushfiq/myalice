@@ -88,7 +88,7 @@ class _ChannelModalState extends State<ChannelModal> {
                   onTap: () {
                     state(() {
                       _selectedChannels.clear();
-
+                      _pref.remove("selectedChannels");
                     });
                     Get.back();
                   }),
@@ -116,7 +116,8 @@ class _ChannelModalState extends State<ChannelModal> {
                   onTap: () {
                     Get.back();
                     widget.onsaved(_selectedChannels);
-                    _pref.saveString("selectedChannels", ChannelDataSource.encode(_selectedChannels));
+                    _pref.saveString("selectedChannels",
+                        ChannelDataSource.encode(_selectedChannels));
                   }),
             ],
           ),

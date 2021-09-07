@@ -78,7 +78,11 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                               ),
                             ),
                           ),
-                          onTap: () {}),
+                          onTap: () {
+                            _selectedAgents.clear();
+                            _sharedPref.remove("selectedAgents");
+                            Get.back();
+                          }),
                       InkWell(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),

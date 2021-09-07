@@ -71,8 +71,15 @@ class _MainModalState extends State<MainModal> {
                   widget.resolvedSelected
                       ? widget.inboxController.resolved = 1
                       : widget.inboxController.resolved = 0;
-                  widget.inboxController.getTickets(widget.inboxController.sort,
-                      widget.inboxController.resolved, "", [], [], [], []);
+                  widget.inboxController.getTickets(
+                      order: widget.inboxController.sort,
+                      resolved: widget.inboxController.resolved,
+                      search: "",
+                      channels: [],
+                      agents: [],
+                      groups: [],
+                      tags: [],
+                      dates: []);
                 });
 
                 widget.onChanged(widget.pendingSelected,
@@ -134,9 +141,14 @@ class _MainModalState extends State<MainModal> {
                         ? widget.inboxController.sort = "asc"
                         : widget.inboxController.sort = "desc";
                     widget.inboxController.getTickets(
-                        widget.inboxController.sort,
-                        widget.inboxController.resolved,
-                        "", [], [], [], []);
+                        order: widget.inboxController.sort,
+                        resolved: widget.inboxController.resolved,
+                        search: "",
+                        channels: [],
+                        agents: [],
+                        groups: [],
+                        tags: [],
+                        dates: []);
                   });
                   widget.onChanged(widget.pendingSelected,
                       widget.resolvedSelected, widget.sortNew);

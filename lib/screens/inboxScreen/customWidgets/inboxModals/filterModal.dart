@@ -47,6 +47,7 @@ class _FilterModalState extends State<FilterModal> {
   List<String?> _selectedAgentsID = [];
   List<String?> _selectedChannelsID = [];
   List<String?> _selectedTagsID = [];
+  List<String>? _selectedTimes = [];
   SharedPref _pref = SharedPref();
   @override
   void initState() {
@@ -61,6 +62,7 @@ class _FilterModalState extends State<FilterModal> {
         ChannelDataSource.decode(await _pref.readString("selectedChannels"));
     _selectedTags =
         TagsDataSource.decode(await _pref.readString("selectedTags"));
+    _selectedTimes = await _pref.readStringList("selectedTimes") ?? [];
     setState(() {});
   }
 
@@ -90,7 +92,9 @@ class _FilterModalState extends State<FilterModal> {
                     ),
                     if (_selectedChannels.length > 0 ||
                         _selectedAgents.length > 0 ||
-                        _selectedTags.length > 0)
+                        _selectedTags.length > 0 ||
+                        _selectedTimes!.length>0
+                        )
                       Row(
                         children: [
                           InkWell(
@@ -125,18 +129,22 @@ class _FilterModalState extends State<FilterModal> {
                                 _selectedChannels.clear();
                                 _selectedChannelsID.clear();
 
+                                _selectedTimes!.clear();
+
                                 _pref.remove("selectedAgents");
                                 _pref.remove("selectedChannels");
                                 _pref.remove("selectedTags");
+                                _pref.remove("selectedTimes");
 
                                 Get.find<InboxController>().getTickets(
-                                    widget.sortNew ? "desc" : "",
-                                    widget.resolvedSelected ? 1 : 0,
-                                    "",
-                                    _selectedChannelsID,
-                                    _selectedAgentsID,
-                                    [],
-                                    _selectedTagsID);
+                                    order: widget.sortNew ? "desc" : "",
+                                    resolved: widget.resolvedSelected ? 1 : 0,
+                                    search: "",
+                                    channels: _selectedChannelsID,
+                                    agents: _selectedAgentsID,
+                                    groups: [],
+                                    tags: _selectedTagsID,
+                                    dates: _selectedTimes!);
                               }),
                           InkWell(
                               child: Padding(
@@ -162,14 +170,16 @@ class _FilterModalState extends State<FilterModal> {
                               ),
                               onTap: () {
                                 Navigator.pop(context, true);
+
                                 Get.find<InboxController>().getTickets(
-                                    widget.sortNew ? "desc" : "",
-                                    widget.resolvedSelected ? 1 : 0,
-                                    "",
-                                    _selectedChannelsID,
-                                    _selectedAgentsID,
-                                    [],
-                                    _selectedTagsID);
+                                    order: widget.sortNew ? "desc" : "",
+                                    resolved: widget.resolvedSelected ? 1 : 0,
+                                    search: "",
+                                    channels: _selectedChannelsID,
+                                    agents: _selectedAgentsID,
+                                    groups: [],
+                                    tags: _selectedTagsID,
+                                    dates: _selectedTimes!);
                               }),
                         ],
                       )
@@ -235,17 +245,59 @@ class _FilterModalState extends State<FilterModal> {
                 Divider(
                   color: Colors.grey,
                 ),
-                ListTile(
-                  contentPadding: EdgeInsets.only(left: 10.0),
-                  title: Text("Time", style: TextStyle(fontSize: 14)),
-                  trailing: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.arrow_forward_ios, size: 20),
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0),
+                  child: InkWell(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text("Time",
+                            style: TextStyle(
+                              fontWeight: _selectedTimes!.length <= 0
+                                  ? FontWeight.normal
+                                  : FontWeight.bold,
+                            )),
+                        Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            itemCount: _selectedTimes!.length,
+                            padding: EdgeInsets.all(8.0),
+                            itemBuilder: (context, index) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: AliceColors.ALICE_SELECTED_CHANNEL),
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Text(
+                                        _selectedTimes!.elementAt(index),
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.green, fontSize: 10)),
+                                  ),
+                                ),
+                              );
+                            },
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 8.0,
+                                    mainAxisExtent: 30.0,
+                                    mainAxisSpacing: 8.0),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.arrow_forward_ios,
+                              size: 20, color: Colors.grey),
+                        )
+                      ],
+                    ),
+                    onTap: () => showTimePicker(context),
                   ),
-                  minLeadingWidth: 0.0,
-                  onTap: () {
-                    showTimePicker(context);
-                  },
                 ),
                 Divider(
                   color: Colors.grey,
@@ -328,8 +380,7 @@ class _FilterModalState extends State<FilterModal> {
                           fit: FlexFit.tight,
                           child: GridView.builder(
                             shrinkWrap: true,
-                            
-                            padding:EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             itemCount: _selectedTags.length,
                             itemBuilder: (context, index) {
                               return Container(
@@ -337,14 +388,12 @@ class _FilterModalState extends State<FilterModal> {
                                     borderRadius: BorderRadius.circular(5),
                                     color: AliceColors.ALICE_SELECTED_CHANNEL),
                                 child: Center(
-                                    child: Text(
-                                        _selectedTags
-                                            .elementAt(index)!
-                                            .name!,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.green, fontSize: 10)),
-                                  ),
+                                  child: Text(
+                                      _selectedTags.elementAt(index)!.name!,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.green, fontSize: 10)),
+                                ),
                               );
                             },
                             gridDelegate:
@@ -352,7 +401,6 @@ class _FilterModalState extends State<FilterModal> {
                                     crossAxisCount: 3,
                                     crossAxisSpacing: 8.0,
                                     mainAxisSpacing: 8.0,
-                                    
                                     mainAxisExtent: 25.0),
                           ),
                         ),
@@ -363,8 +411,7 @@ class _FilterModalState extends State<FilterModal> {
                         )
                       ],
                     ),
-                    onTap: () => showTagsModal(
-                        context, state, widget.tags),
+                    onTap: () => showTagsModal(context, state, widget.tags),
                   ),
                 ),
               ],
@@ -441,7 +488,11 @@ class _FilterModalState extends State<FilterModal> {
         isScrollControlled: true,
         backgroundColor: Colors.white,
         builder: (context) {
-          return TimeModal();
+          return TimeModal(
+            onSaved: (List<String> times) {
+              _selectedTimes = times;
+            },
+          );
         });
   }
 }

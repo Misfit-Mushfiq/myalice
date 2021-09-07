@@ -72,7 +72,11 @@ class _TagsModalState extends State<TagsModal> {
                           ),
                         ),
                       ),
-                      onTap: () {}),
+                      onTap: () {
+                        _selectedTags.clear();
+                        _sharedPref.remove("selectedTags");
+                        Get.back();
+                      }),
                   InkWell(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),

@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:myalice/utils/colors.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class TimeModal extends StatefulWidget {
-  TimeModal({Key? key}) : super(key: key);
+  final Function(List<String> times) onSaved;
+  TimeModal({Key? key, required this.onSaved}) : super(key: key);
 
   @override
   _TimeModalState createState() => _TimeModalState();
@@ -13,6 +16,8 @@ class TimeModal extends StatefulWidget {
 class _TimeModalState extends State<TimeModal> {
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now();
+  List<String> times = [];
+  SharedPref _sharedPref = SharedPref();
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(builder: (context, StateSetter state) {
@@ -35,7 +40,63 @@ class _TimeModalState extends State<TimeModal> {
                 SizedBox(
                   width: 5,
                 ),
-                Text("Time"),
+                Expanded(child: Text("Time")),
+                Row(
+                  children: [
+                    InkWell(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.grey)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Reset",
+                                  style: TextStyle(fontSize: 12),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          times.clear();
+                          _sharedPref.remove("selectedTimes");
+                          Get.back();
+                        }),
+                    InkWell(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: AliceColors.ALICE_GREEN),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Filter",
+                                    style: TextStyle(
+                                        fontSize: 12, color: Colors.white),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          times.clear();
+                          times
+                              .add(DateFormat("yyyy-MM-dd").format(_startDate));
+                          times.add(DateFormat("yyyy-MM-dd").format(_endDate));
+                          widget.onSaved(times);
+                          _sharedPref.saveStringList("selectedTimes", times);
+                          Get.back();
+                        }),
+                  ],
+                )
               ],
             ),
             Container(
@@ -133,7 +194,7 @@ class _TimeModalState extends State<TimeModal> {
       context: context,
       initialDate: _startDate,
       firstDate: DateTime(2000),
-      lastDate: DateTime(3000),
+      lastDate: DateTime.now(),
     );
     if (picked != null && picked != _startDate)
       state(() {
@@ -154,12 +215,12 @@ class _TimeModalState extends State<TimeModal> {
               onDateTimeChanged: (picked) {
                 if (picked != null && picked != _startDate)
                   state(() {
-                    _endDate = picked;
+                    _startDate = picked;
                   });
               },
               initialDateTime: _startDate,
-              minimumYear: 2000,
-              maximumYear: 3000,
+              minimumDate: DateTime(2000),
+              maximumDate: DateTime.now(),
             ),
           );
         });
@@ -170,7 +231,7 @@ class _TimeModalState extends State<TimeModal> {
       context: context,
       initialDate: _endDate,
       firstDate: DateTime(2000),
-      lastDate: DateTime(3000),
+      lastDate: DateTime.now(),
     );
     if (picked != null && picked != _endDate)
       state(() {
@@ -195,8 +256,8 @@ class _TimeModalState extends State<TimeModal> {
                   });
               },
               initialDateTime: _endDate,
-              minimumYear: 2000,
-              maximumYear: 3000,
+              minimumDate: DateTime(2000),
+              maximumDate: DateTime.now(),
             ),
           );
         });
