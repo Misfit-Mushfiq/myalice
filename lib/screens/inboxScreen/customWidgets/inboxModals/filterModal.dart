@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
-import 'package:myalice/models/availableAgents/assigned_agents.dart';
-import 'package:myalice/models/availableAgents/data_source.dart';
-import 'package:myalice/models/availableGroups/available_groups.dart';
-import 'package:myalice/models/channels/channels.dart';
-import 'package:myalice/models/channels/data_source.dart';
-import 'package:myalice/models/projectsModels/data_source.dart';
-import 'package:myalice/models/projectsModels/projects.dart';
-import 'package:myalice/models/tags/data_source.dart';
-import 'package:myalice/models/tags/tags.dart';
+import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
+import 'package:myalice/models/responseModels/availableAgents/data_source.dart';
+import 'package:myalice/models/responseModels/availableGroups/available_groups.dart';
+import 'package:myalice/models/responseModels/channels/channels.dart';
+import 'package:myalice/models/responseModels/channels/data_source.dart';
+import 'package:myalice/models/responseModels/tags/data_source.dart';
+import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/assignedModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/channelModal.dart';
@@ -44,9 +42,9 @@ class _FilterModalState extends State<FilterModal> {
   List<ChannelDataSource?> _selectedChannels = [];
   List<AssignedAgentsDataSource?> _selectedAgents = [];
   List<TagsDataSource?> _selectedTags = [];
-  List<String?> _selectedAgentsID = [];
-  List<String?> _selectedChannelsID = [];
-  List<String?> _selectedTagsID = [];
+  List<String> _selectedAgentsID = [];
+  List<String> _selectedChannelsID = [];
+  List<String> _selectedTagsID = [];
   List<String>? _selectedTimes = [];
   SharedPref _pref = SharedPref();
   @override
@@ -93,8 +91,7 @@ class _FilterModalState extends State<FilterModal> {
                     if (_selectedChannels.length > 0 ||
                         _selectedAgents.length > 0 ||
                         _selectedTags.length > 0 ||
-                        _selectedTimes!.length>0
-                        )
+                        _selectedTimes!.length > 0)
                       Row(
                         children: [
                           InkWell(
@@ -436,6 +433,7 @@ class _FilterModalState extends State<FilterModal> {
               for (int a = 0; a < value!.length; a++) {
                 _selectedAgentsID.add(value.elementAt(a).admin!.id!.toString());
               }
+              _pref.saveStringList("selectedAgentsID", _selectedAgentsID);
             },
           );
         }).whenComplete(() {
@@ -455,6 +453,7 @@ class _FilterModalState extends State<FilterModal> {
               for (int a = 0; a < tags!.length; a++) {
                 _selectedTagsID.add(tags.elementAt(a).id.toString());
               }
+              _pref.saveStringList("selectedTagsID", _selectedTagsID);
             },
           );
         });
@@ -473,6 +472,7 @@ class _FilterModalState extends State<FilterModal> {
               for (int a = 0; a < value.length; a++) {
                 _selectedChannelsID.add(value.elementAt(a)!.id.toString());
               }
+              _pref.saveStringList("selectedChannelsID", _selectedChannelsID);
             },
           );
         }).whenComplete(() {

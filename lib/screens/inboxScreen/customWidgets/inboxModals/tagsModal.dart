@@ -1,8 +1,9 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myalice/models/tags/data_source.dart';
-import 'package:myalice/models/tags/tags.dart';
+import 'package:myalice/models/responseModels/tags/data_source.dart';
+import 'package:myalice/models/responseModels/tags/tags.dart';
+
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/shared_pref.dart';
 

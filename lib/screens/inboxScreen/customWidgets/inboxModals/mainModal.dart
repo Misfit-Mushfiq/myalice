@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
-import 'package:myalice/models/availableAgents/assigned_agents.dart';
-import 'package:myalice/models/availableGroups/available_groups.dart';
-import 'package:myalice/models/channels/channels.dart';
-import 'package:myalice/models/tags/tags.dart';
+import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
+import 'package:myalice/models/responseModels/availableGroups/available_groups.dart';
+import 'package:myalice/models/responseModels/channels/channels.dart';
+import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/filterModal.dart';
-import 'package:myalice/screens/inboxScreen/inboxScreen.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class MainModal extends StatefulWidget {
   Channels channels;
@@ -38,6 +38,27 @@ class MainModal extends StatefulWidget {
 }
 
 class _MainModalState extends State<MainModal> {
+  SharedPref _sharedPref = SharedPref();
+  List<String>? _selectedAgentsID = [];
+  List<String>? _selectedChannelsID = [];
+  List<String>? _selectedTagsID = [];
+  List<String>? _selectedTimes = [];
+  @override
+  void initState() {
+    getFilterdData();
+    super.initState();
+  }
+
+  getFilterdData() async {
+    _selectedChannelsID =
+        await _sharedPref.readStringList("selectedChannelsID") ?? [];
+    _selectedAgentsID =
+        (await _sharedPref.readStringList("selectedAgentsID")) ?? [];
+    _selectedTagsID =
+        (await _sharedPref.readStringList("selectedTagsID")) ?? [];
+    _selectedTimes = await _sharedPref.readStringList("selectedTimes") ?? [];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -64,7 +85,7 @@ class _MainModalState extends State<MainModal> {
               minLeadingWidth: 0.0,
               contentPadding: EdgeInsets.only(left: 10.0),
               onTap: () {
-                setState(() {
+                setState(() async {
                   widget.pendingSelected = !widget.pendingSelected;
                   widget.resolvedSelected = !widget.resolvedSelected;
                   widget.inboxController.isticketsDataAvailable.value = false;
@@ -75,11 +96,11 @@ class _MainModalState extends State<MainModal> {
                       order: widget.inboxController.sort,
                       resolved: widget.inboxController.resolved,
                       search: "",
-                      channels: [],
-                      agents: [],
+                      channels: _selectedChannelsID!,
+                      agents: _selectedAgentsID!,
                       groups: [],
-                      tags: [],
-                      dates: []);
+                      tags: _selectedTagsID!,
+                      dates: _selectedTimes!);
                 });
 
                 widget.onChanged(widget.pendingSelected,
@@ -133,7 +154,7 @@ class _MainModalState extends State<MainModal> {
                   ),
                 ),
                 minLeadingWidth: 0.0,
-                onTap: () {
+                onTap: () async {
                   setState(() {
                     widget.sortNew = !widget.sortNew;
                     widget.inboxController.isticketsDataAvailable.value = false;
@@ -144,11 +165,11 @@ class _MainModalState extends State<MainModal> {
                         order: widget.inboxController.sort,
                         resolved: widget.inboxController.resolved,
                         search: "",
-                        channels: [],
-                        agents: [],
+                        channels: _selectedChannelsID!,
+                        agents: _selectedAgentsID!,
                         groups: [],
-                        tags: [],
-                        dates: []);
+                        tags: _selectedTagsID!,
+                        dates: _selectedTimes!);
                   });
                   widget.onChanged(widget.pendingSelected,
                       widget.resolvedSelected, widget.sortNew);

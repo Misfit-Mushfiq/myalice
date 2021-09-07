@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
-import 'package:myalice/models/availableAgents/assigned_agents.dart';
-import 'package:myalice/models/availableGroups/available_groups.dart';
-import 'package:myalice/models/channels/channels.dart';
-import 'package:myalice/models/tags/tags.dart';
+import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
+import 'package:myalice/models/responseModels/availableGroups/available_groups.dart';
+import 'package:myalice/models/responseModels/channels/channels.dart';
+import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/mainModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/profileImage.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/tickets.dart';
@@ -32,6 +32,11 @@ class _InboxState extends State<Inbox> {
   late AvailableGroups _groups;
   late Tags _tags;
 
+  List<String>? _selectedAgentsID = [];
+  List<String>? _selectedChannelsID = [];
+  List<String>? _selectedTagsID = [];
+  List<String>? _selectedTimes = [];
+
   var ticketType = "PENDING TICKETS".obs;
 
   @override
@@ -49,10 +54,13 @@ class _InboxState extends State<Inbox> {
     _agents = (await _inboxController.getAvailableAgents())!;
     _groups = (await _inboxController.getAvailableGroups())!;
     _tags = (await _inboxController.getTicketTags())!;
-  }
-
-  void a() {
-    setState(() {});
+    _selectedChannelsID =
+        await _sharedPref.readStringList("selectedChannelsID") ?? [];
+    _selectedAgentsID =
+        (await _sharedPref.readStringList("selectedAgentsID")) ?? [];
+    _selectedTagsID =
+        (await _sharedPref.readStringList("selectedTagsID")) ?? [];
+    _selectedTimes = await _sharedPref.readStringList("selectedTimes") ?? [];
   }
 
   @override
@@ -137,7 +145,6 @@ class _InboxState extends State<Inbox> {
                                 Future.delayed(
                                     const Duration(milliseconds: 300), () {
                                   setState(() {});
-                                  print("OKIZ");
                                 });
                               });
                             }))
@@ -169,16 +176,25 @@ class _InboxState extends State<Inbox> {
                   centerTitle: false,
                   title: TextField(
                       onChanged: (String text) {
-                        _inboxController.getTickets(
-                            order: sortNew ? "desc" : "",
-                            resolved: resolvedSelected ? 1 : 0,
-                            search: text,
-                            channels: [],
-                            agents: [],
-                            groups: [],
-                            tags: [],
-                            dates: []).whenComplete(() {
-                          setState(() {});
+                        _inboxController
+                            .getTickets(
+                                order: sortNew ? "desc" : "",
+                                resolved: resolvedSelected ? 1 : 0,
+                                search: text,
+                                channels: _selectedChannelsID!,
+                                agents: _selectedAgentsID!,
+                                groups: [],
+                                tags: _selectedTagsID!,
+                                dates: _selectedTimes!)
+                            .catchError((e) {})
+                            .then((value) {})
+                            .whenComplete(() {
+                          Future.delayed(const Duration(milliseconds: 500), () {
+                            setState(() {});
+                          });
+                          setState(() {
+                            
+                          });
                         });
                       },
                       decoration: InputDecoration(

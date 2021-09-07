@@ -1,9 +1,9 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myalice/models/availableAgents/assigned_agents.dart';
-import 'package:myalice/models/availableAgents/data_source.dart';
-import 'package:myalice/models/availableGroups/available_groups.dart';
+import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
+import 'package:myalice/models/responseModels/availableAgents/data_source.dart';
+import 'package:myalice/models/responseModels/availableGroups/available_groups.dart';
 import 'package:myalice/screens/chatDetails.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/shared_pref.dart';

@@ -1,13 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/baseApiController.dart';
-import 'package:myalice/models/availableAgents/assigned_agents.dart';
-import 'package:myalice/models/availableGroups/available_groups.dart';
-import 'package:myalice/models/channels/channels.dart';
-import 'package:myalice/models/projectsModels/projects.dart';
 import 'package:myalice/models/responseModels/UserResponse.dart';
+import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
+import 'package:myalice/models/responseModels/availableGroups/available_groups.dart';
+import 'package:myalice/models/responseModels/channels/channels.dart';
+import 'package:myalice/models/responseModels/projectsModels/projects.dart';
+import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/models/responseModels/ticketsResponseModels/ticketResponse.dart';
-import 'package:myalice/models/tags/tags.dart';
 import 'package:myalice/utils/shared_pref.dart';
 import 'package:pusher_client/pusher_client.dart';
 
@@ -87,10 +87,10 @@ class InboxController extends BaseApiController {
       {required String order,
       required int resolved,
       required String search,
-      required List<String?> channels,
-      required List<String?> agents,
-      required List<String?> groups,
-      required List<String?> tags,
+      required List<String> channels,
+      required List<String> agents,
+      required List<String> groups,
+      required List<String> tags,
       required List<String> dates}) async {
     getDio()!
         .get(_ticketsPath,
@@ -104,7 +104,7 @@ class InboxController extends BaseApiController {
               "groups": groups.length == 0 ? "all" : groups.join(','),
               "tags": tags.length == 0 ? "all" : tags.join(','),
               "order": order,
-              "start": dates.length > 0 ? dates.elementAt(0) : "",
+              "start": dates!.length > 0 ? dates.elementAt(0) : "",
               "end": dates.length > 0 ? dates.elementAt(1) : ""
             },
             options: Options(headers: {"Authorization": "Token $token"}))
