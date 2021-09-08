@@ -52,6 +52,35 @@ class ChatApiController extends BaseApiController {
     });
   }
 
+  void sendChats(
+    String id,
+    String text,
+  ) async {
+    getDio()!.post("crm/tickets/$id/messenger-chat",
+        data: {"text": text, "image": null, "action": "direct_message"},
+        options: Options(headers: {"Authorization": "Token $token"}));
+    /* then((value) async {
+      if (value.statusCode == 200) {
+        ChatResponse response = ChatResponse.fromJson(value.data);
+/* _chatResponse.update((val) {
+          val!.data = DataSource.fromJson(value.data).data;
+        }); */
+
+        for (int i = 0; i < response.dataSource!.length; i++) {
+          await _chatDataBase.insertChats(response.dataSource![i]);
+        }
+        _chatDataBase.getChats().then((value) {
+          for (int i = 0; i < value.length; i++) {
+            chatResponse.add(value[i]);
+          }
+        });
+      }
+    }).whenComplete(() {
+      dataAvailable.value = true;
+      chatResponse.refresh();
+    }); */
+  }
+
   Future<void> closeDB() async {
     await _chatDataBase.dbClose();
   }

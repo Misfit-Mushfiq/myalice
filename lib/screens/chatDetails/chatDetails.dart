@@ -32,6 +32,7 @@ class _ChatDetailsState extends State<ChatDetails>
   late var _items;
   late int _ticketId;
   late String _name;
+  late String _customerId;
   List<TagsDataSource>? _tagsLlist = [];
 
   //List<Animal> _selectedChannels = [];
@@ -54,14 +55,15 @@ class _ChatDetailsState extends State<ChatDetails>
     var args = Get.arguments;
     _tags = args[0];
     _ticketId = args[1];
-    _name=args[2];
+    _name = args[2];
+    _customerId = args[3];
     _tagsLlist = _tags.dataSource;
     _items = _tags.dataSource!
         .map((channel) =>
             MultiSelectItem<TagsDataSource>(channel, channel.name!))
         .toList()
         .obs;
-    await pusherService.connectPusher('chat-C_999', "messages");
+    await pusherService.connectPusher('chat-C_$_customerId', "messages");
   }
 
   void animateToScreenEnd() {
@@ -209,7 +211,7 @@ class _ChatDetailsState extends State<ChatDetails>
                                       obj.chats.elementAt(index)!.source ==
                                               "customer"
                                           ? obj.chats.elementAt(index)!.text!
-                                          : obj.chats.elementAt(index)!.text!,
+                                          : obj.chats.elementAt(0)!.text!,
                                       style: TextStyle(
                                           fontSize: 14,
                                           height: 1.8,
@@ -274,18 +276,18 @@ class _ChatDetailsState extends State<ChatDetails>
                             //await pusherService.pusherTrigger('test-event');
                             animateToScreenEnd();
 
-                            Get.find<ChatApiController>()
+/*                             Get.find<ChatApiController>()
                                 .chatResponse
                                 .add(DataSource.fromJson({
                                   "text": _textEditingController.text,
                                   "source": "admin",
                                   "sub_type": "",
                                   "type": ""
-                                }));
+                                })); */
+                            Get.find<ChatApiController>().sendChats(
+                                _ticketId.toString(),
+                                _textEditingController.text);
                             _textEditingController.text = "";
-                            Get.find<ChatApiController>()
-                                .chatResponse
-                                .refresh();
                           },
                           icon: Icon(
                             Icons.send,
