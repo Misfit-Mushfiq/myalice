@@ -20,11 +20,11 @@ class PusherService extends ChatApiController {
           enableLogging: true, autoConnect: false);
       pusher!.connect();
       pusher!.onConnectionStateChange((state) {
-        print(state.currentState);
+        print(state!.currentState);
       });
       channel = pusher!.subscribe(channelName);
       channel!.bind(eventName, (event) async {
-        Map<String, dynamic> text = jsonDecode(event.data);
+        Map<String, dynamic> text = jsonDecode(event!.data!);
         Get.find<ChatApiController>().chatResponse.add(DataSource(
             text: text['data']['text'],
             source: text['source'],
