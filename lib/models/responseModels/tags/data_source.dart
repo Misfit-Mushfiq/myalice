@@ -15,28 +15,21 @@ class TagsDataSource {
         'id': id,
         'name': name,
       };
-      static Map<String, dynamic> toMap(
-          TagsDataSource tags) =>
-      {
+  static Map<String, dynamic> toMap(TagsDataSource tags) => {
         'id': tags.id,
         'name': tags.name,
       };
 
-  static String encode(
-          List<TagsDataSource> tagsList) =>
-      json.encode(
+  static String encode(List<TagsDataSource> tagsList) => json.encode(
         tagsList
-            .map<Map<String, dynamic>>((tags) =>
-                TagsDataSource.toMap(tags))
+            .map<Map<String, dynamic>>((tags) => TagsDataSource.toMap(tags))
             .toList(),
       );
 
-  static List<TagsDataSource> decode(
-      String tags) {
+  static List<TagsDataSource> decode(String tags) {
     return tags != null
         ? (json.decode(tags) ?? [])
-            .map<TagsDataSource>(
-                (item) => TagsDataSource.fromJson(item))
+            .map<TagsDataSource>((item) => TagsDataSource.fromJson(item))
             .toList()
         : [];
   }

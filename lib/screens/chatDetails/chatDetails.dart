@@ -211,7 +211,7 @@ class _ChatDetailsState extends State<ChatDetails>
                                       obj.chats.elementAt(index)!.source ==
                                               "customer"
                                           ? obj.chats.elementAt(index)!.text!
-                                          : obj.chats.elementAt(0)!.text!,
+                                          : obj.chats.elementAt(index)!.text!,
                                       style: TextStyle(
                                           fontSize: 14,
                                           height: 1.8,
@@ -276,18 +276,19 @@ class _ChatDetailsState extends State<ChatDetails>
                             //await pusherService.pusherTrigger('test-event');
                             animateToScreenEnd();
 
-/*                             Get.find<ChatApiController>()
+                            Get.find<ChatApiController>()
                                 .chatResponse
                                 .add(DataSource.fromJson({
                                   "text": _textEditingController.text,
                                   "source": "admin",
                                   "sub_type": "",
                                   "type": ""
-                                })); */
+                                }));
                             Get.find<ChatApiController>().sendChats(
                                 _ticketId.toString(),
                                 _textEditingController.text);
                             _textEditingController.text = "";
+                            setState(() {});
                           },
                           icon: Icon(
                             Icons.send,

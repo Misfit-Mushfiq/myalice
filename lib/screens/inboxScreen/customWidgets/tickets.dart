@@ -166,7 +166,8 @@ class Tickets extends GetView<InboxController> {
                                   controller.tickets.dataSource!
                                       .elementAt(index)
                                       .customer!
-                                      .id.toString()
+                                      .id
+                                      .toString()
                                 ])));
                   },
                   itemCount: controller.tickets.dataSource!.length))

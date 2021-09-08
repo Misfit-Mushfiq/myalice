@@ -13,10 +13,9 @@ class SharedPref {
     return prefs.getString(key);
   }
 
-
   Future<List<String>?> readStringList(String key) async {
     final prefs = await SharedPreferences.getInstance();
-    return  prefs.getStringList(key);
+    return prefs.getStringList(key);
   }
 
   readInt(String key) async {

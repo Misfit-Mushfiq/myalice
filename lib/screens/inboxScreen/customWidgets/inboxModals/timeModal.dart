@@ -86,7 +86,7 @@ class _TimeModalState extends State<TimeModal> {
                             ),
                           ),
                         ),
-                        onTap: () {      
+                        onTap: () {
                           times.clear();
                           times
                               .add(DateFormat("yyyy-MM-dd").format(_startDate));
