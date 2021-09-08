@@ -30,6 +30,8 @@ class _ChatDetailsState extends State<ChatDetails>
   final _chatboxBottomSheet = GlobalKey<ScaffoldState>();
   late Tags _tags;
   late var _items;
+  late int _ticketId;
+  late String _name;
   List<TagsDataSource>? _tagsLlist = [];
 
   //List<Animal> _selectedChannels = [];
@@ -48,15 +50,18 @@ class _ChatDetailsState extends State<ChatDetails>
   }
 
   Future<void> init() async {
-    _tags = Get.arguments;
-    _tagsLlist = _tags.dataSource;
     pusherService = PusherService();
+    var args = Get.arguments;
+    _tags = args[0];
+    _ticketId = args[1];
+    _name=args[2];
+    _tagsLlist = _tags.dataSource;
     _items = _tags.dataSource!
         .map((channel) =>
             MultiSelectItem<TagsDataSource>(channel, channel.name!))
         .toList()
         .obs;
-    await pusherService.connectPusher('chat-C_650', "messages");
+    await pusherService.connectPusher('chat-C_999', "messages");
   }
 
   void animateToScreenEnd() {
@@ -70,6 +75,7 @@ class _ChatDetailsState extends State<ChatDetails>
   @override
   Widget build(BuildContext context) {
     final obj = Get.put(ChatApiController());
+    obj.updateID(_ticketId);
     return Scaffold(
         key: _chatboxBottomSheet,
         appBar: AppBar(
@@ -89,7 +95,7 @@ class _ChatDetailsState extends State<ChatDetails>
                 width: 10,
               ),
               Text(
-                'Mark Tewin',
+                _name,
                 style: TextStyle(
                     fontWeight: FontWeight.normal, color: Colors.black),
               ),
@@ -534,85 +540,85 @@ class _ChatDetailsState extends State<ChatDetails>
         builder: (context) {
           return Container(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            Get.back();
-                          },
-                          icon: Icon(
-                            Icons.arrow_back_ios_new,
-                            color: Colors.grey,
-                          )),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Expanded(
-                        child: Text("Used Tags"),
-                      ),
-                      InkWell(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(color: Colors.grey)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.add,
-                                      size: 20,
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      "Add New Tags",
-                                      style: TextStyle(fontSize: 12),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                             // _animals.add(Animal(id: 4, name: "Lionss"));
-                            });
-                          })
-                    ],
+                  IconButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      icon: Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Colors.grey,
+                      )),
+                  SizedBox(
+                    width: 5,
                   ),
-                  Wrap(
-                    children: [
-                      Container(
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            child: MultiSelectChipField(
-                              items: _items,
-                              showHeader: false,
-                              scroll: false,
-                              initialValue: _selectedChannels2,
-                              headerColor: Colors.white,
-                              chipShape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5)),
-                              decoration: BoxDecoration(),
-                              selectedChipColor: AliceColors.ALICE_GREEN,
-                              selectedTextStyle: TextStyle(color: Colors.white),
-                              onTap: (values) {
-                                _selectedChannels2 = values;
-                              },
-                              icon: Icon(
-                                Icons.cancel,
-                                color: Colors.white,
-                              ),
+                  Expanded(
+                    child: Text("Used Tags"),
+                  ),
+                  InkWell(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.grey)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.add,
+                                  size: 20,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  "Add New Tags",
+                                  style: TextStyle(fontSize: 12),
+                                )
+                              ],
                             ),
                           ),
-                          /* _selectedChannels2.isEmpty
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          // _animals.add(Animal(id: 4, name: "Lionss"));
+                        });
+                      })
+                ],
+              ),
+              Wrap(
+                children: [
+                  Container(
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          child: MultiSelectChipField(
+                            items: _items,
+                            showHeader: false,
+                            scroll: false,
+                            initialValue: _selectedChannels2,
+                            headerColor: Colors.white,
+                            chipShape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)),
+                            decoration: BoxDecoration(),
+                            selectedChipColor: AliceColors.ALICE_GREEN,
+                            selectedTextStyle: TextStyle(color: Colors.white),
+                            onTap: (values) {
+                              _selectedChannels2 = values;
+                            },
+                            icon: Icon(
+                              Icons.cancel,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        /* _selectedChannels2.isEmpty
                                   ? Container(
                                       padding: EdgeInsets.all(10),
                                       alignment: Alignment.centerLeft,
@@ -627,13 +633,13 @@ class _ChatDetailsState extends State<ChatDetails>
                                     });
                                   },
                                 ), */
-                        ],
-                      ),
-                    )
-                    ] ,
+                      ],
+                    ),
                   )
                 ],
-              ));
+              )
+            ],
+          ));
         });
   }
 

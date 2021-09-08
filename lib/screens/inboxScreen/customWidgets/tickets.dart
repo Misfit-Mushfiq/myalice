@@ -9,7 +9,7 @@ import 'package:myalice/utils/platform_icon.dart';
 import 'package:myalice/utils/routes.dart';
 
 class Tickets extends GetView<InboxController> {
-  final Tags tags;
+  final Tags? tags;
   Tickets(
       {Key? key,
       required this.tags})
@@ -155,7 +155,7 @@ class Tickets extends GetView<InboxController> {
                               )
                             ],
                           ),
-                          onTap: () => Get.toNamed(CHAT_DETAILS_PAGE,arguments: tags),
+                          onTap: () => Get.toNamed(CHAT_DETAILS_PAGE,arguments: [tags,controller.tickets.dataSource!.elementAt(index).id,controller.tickets.dataSource!.elementAt(index).customer!.fullName])
                         ));
                   },
                   itemCount: controller.tickets.dataSource!.length))

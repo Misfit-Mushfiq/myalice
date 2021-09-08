@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       ),
       getPages: [
         GetPage(name: LOGIN_PAGE, page: () => LoginScreen()),
-        GetPage(name: CHAT_DETAILS_PAGE, page: () => ChatDetails(),binding: DataBinding()),
+        GetPage(name: CHAT_DETAILS_PAGE, page: () => ChatDetails()),
         GetPage(name: INBOX_PAGE, page: () => Inbox(), binding: DataBinding()),
         GetPage(name: SIGNUP_PAGE, page: () => SignUpScreen()),
         GetPage(name: USER_PROFILE_PAGE, page: () => UserProfile()),

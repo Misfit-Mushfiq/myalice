@@ -102,10 +102,8 @@ class _MainModalState extends State<MainModal> {
                       tags: _selectedTagsID!,
                       dates: _selectedTimes!);
                 });
-
                 widget.onChanged(widget.pendingSelected,
                     widget.resolvedSelected, widget.sortNew);
-
                 Get.back();
               },
             ),

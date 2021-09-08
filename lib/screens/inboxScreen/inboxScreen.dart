@@ -31,7 +31,8 @@ class _InboxState extends State<Inbox> {
   late AssignedAgents _agents;
   late AvailableGroups _groups;
   late Tags _tags;
-
+  var isTagsAvailable = false.obs;
+  bool get tagsAvailable => isTagsAvailable.value;
   List<String>? _selectedAgentsID = [];
   List<String>? _selectedChannelsID = [];
   List<String>? _selectedTagsID = [];
@@ -41,9 +42,9 @@ class _InboxState extends State<Inbox> {
 
   @override
   void initState() {
-    super.initState();
     _inboxController = Get.put(InboxController());
     readFilterParams();
+    super.initState();
   }
 
   void readFilterParams() async {
@@ -53,7 +54,11 @@ class _InboxState extends State<Inbox> {
     _channels = (await _inboxController.getChannels())!;
     _agents = (await _inboxController.getAvailableAgents())!;
     _groups = (await _inboxController.getAvailableGroups())!;
-    _tags = (await _inboxController.getTicketTags())!;
+    _tags = (await _inboxController.getTicketTags().whenComplete(() {
+      setState(() {
+        isTagsAvailable.value = true;
+      });
+    }))!;
     _selectedChannelsID =
         await _sharedPref.readStringList("selectedChannelsID") ?? [];
     _selectedAgentsID =
@@ -192,9 +197,7 @@ class _InboxState extends State<Inbox> {
                           Future.delayed(const Duration(milliseconds: 500), () {
                             setState(() {});
                           });
-                          setState(() {
-                            
-                          });
+                          setState(() {});
                         });
                       },
                       decoration: InputDecoration(
@@ -215,7 +218,13 @@ class _InboxState extends State<Inbox> {
                       fontWeight: FontWeight.bold));
             }),
           ),
-          Tickets(tags:_tags)
+          Obx(() {
+            if (tagsAvailable) {
+              return Tickets(tags: _tags);
+            } else {
+              return CircularProgressIndicator();
+            }
+          })
         ])));
   }
 }

@@ -6,7 +6,6 @@ import 'package:myalice/utils/db.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
 class ChatApiController extends BaseApiController {
-  static String _chatPath = "/crm/tickets/932/messenger-chat";
   var chatResponse = <DataSource?>[].obs;
   var dataAvailable = false.obs;
   bool get isDataAvailable => dataAvailable.value;
@@ -14,17 +13,22 @@ class ChatApiController extends BaseApiController {
   ChatDataBase _chatDataBase = ChatDataBase();
   final SharedPref _sharedPref = SharedPref();
   late String? token;
-
+  int id = 0;
+  int get getId => id;
   @override
   Future<void> onInit() async {
     super.onInit();
     token = await _sharedPref.readString("apiToken");
-    getChats();
+    getChats(getId.toString());
   }
 
-  void getChats() async {
+  void updateID(var ticketsID) {
+    id = ticketsID;
+  }
+
+  void getChats(String id) async {
     getDio()!
-        .get(_chatPath,
+        .get("crm/tickets/$id/messenger-chat",
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((value) async {
       if (value.statusCode == 200) {

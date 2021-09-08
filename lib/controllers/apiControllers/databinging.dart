@@ -6,6 +6,5 @@ class DataBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(() => InboxController());
-    Get.lazyPut(() => ChatApiController());
   }
 }
