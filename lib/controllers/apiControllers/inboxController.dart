@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:myalice/controllers/apiControllers/baseApiController.dart';
 import 'package:myalice/models/responseModels/UserResponse.dart';
 import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
@@ -9,7 +10,6 @@ import 'package:myalice/models/responseModels/projectsModels/projects.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/models/responseModels/ticketsResponseModels/ticketResponse.dart';
 import 'package:myalice/utils/shared_pref.dart';
-import 'package:pusher_client/pusher_client.dart';
 
 class InboxController extends BaseApiController {
   static String _accountPath = "accounts/info";

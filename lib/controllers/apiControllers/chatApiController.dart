@@ -1,5 +1,11 @@
+
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart' as pref;
+import 'package:image_picker/image_picker.dart';
 import 'package:myalice/controllers/apiControllers/baseApiController.dart';
 import 'package:myalice/models/responseModels/chatResponse.dart';
 import 'package:myalice/utils/db.dart';
@@ -83,5 +89,71 @@ class ChatApiController extends BaseApiController {
 
   Future<void> closeDB() async {
     await _chatDataBase.dbClose();
+  }
+
+   Future<dynamic> uploadUserProfilePhoto(
+    XFile imageFile,
+  ) async {
+    String fileName = imageFile.path.split('/').last;
+
+    FormData formData = FormData.fromMap({
+      "file":
+          await MultipartFile.fromFile(imageFile.path, filename: fileName),
+    });
+    print(imageFile.path);
+    try {
+      Response response = await getDio()!.post(
+        "crm/projects/81/images",
+        options: Options(headers: {
+          'Authorization': 'Token $token',
+        }),
+        data: formData,
+      );
+      return response.data;
+    } catch (error, stacktrace) {
+      debugPrint("Exception occured: $error stackTrace: $stacktrace");
+      
+    }
+  }
+
+ /*  Future<dynamic> uploadImage(XFile file) async {
+    String fileName = file.path.split('/').last;
+    print("FileName::$fileName");
+    print("FilePath::${file.path}");
+
+    
+
+    Uint8List uint8list = await file.readAsBytes();
+
+    var image =
+        XFile.fromData(uint8list, mimeType: file.mimeType, name: fileName);
+         FormData formData = FormData.fromMap({
+      "file": image,
+    }); 
+    print(formData.files);
+    var response = await getDio()!.post("crm/projects/81/images",
+        data: formData,
+        options: Options(
+          contentType: "multipart/form-data",
+            headers: {"Authorization": "Token $token"}));
+    return response.data;
+  }
+
+   */Future<bool?> addTicketTags(String action, String name, int tagId) async {
+    return getDio()!
+        .post("api/crm/tickets/$id/tag",
+            data: {"action": action, "name": name, "id": tagId},
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((response) =>
+            response.statusCode == 200 ? response.data["success"] : null);
+  }
+
+  Future<bool?> removeTicketTags(String action, String name, int tagId) async {
+    return getDio()!
+        .post("api/crm/tickets/$id/tag",
+            data: {"action": action, "name": name, "id": tagId},
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((response) =>
+            response.statusCode == 200 ? response.data["success"] : null);
   }
 }

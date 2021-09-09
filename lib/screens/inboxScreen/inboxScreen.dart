@@ -222,7 +222,7 @@ class _InboxState extends State<Inbox> {
             if (tagsAvailable) {
               return Tickets(tags: _tags);
             } else {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             }
           })
         ])));
