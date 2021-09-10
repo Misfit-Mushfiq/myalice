@@ -1,18 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:myalice/models/responseModels/tags/data_source.dart';
+import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/utils/colors.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class InboxTagsModal extends StatefulWidget {
-  final items;
-  InboxTagsModal({Key? key, required this.items}) : super(key: key);
+  final List<MultiSelectItem<TagsDataSource>> tags;
+  InboxTagsModal({Key? key, required this.tags}) : super(key: key);
 
   @override
   _InboxTagsModalState createState() => _InboxTagsModalState();
 }
 
 class _InboxTagsModalState extends State<InboxTagsModal> {
-  List<Object?> _selectedTags = [];
+  List<MultiSelectItem<TagsDataSource>> _tags = [];
+  List<TagsDataSource> _selectedTags = [];
+  SharedPref _pref = SharedPref();
+  @override
+  void initState() {
+    getTags();
+    super.initState();
+  }
+
+  getTags() async {
+    _tags = widget.tags;
+    _selectedTags = TagsDataSource.decode(
+        await _pref.readString("selectedInboxTags") ?? []);
+    _selectedTags.forEach((element) {
+      print(element.name);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -75,8 +95,8 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    child: MultiSelectChipField(
-                      items: widget.items,
+                    child: MultiSelectChipField<TagsDataSource>(
+                      items: _tags,
                       showHeader: false,
                       scroll: false,
                       initialValue: _selectedTags,
@@ -88,6 +108,8 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
                       selectedTextStyle: TextStyle(color: Colors.white),
                       onTap: (values) {
                         _selectedTags = values;
+                        _pref.saveString("selectedInboxTags",
+                            TagsDataSource.encode(_selectedTags));
                       },
                       icon: Icon(
                         Icons.cancel,

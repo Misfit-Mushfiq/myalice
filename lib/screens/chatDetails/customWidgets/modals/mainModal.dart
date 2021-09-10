@@ -123,7 +123,7 @@ class _MainModalState extends State<MainModal> {
         backgroundColor: Colors.white,
         builder: (context) {
           return InboxTagsModal(
-            items: widget.items,
+            tags: widget.items,
           );
         });
   }

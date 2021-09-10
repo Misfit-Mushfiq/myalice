@@ -66,7 +66,7 @@ class _ChatDetailsState extends State<ChatDetails>
         .map((channel) =>
             MultiSelectItem<TagsDataSource>(channel, channel.name!))
         .toList()
-        .obs;
+        ;
     await pusherService.connectPusher('chat-C_$_customerId', "messages");
   }
 
