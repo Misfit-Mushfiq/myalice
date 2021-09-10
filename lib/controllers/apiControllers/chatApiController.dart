@@ -1,15 +1,13 @@
-
-import 'dart:typed_data';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart' as pref;
 import 'package:image_picker/image_picker.dart';
 import 'package:myalice/controllers/apiControllers/baseApiController.dart';
 import 'package:myalice/models/responseModels/chatResponse.dart';
+import 'package:myalice/models/responseModels/imageUpload/image_upload.dart';
 import 'package:myalice/utils/db.dart';
 import 'package:myalice/utils/shared_pref.dart';
+import 'package:http_parser/http_parser.dart';
 
 class ChatApiController extends BaseApiController {
   var chatResponse = <DataSource?>[].obs;
@@ -61,9 +59,10 @@ class ChatApiController extends BaseApiController {
   void sendChats(
     String id,
     String text,
+    String image
   ) async {
     getDio()!.post("crm/tickets/$id/messenger-chat",
-        data: {"text": text, "image": null, "action": "direct_message"},
+        data: {"text": text, "image": image, "action": "direct_message"},
         options: Options(headers: {"Authorization": "Token $token"}));
     /* then((value) async {
       if (value.statusCode == 200) {
@@ -91,32 +90,28 @@ class ChatApiController extends BaseApiController {
     await _chatDataBase.dbClose();
   }
 
-   Future<dynamic> uploadUserProfilePhoto(
-    XFile imageFile,
-  ) async {
+  Future<ImageUpload> uploadPhoto(XFile imageFile) async {
     String fileName = imageFile.path.split('/').last;
-
+    String fileExt = imageFile.path.split('.').last;
     FormData formData = FormData.fromMap({
-      "file":
-          await MultipartFile.fromFile(imageFile.path, filename: fileName),
+      "file": await MultipartFile.fromFile(imageFile.path,
+          filename: fileName, contentType: MediaType("image", fileExt)),
     });
-    print(imageFile.path);
-    try {
-      Response response = await getDio()!.post(
-        "crm/projects/81/images",
-        options: Options(headers: {
-          'Authorization': 'Token $token',
-        }),
-        data: formData,
-      );
-      return response.data;
-    } catch (error, stacktrace) {
-      debugPrint("Exception occured: $error stackTrace: $stacktrace");
-      
+    Response response = await getDio()!.post(
+      "crm/projects/81/images",
+      options: Options(headers: {
+        'Authorization': 'Token $token',
+      }),
+      data: formData,
+    );
+    if (response.statusCode == 200)
+      return ImageUpload.fromJson(response.data);
+    else {
+      return ImageUpload.fromJson(response.data);
     }
   }
 
- /*  Future<dynamic> uploadImage(XFile file) async {
+  /*  Future<dynamic> uploadImage(XFile file) async {
     String fileName = file.path.split('/').last;
     print("FileName::$fileName");
     print("FilePath::${file.path}");
@@ -139,7 +134,8 @@ class ChatApiController extends BaseApiController {
     return response.data;
   }
 
-   */Future<bool?> addTicketTags(String action, String name, int tagId) async {
+   */
+  Future<bool?> addTicketTags(String action, String name, int tagId) async {
     return getDio()!
         .post("api/crm/tickets/$id/tag",
             data: {"action": action, "name": name, "id": tagId},

@@ -127,14 +127,19 @@ class DataSource {
     data['text'] =
         this.source == "customer" ? this.data!.text : this.data!.data!.text;
     data['image_url'] = this.data!.type == "attachment"
-        ? this.data!.data!.subType == "image"
-            ? this.data!.data!.urls!.elementAt(0)
+        ? this.data!.data != null && this.data!.attachment != null
+            ? this.data!.data!.subType == "image"
+                ? this.data!.attachment!.urls!.elementAt(0)
+                : ""
             : ""
         : "";
     data['source'] = this.source;
     data['type'] = this.data!.type;
-    data['sub_type'] =
-        this.data!.type == "attachment" ? this.data!.data!.subType : "";
+    data['sub_type'] = this.data!.type == "attachment"
+        ? this.data!.data != null
+            ? this.data!.data!.subType
+            : ""
+        : "";
     return data;
   }
 
@@ -150,6 +155,7 @@ class Data {
   String? payload;
   //Null extra;
   Datam? data;
+  Attachment? attachment;
 
   Data({this.type, this.text, this.payload, /* this.extra, */ this.data});
 
@@ -170,6 +176,28 @@ class Data {
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
+    attachment = data['attachment'] != null
+        ? new Attachment.fromJson(data['attachment'])
+        : null;
+    return data;
+  }
+}
+
+class Attachment {
+  String? type;
+  List<String>? urls;
+
+  Attachment({this.type, this.urls});
+
+  Attachment.fromJson(Map<String, dynamic> json) {
+    type = json['type'];
+    urls = json['urls'].cast<String>();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['type'] = this.type;
+    data['urls'] = this.urls;
     return data;
   }
 }

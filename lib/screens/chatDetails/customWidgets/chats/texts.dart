@@ -34,12 +34,25 @@ class Texts extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
           child: object.chats.elementAt(index)!.type == "attachment" &&
                   object.chats.elementAt(index)!.subType == "image"
-              ? CachedNetworkImage(
-                  imageUrl: object.chats.elementAt(index)!.imageUrl!,
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      CircularProgressIndicator(
-                          value: downloadProgress.progress),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+              ? Container(
+                  height: 300,
+                  width: 300,
+                  child: CachedNetworkImage(
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        image: DecorationImage(
+                            image: imageProvider, fit: BoxFit.fill),
+                      ),
+                    ),
+                    fit: BoxFit.cover,
+                    imageUrl: object.chats.elementAt(index)!.imageUrl!,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) =>
+                            CircularProgressIndicator(
+                                value: downloadProgress.progress),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
                 )
               : object.chats.elementAt(index)!.type == "action" &&
                       object.chats.elementAt(index)!.source == "admin"

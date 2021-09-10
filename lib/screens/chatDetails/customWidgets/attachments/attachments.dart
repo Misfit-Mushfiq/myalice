@@ -7,7 +7,8 @@ import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/utils/colors.dart';
 
 class Attachments extends StatefulWidget {
-  Attachments({Key? key}) : super(key: key);
+  final String ticketId;
+  Attachments({Key? key,required this.ticketId}) : super(key: key);
 
   @override
   _AttachmentsState createState() => _AttachmentsState();
@@ -165,7 +166,14 @@ class _AttachmentsState extends State<Attachments> {
                       ),
                       onTap: () {
                         _openGallery(context).then((value) =>
-                            Get.find<ChatApiController>().uploadUserProfilePhoto(value));
+                            Get.find<ChatApiController>()
+                                .uploadPhoto(value)
+                                .then((value) {
+                              if (value.success!) {
+                                Get.find<ChatApiController>()
+                                    .sendChats(widget.ticketId,"",value.dataSource!.s3Url! );
+                              }
+                            }));
                       },
                     ),
                     Padding(padding: EdgeInsets.all(10)),
@@ -178,7 +186,6 @@ class _AttachmentsState extends State<Attachments> {
                         //_openCamera(context);
                       },
                     ),
-                    _setImageView()
                   ],
                 ),
               ));
@@ -187,17 +194,6 @@ class _AttachmentsState extends State<Attachments> {
 
   Future<XFile> _openGallery(BuildContext context) async {
     var picture = await _picker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      imageFile = picture;
-    });
     return picture!;
-  }
-
-  Widget _setImageView() {
-    if (imageFile != null) {
-      return Image.file(File(imageFile.path));
-    } else {
-      return Text("Please select an image");
-    }
   }
 }

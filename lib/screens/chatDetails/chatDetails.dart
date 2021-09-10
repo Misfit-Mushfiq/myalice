@@ -257,7 +257,7 @@ class _ChatDetailsState extends State<ChatDetails>
                                 }));
                             Get.find<ChatApiController>().sendChats(
                                 _ticketId.toString(),
-                                _textEditingController.text);
+                                _textEditingController.text,"");
                             _textEditingController.text = "";
                             setState(() {});
                           },
@@ -271,7 +271,7 @@ class _ChatDetailsState extends State<ChatDetails>
                     ),
                   ),
                 ),
-                Visibility(visible: _visiblity, child: Attachments())
+                Visibility(visible: _visiblity, child: Attachments(ticketId: _ticketId.toString(),))
               ],
             )));
   }

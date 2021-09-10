@@ -29,7 +29,15 @@ class PusherService extends ChatApiController {
           Get.find<ChatApiController>().chatResponse.add(DataSource(
               text: text['data']['text'],
               source: text['source'],
-              type: text['type']));
+              type: text['data']['type'],
+              subType: text['data']['type'] == "attachment"
+                  ? text['data']["attachment"]["type"]
+                  : "",
+              imageUrl: text['data']['type'] == "attachment"
+                  ? text['data']["attachment"]["type"] == "image"
+                      ? text['data']["attachment"]["urls"][0]
+                      : ""
+                  : ""));
         }
       });
     } on PlatformException catch (e) {
