@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:myalice/controllers/apiControllers/chatApiController.dart';
+import 'package:myalice/models/responseModels/chatResponse.dart';
 import 'package:myalice/utils/colors.dart';
 
 class Attachments extends StatefulWidget {
   final String ticketId;
-  Attachments({Key? key,required this.ticketId}) : super(key: key);
+  Attachments({Key? key, required this.ticketId}) : super(key: key);
 
   @override
   _AttachmentsState createState() => _AttachmentsState();
@@ -171,8 +172,31 @@ class _AttachmentsState extends State<Attachments> {
                                 .then((value) {
                               if (value.success!) {
                                 Get.find<ChatApiController>()
-                                    .sendChats(widget.ticketId,"",value.dataSource!.s3Url! );
+                                    .sendChats(widget.ticketId, "",
+                                        value.dataSource!.s3Url!)
+                                    .then((value) {
+                                  if (value.success!) {
+                                    Get.find<ChatApiController>()
+                                        .chatResponse
+                                        .add(DataSource.fromJson({
+                                          "text": "",
+                                          "source": value.dataSource!.source!,
+                                          "sub_type":
+                                              value.dataSource!.data!.type ==
+                                                      "attachment"
+                                                  ? value.dataSource!.data!
+                                                      .data!.subType
+                                                  : "",
+                                          "type": value.dataSource!.data!.type,
+                                          "image_url": value.dataSource!.data!.type ==
+                                                      "attachment"
+                                                  ? value.dataSource!.data!
+                                                      .data!.urls!.elementAt(0):""
+                                        }));
+                                  }
+                                });
                               }
+                              Get.back();
                             }));
                       },
                     ),

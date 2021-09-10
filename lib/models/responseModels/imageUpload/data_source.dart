@@ -4,7 +4,8 @@ class ImageDataSource {
 
   ImageDataSource({this.id, this.s3Url});
 
-  factory ImageDataSource.fromJson(Map<String, dynamic> json) => ImageDataSource(
+  factory ImageDataSource.fromJson(Map<String, dynamic> json) =>
+      ImageDataSource(
         id: json['id'] as int?,
         s3Url: json['s3_url'] as String?,
       );

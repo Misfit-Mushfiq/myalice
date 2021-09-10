@@ -11,7 +11,7 @@ class Texts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 10, right: 1, top: 10),
+      padding: EdgeInsets.only(left: 8, right: 8, top: 10),
       child: Align(
         alignment: (object.chats.elementAt(index)!.source == "customer"
             ? Alignment.topLeft
@@ -29,9 +29,11 @@ class Texts extends StatelessWidget {
                     bottomLeft: Radius.circular(10)),
             color: (object.chats.elementAt(index)!.source == "customer"
                 ? AliceColors.CHAT_RECEIVER
-                : AliceColors.CHAT_SENDER),
+                : object.chats.elementAt(index)!.type == "attachment"
+                    ? AliceColors.CHAT_RECEIVER
+                    : AliceColors.CHAT_SENDER),
           ),
-          padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
+          padding: EdgeInsets.all(5),
           child: object.chats.elementAt(index)!.type == "attachment" &&
                   object.chats.elementAt(index)!.subType == "image"
               ? Container(
@@ -48,9 +50,14 @@ class Texts extends StatelessWidget {
                     fit: BoxFit.cover,
                     imageUrl: object.chats.elementAt(index)!.imageUrl!,
                     progressIndicatorBuilder:
-                        (context, url, downloadProgress) =>
-                            CircularProgressIndicator(
-                                value: downloadProgress.progress),
+                        (context, url, downloadProgress) => Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Container(
+                        height: 10,
+                        child: CircularProgressIndicator(
+                            value: downloadProgress.progress),
+                      ),
+                    ),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 )
@@ -68,18 +75,21 @@ class Texts extends StatelessWidget {
                               borderRadius: BorderRadius.circular(5)),
                           padding: EdgeInsets.symmetric(
                               horizontal: 10, vertical: 5)))
-                  : Text(
-                      object.chats.elementAt(index)!.source == "customer"
-                          ? object.chats.elementAt(index)!.text!
-                          : object.chats.elementAt(index)!.text!,
-                      style: TextStyle(
-                          fontSize: 14,
-                          height: 1.8,
-                          color: (object.chats.elementAt(index)!.source ==
-                                  "customer"
-                              ? Colors.black
-                              : Colors.white)),
-                    ),
+                  : Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                    child: Text(
+                        object.chats.elementAt(index)!.source == "customer"
+                            ? object.chats.elementAt(index)!.text!
+                            : object.chats.elementAt(index)!.text!,
+                        style: TextStyle(
+                            fontSize: 14,
+                            height: 1.8,
+                            color: (object.chats.elementAt(index)!.source ==
+                                    "customer"
+                                ? Colors.black
+                                : Colors.white)),
+                      ),
+                  ),
         ),
       ),
     );

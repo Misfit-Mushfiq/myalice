@@ -1,17 +1,16 @@
 import 'data_source.dart';
 
-class ImageUpload {
+class SendData {
   bool? success;
-  ImageDataSource? dataSource;
+  SendDataSource? dataSource;
 
-  ImageUpload({this.success, this.dataSource});
+  SendData({this.success, this.dataSource});
 
-  factory ImageUpload.fromJson(Map<String, dynamic> json) => ImageUpload(
+  factory SendData.fromJson(Map<String, dynamic> json) => SendData(
         success: json['success'] as bool?,
         dataSource: json['dataSource'] == null
             ? null
-            : ImageDataSource.fromJson(
-                json['dataSource'] as Map<String, dynamic>),
+            : SendDataSource.fromJson(json['dataSource'] as Map<String, dynamic>),
       );
 
   Map<String, dynamic> toJson() => {

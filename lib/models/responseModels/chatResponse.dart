@@ -95,6 +95,8 @@ class DataSource {
         ? new AdminInfo.fromJson(json['admin_info'])
         : null;
     this.text = json['text'];
+    this.imageUrl = json['image_url'];
+    this.subType = json['sub_type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -126,20 +128,26 @@ class DataSource {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['text'] =
         this.source == "customer" ? this.data!.text : this.data!.data!.text;
-    data['image_url'] = this.data!.type == "attachment"
-        ? this.data!.data != null && this.data!.attachment != null
-            ? this.data!.data!.subType == "image"
+    data['image_url'] = this.source == "customer"
+        ? this.data!.type == "attachment"
+            ? this.data!.attachment!.type == "image"
                 ? this.data!.attachment!.urls!.elementAt(0)
                 : ""
             : ""
-        : "";
+        : this.data!.type == "attachment"
+            ? this.data!.data!.subType == "image"
+                ? this.data!.data!.urls!.elementAt(0)
+                : ""
+            : "";
     data['source'] = this.source;
     data['type'] = this.data!.type;
-    data['sub_type'] = this.data!.type == "attachment"
-        ? this.data!.data != null
+    data['sub_type'] = this.source == "admin"
+        ? this.data!.type == "attachment"
             ? this.data!.data!.subType
             : ""
-        : "";
+        : this.data!.type == "attachment"
+            ? this.data!.attachment!.type
+            : "";
     return data;
   }
 
@@ -157,7 +165,12 @@ class Data {
   Datam? data;
   Attachment? attachment;
 
-  Data({this.type, this.text, this.payload, /* this.extra, */ this.data});
+  Data(
+      {this.type,
+      this.text,
+      this.payload,
+      /* this.extra, */ this.data,
+      this.attachment});
 
   Data.fromJson(Map<String, dynamic> json) {
     type = json['type'];
@@ -165,6 +178,10 @@ class Data {
     payload = json['payload'];
     //extra = json['extra'];
     data = json['data'] != null ? new Datam.fromJson(json['data']) : null;
+
+    attachment = json["attachment"] != null
+        ? Attachment.fromJson(json["attachment"])
+        : null;
   }
 
   Map<String, dynamic> toJson() {

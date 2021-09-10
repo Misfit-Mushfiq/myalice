@@ -5,6 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:myalice/controllers/apiControllers/baseApiController.dart';
 import 'package:myalice/models/responseModels/chatResponse.dart';
 import 'package:myalice/models/responseModels/imageUpload/image_upload.dart';
+
+import 'package:myalice/models/responseModels/sendChats/send_data.dart';
 import 'package:myalice/utils/db.dart';
 import 'package:myalice/utils/shared_pref.dart';
 import 'package:http_parser/http_parser.dart';
@@ -42,7 +44,7 @@ class ChatApiController extends BaseApiController {
         }); */
 
         for (int i = 0; i < response.dataSource!.length; i++) {
-          await _chatDataBase.insertChats(response.dataSource![i]);
+          _chatDataBase.insertChats(response.dataSource![i]);
         }
         _chatDataBase.getChats().then((value) {
           for (int i = 0; i < value.length; i++) {
@@ -56,34 +58,19 @@ class ChatApiController extends BaseApiController {
     });
   }
 
-  void sendChats(
-    String id,
-    String text,
-    String image
-  ) async {
-    getDio()!.post("crm/tickets/$id/messenger-chat",
-        data: {"text": text, "image": image, "action": "direct_message"},
-        options: Options(headers: {"Authorization": "Token $token"}));
-    /* then((value) async {
+  Future<SendData> sendChats(String id, String text, String image) async {
+    return getDio()!
+        .post("crm/tickets/$id/messenger-chat",
+            data: {"text": text, "image": image, "action": "direct_message"},
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((value) {
       if (value.statusCode == 200) {
-        ChatResponse response = ChatResponse.fromJson(value.data);
-/* _chatResponse.update((val) {
-          val!.data = DataSource.fromJson(value.data).data;
-        }); */
-
-        for (int i = 0; i < response.dataSource!.length; i++) {
-          await _chatDataBase.insertChats(response.dataSource![i]);
+        if (value.data["success"]) {
+          return SendData.fromJson(value.data);
         }
-        _chatDataBase.getChats().then((value) {
-          for (int i = 0; i < value.length; i++) {
-            chatResponse.add(value[i]);
-          }
-        });
       }
-    }).whenComplete(() {
-      dataAvailable.value = true;
-      chatResponse.refresh();
-    }); */
+      return SendData.fromJson(value.data["success"]);
+    });
   }
 
   Future<void> closeDB() async {
