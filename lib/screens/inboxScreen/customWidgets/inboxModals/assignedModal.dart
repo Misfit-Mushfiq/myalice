@@ -11,8 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AssignedAgentModal extends StatefulWidget {
   AvailableGroups groups;
-  AssignedAgents agents;
-  final Function(List<AssignedAgentsDataSource>?) onsaved;
+  AvailableAgents agents;
+  final Function(List<AvailableAgentsDataSource>?) onsaved;
   AssignedAgentModal(
       {Key? key,
       required this.groups,
@@ -27,9 +27,9 @@ class AssignedAgentModal extends StatefulWidget {
 class _AssignedAgentModalState extends State<AssignedAgentModal> {
   String searchTitle = "Search for agents/groups";
   bool assignedAgents = true;
-  List<AssignedAgentsDataSource> _selectedAgents = [];
+  List<AvailableAgentsDataSource> _selectedAgents = [];
   List<String> _selectedAgentsID = [];
-  List<AssignedAgentsDataSource>? _availableAgents = [];
+  List<AvailableAgentsDataSource>? _availableAgents = [];
   final SharedPref _sharedPref = SharedPref();
   @override
   void initState() {
@@ -109,7 +109,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                             widget.onsaved(_selectedAgents);
                             _sharedPref.saveString(
                                 "selectedAgents",
-                                AssignedAgentsDataSource.encode(
+                                AvailableAgentsDataSource.encode(
                                     _selectedAgents));
                           }),
                     ],
@@ -118,7 +118,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: DropdownSearch<AssignedAgentsDataSource>(
+                child: DropdownSearch<AvailableAgentsDataSource>(
                     mode: Mode.BOTTOM_SHEET,
                     items: _availableAgents,
                     hint: "Search for agents/groups",
@@ -130,7 +130,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                       });
                     },
                     popupItemBuilder: (context,
-                        AssignedAgentsDataSource? agents, bool selected) {
+                        AvailableAgentsDataSource? agents, bool selected) {
                       return Container(
                         child: ListTile(
                           title: Text(agents!.admin!.fullName!),
@@ -155,7 +155,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                       );
                     },
                     dropdownBuilder: (BuildContext context,
-                        AssignedAgentsDataSource? agents,
+                        AvailableAgentsDataSource? agents,
                         String itemDesignation) {
                       return Row(
                         children: [

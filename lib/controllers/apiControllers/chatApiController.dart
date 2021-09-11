@@ -124,7 +124,7 @@ class ChatApiController extends BaseApiController {
    */
   Future<bool?> addTicketTags(String action, String name, int tagId) async {
     return getDio()!
-        .post("api/crm/tickets/$id/tag",
+        .post("crm/tickets/$id/tag",
             data: {"action": action, "name": name, "id": tagId},
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) =>
@@ -133,8 +133,17 @@ class ChatApiController extends BaseApiController {
 
   Future<bool?> removeTicketTags(String action, String name, int tagId) async {
     return getDio()!
-        .post("api/crm/tickets/$id/tag",
+        .post("crm/tickets/$id/tag",
             data: {"action": action, "name": name, "id": tagId},
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((response) =>
+            response.statusCode == 200 ? response.data["success"] : null);
+  }
+
+  Future<bool?> reassign(String agentID, String groupID) async {
+    return getDio()!
+        .post("crm/tickets/$id/action-assign",
+            data: {"agent_id": agentID, "group_id": groupID},
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) =>
             response.statusCode == 200 ? response.data["success"] : null);

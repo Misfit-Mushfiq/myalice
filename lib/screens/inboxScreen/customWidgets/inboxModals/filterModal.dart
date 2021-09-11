@@ -20,7 +20,7 @@ import 'package:myalice/utils/shared_pref.dart';
 class FilterModal extends StatefulWidget {
   Channels channels;
   AvailableGroups groups;
-  AssignedAgents agents;
+  AvailableAgents agents;
   Tags tags;
   bool sortNew;
   bool resolvedSelected;
@@ -40,7 +40,7 @@ class FilterModal extends StatefulWidget {
 
 class _FilterModalState extends State<FilterModal> {
   List<ChannelDataSource?> _selectedChannels = [];
-  List<AssignedAgentsDataSource?> _selectedAgents = [];
+  List<AvailableAgentsDataSource?> _selectedAgents = [];
   List<TagsDataSource?> _selectedTags = [];
   List<String> _selectedAgentsID = [];
   List<String> _selectedChannelsID = [];
@@ -54,7 +54,7 @@ class _FilterModalState extends State<FilterModal> {
   }
 
   getSelectedAgents() async {
-    _selectedAgents = AssignedAgentsDataSource.decode(
+    _selectedAgents = AvailableAgentsDataSource.decode(
         await _pref.readString("selectedAgents"));
     _selectedChannels =
         ChannelDataSource.decode(await _pref.readString("selectedChannels"));
@@ -420,7 +420,7 @@ class _FilterModalState extends State<FilterModal> {
   }
 
   void showAssignedModal(BuildContext context, StateSetter state,
-      AssignedAgents agents, AvailableGroups availableGroups) {
+      AvailableAgents agents, AvailableGroups availableGroups) {
     showModalBottomSheet(
         context: context,
         isDismissible: true,
@@ -429,7 +429,7 @@ class _FilterModalState extends State<FilterModal> {
           return AssignedAgentModal(
             agents: agents,
             groups: availableGroups,
-            onsaved: (List<AssignedAgentsDataSource>? value) {
+            onsaved: (List<AvailableAgentsDataSource>? value) {
               for (int a = 0; a < value!.length; a++) {
                 _selectedAgentsID.add(value.elementAt(a).admin!.id!.toString());
               }

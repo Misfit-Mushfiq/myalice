@@ -9,6 +9,8 @@ class AliceColors {
   static const ALICE_BLUE = const Color(0xFF0078CF);
   static const ALICE_VIBER = const Color(0xFF7360F2);
   static const ALICE_SELECTED_CHANNEL = const Color(0xFFCDF0DF);
+  static const ALICE_ORANGE = const Color(0xFFF59E0B);
+  static const ALICE_ORANGE_LIGHT = const Color(0xFFFFFBEB);
 }
 
 Color platformColor(String name) {

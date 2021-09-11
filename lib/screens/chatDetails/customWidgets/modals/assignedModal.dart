@@ -1,15 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
+import 'package:myalice/models/responseModels/availableAgents/data_source.dart';
+import 'package:myalice/screens/chatDetails/customWidgets/modals/reassignConfirm.dart';
 import 'package:myalice/utils/colors.dart';
 
 class InboxAssignedModal extends StatefulWidget {
-  InboxAssignedModal({Key? key}) : super(key: key);
+  final AvailableAgents agents;
+  final Function(String name) onSaved;
+  InboxAssignedModal({Key? key, required this.agents, required this.onSaved})
+      : super(key: key);
 
   @override
   _AssignedModalState createState() => _AssignedModalState();
 }
 
 class _AssignedModalState extends State<InboxAssignedModal> {
+  List<AvailableAgentsDataSource> _agents = [];
+  String selectedAgentName = '';
+  String selectedAgentpic = "";
+  @override
+  void initState() {
+    getAgents();
+    super.initState();
+  }
+
+  getAgents() {
+    _agents = widget.agents.dataSource!;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -62,7 +81,7 @@ class _AssignedModalState extends State<InboxAssignedModal> {
               body: TabBarView(
                 children: [
                   ListView.separated(
-                    itemCount: 100,
+                    itemCount: _agents.length,
                     separatorBuilder: (context, index) {
                       return Divider(
                         height: 0.5,
@@ -71,27 +90,47 @@ class _AssignedModalState extends State<InboxAssignedModal> {
                     },
                     itemBuilder: (context, index) {
                       return ListTile(
+                        onTap: () {
+                          showModal(
+                              context,
+                              _agents
+                                  .elementAt(index)
+                                  .admin!
+                                  .id
+                                  .toString()
+                                  .toString(),
+                              _agents.elementAt(index).admin!.fullName!,
+                              "",
+                              "");
+                        },
                         leading: Stack(
                           children: [
                             CircleAvatar(
-                              backgroundImage: NetworkImage(""),
+                              backgroundImage: NetworkImage(
+                                  _agents.elementAt(index).admin!.avatar!),
                               radius: 25,
                             ),
                             Positioned(
-                                top: 30,
-                                left: 30,
+                                top: 40,
+                                left: 35,
                                 child: CircleAvatar(
-                                  backgroundColor: AliceColors.ALICE_GREEN,
-                                  radius: 10,
+                                  backgroundImage:
+                                      NetworkImage(selectedAgentpic),
+                                  backgroundColor:
+                                      _agents.elementAt(index).admin!.status! ==
+                                              "online"
+                                          ? AliceColors.ALICE_GREEN
+                                          : AliceColors.ALICE_ORANGE,
+                                  radius: 5,
                                 ))
                           ],
                         ),
                         title: Text(
-                          "Jenny Wilson",
+                          _agents.elementAt(index).admin!.fullName!,
                           style: TextStyle(color: Colors.black, fontSize: 15),
                         ),
                         subtitle: Text(
-                          "Active now",
+                          _agents.elementAt(index).admin!.status!,
                           style: TextStyle(color: Colors.grey),
                         ),
                       );
@@ -128,5 +167,24 @@ class _AssignedModalState extends State<InboxAssignedModal> {
         );
       }),
     );
+  }
+
+  showModal(BuildContext context, String agentID, String agentName,
+      String groupName, String groupID) {
+    showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.white,
+        useRootNavigator: true,
+        builder: (context) {
+          return ReassignConfirm(
+            agentID: agentID,
+            groupID: groupID,
+            agentName: agentName,
+            groupName: groupName,
+            onSaved: (String name) {
+              widget.onSaved(name);
+            },
+          );
+        }).whenComplete(() {});
   }
 }

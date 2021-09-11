@@ -134,12 +134,12 @@ class InboxController extends BaseApiController {
             : null);
   }
 
-  Future<AssignedAgents?> getAvailableAgents() async {
+  Future<AvailableAgents?> getAvailableAgents() async {
     return getDio()!
         .get(_availableAgentsPath,
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) => response.statusCode == 200
-            ? AssignedAgents.fromJson(response.data)
+            ? AvailableAgents.fromJson(response.data)
             : null);
   }
 

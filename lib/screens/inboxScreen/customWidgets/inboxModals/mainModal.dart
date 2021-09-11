@@ -12,7 +12,7 @@ import 'package:myalice/utils/shared_pref.dart';
 class MainModal extends StatefulWidget {
   Channels channels;
   AvailableGroups groups;
-  AssignedAgents agents;
+  AvailableAgents agents;
   Tags tags;
   InboxController inboxController;
   bool pendingSelected;
@@ -180,7 +180,7 @@ class _MainModalState extends State<MainModal> {
   }
 
   void showFilterModal(BuildContext context, Channels channels,
-      AssignedAgents agents, AvailableGroups groups, Tags tags) {
+      AvailableAgents agents, AvailableGroups groups, Tags tags) {
     showModalBottomSheet(
         context: context,
         enableDrag: true,

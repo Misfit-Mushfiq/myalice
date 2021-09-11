@@ -11,7 +11,7 @@ class DataSource {
   String? createdAt;
   bool? isReplied;
   Customer? customer;
-  List<Agent>? agents;
+  List<AssignedAgents>? agents;
   List<dynamic>? tags;
   List<dynamic>? groups;
   bool? isResolved;
@@ -53,7 +53,7 @@ class DataSource {
             ? null
             : Customer.fromJson(json['customer'] as Map<String, dynamic>),
         agents: (json['agents'] as List<dynamic>?)
-            ?.map((e) => Agent.fromJson(e as Map<String, dynamic>))
+            ?.map((e) => AssignedAgents.fromJson(e as Map<String, dynamic>))
             .toList(),
         tags: json['tags'] as List<dynamic>?,
         groups: json['groups'] as List<dynamic>?,

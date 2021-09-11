@@ -28,7 +28,7 @@ class _InboxState extends State<Inbox> {
   late bool sortNew;
   final SharedPref _sharedPref = SharedPref();
   late Channels _channels;
-  late AssignedAgents _agents;
+  late AvailableAgents _agents;
   late AvailableGroups _groups;
   late Tags _tags;
   var isTagsAvailable = false.obs;
@@ -220,7 +220,10 @@ class _InboxState extends State<Inbox> {
           ),
           Obx(() {
             if (tagsAvailable) {
-              return Tickets(tags: _tags);
+              return Tickets(
+                tags: _tags,
+                agents: _agents,
+              );
             } else {
               return Center(child: CircularProgressIndicator());
             }

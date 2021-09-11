@@ -8,9 +8,11 @@ import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/controllers/pusherController/pusherController.dart';
 import 'package:myalice/customWidgets/botButton.dart';
 import 'package:myalice/models/chatModel/chat.dart';
+import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
 import 'package:myalice/models/responseModels/chatResponse.dart';
 import 'package:myalice/models/responseModels/tags/data_source.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
+import 'package:myalice/models/responseModels/ticketsResponseModels/agent.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/attachments/attachments.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/chats/actionText.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/chats/texts.dart';
@@ -35,6 +37,8 @@ class _ChatDetailsState extends State<ChatDetails>
   bool _botEnabled = false;
   final _chatboxBottomSheet = GlobalKey<ScaffoldState>();
   late Tags _tags;
+  late AvailableAgents _agents;
+  late List<AssignedAgents> _assignedAgents;
   late var _items;
   late int _ticketId;
   late String _name;
@@ -62,11 +66,12 @@ class _ChatDetailsState extends State<ChatDetails>
     _ticketId = args[1];
     _name = args[2];
     _customerId = args[3];
+    _agents = args[4];
+    _assignedAgents= args[5];
     _items = _tags.dataSource!
         .map((channel) =>
             MultiSelectItem<TagsDataSource>(channel, channel.name!))
-        .toList()
-        ;
+        .toList();
     await pusherService.connectPusher('chat-C_$_customerId', "messages");
   }
 
@@ -287,7 +292,9 @@ class _ChatDetailsState extends State<ChatDetails>
         useRootNavigator: true,
         builder: (context) {
           return MainModal(
-            items: _items,
+            tags: _items,
+            agents: _agents,
+            assignAgents: _assignedAgents,
           );
         });
   }

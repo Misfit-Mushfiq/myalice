@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
+import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/platform_icon.dart';
@@ -10,7 +11,9 @@ import 'package:myalice/utils/routes.dart';
 
 class Tickets extends GetView<InboxController> {
   final Tags? tags;
-  Tickets({Key? key, required this.tags}) : super(key: key);
+  final AvailableAgents? agents;
+  Tickets({Key? key, required this.tags, required this.agents})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -167,7 +170,11 @@ class Tickets extends GetView<InboxController> {
                                       .elementAt(index)
                                       .customer!
                                       .id
-                                      .toString()
+                                      .toString(),
+                                  agents,
+                                  controller.tickets.dataSource!
+                                      .elementAt(index)
+                                      .agents
                                 ])));
                   },
                   itemCount: controller.tickets.dataSource!.length))

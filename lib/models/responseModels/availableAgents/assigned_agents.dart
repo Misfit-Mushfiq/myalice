@@ -1,16 +1,16 @@
 import 'data_source.dart';
 
-class AssignedAgents {
+class AvailableAgents {
   bool? success;
-  List<AssignedAgentsDataSource>? dataSource;
+  List<AvailableAgentsDataSource>? dataSource;
 
-  AssignedAgents({this.success, this.dataSource});
+  AvailableAgents({this.success, this.dataSource});
 
-  factory AssignedAgents.fromJson(Map<String, dynamic> json) => AssignedAgents(
+  factory AvailableAgents.fromJson(Map<String, dynamic> json) => AvailableAgents(
         success: json['success'] as bool?,
         dataSource: (json['dataSource'] as List<dynamic>?)
             ?.map((e) =>
-                AssignedAgentsDataSource.fromJson(e as Map<String, dynamic>))
+                AvailableAgentsDataSource.fromJson(e as Map<String, dynamic>))
             .toList(),
       );
 

@@ -8,7 +8,9 @@ import 'package:myalice/utils/shared_pref.dart';
 
 class InboxTagsModal extends StatefulWidget {
   final List<MultiSelectItem<TagsDataSource>> tags;
-  InboxTagsModal({Key? key, required this.tags}) : super(key: key);
+  final Function(List<TagsDataSource> selectedTags) onsaved;
+  InboxTagsModal({Key? key, required this.tags, required this.onsaved})
+      : super(key: key);
 
   @override
   _InboxTagsModalState createState() => _InboxTagsModalState();
@@ -26,11 +28,12 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
 
   getTags() async {
     _tags = widget.tags;
-    _selectedTags = TagsDataSource.decode(
-        await _pref.readString("selectedInboxTags") ?? []);
+    _selectedTags =
+        TagsDataSource.decode(await _pref.readString("selectedInboxTags"));
     _selectedTags.forEach((element) {
       print(element.name);
     });
+    setState(() {});
   }
 
   @override
@@ -105,8 +108,10 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
                           borderRadius: BorderRadius.circular(5)),
                       decoration: BoxDecoration(),
                       selectedChipColor: AliceColors.ALICE_GREEN,
+                      searchable: true,
                       selectedTextStyle: TextStyle(color: Colors.white),
                       onTap: (values) {
+                        widget.onsaved(values);
                         _selectedTags = values;
                         _pref.saveString("selectedInboxTags",
                             TagsDataSource.encode(_selectedTags));
@@ -117,21 +122,6 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
                       ),
                     ),
                   ),
-                  /* _selectedChannels2.isEmpty
-                                  ? Container(
-                                      padding: EdgeInsets.all(10),
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        "None selected",
-                                        style: TextStyle(color: Colors.black54),
-                                      ))
-                                  : MultiSelectChipDisplay(
-                                  onTap: (value) {
-                                    setState(() {
-                                      _selectedChannels2.remove(value);
-                                    });
-                                  },
-                                ), */
                 ],
               ),
             )

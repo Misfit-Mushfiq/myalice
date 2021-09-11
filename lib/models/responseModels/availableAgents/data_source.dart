@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'admin.dart';
 import 'role.dart';
 
-class AssignedAgentsDataSource {
+class AvailableAgentsDataSource {
   int? id;
   Admin? admin;
   Role? role;
@@ -13,7 +13,7 @@ class AssignedAgentsDataSource {
   bool? browserNotificationOn;
   bool? isDeletable;
 
-  AssignedAgentsDataSource({
+  AvailableAgentsDataSource({
     this.id,
     this.admin,
     this.role,
@@ -24,8 +24,8 @@ class AssignedAgentsDataSource {
     this.isDeletable,
   });
 
-  factory AssignedAgentsDataSource.fromJson(Map<String, dynamic> json) =>
-      AssignedAgentsDataSource(
+  factory AvailableAgentsDataSource.fromJson(Map<String, dynamic> json) =>
+      AvailableAgentsDataSource(
         id: json['id'] as int?,
         admin: json['admin'] == null
             ? null
@@ -52,34 +52,34 @@ class AssignedAgentsDataSource {
       };
 
   static Map<String, dynamic> toMap(
-          AssignedAgentsDataSource assignedAgentsDataSource) =>
+          AvailableAgentsDataSource availableAgentsDataSource) =>
       {
-        'id': assignedAgentsDataSource.id,
-        'admin': assignedAgentsDataSource.admin?.toJson(),
-        'role': assignedAgentsDataSource.role?.toJson(),
-        'groups': assignedAgentsDataSource.groups,
-        'ticket_sound_on': assignedAgentsDataSource.ticketSoundOn,
-        'message_sound_on': assignedAgentsDataSource.messageSoundOn,
+        'id': availableAgentsDataSource.id,
+        'admin': availableAgentsDataSource.admin?.toJson(),
+        'role': availableAgentsDataSource.role?.toJson(),
+        'groups': availableAgentsDataSource.groups,
+        'ticket_sound_on': availableAgentsDataSource.ticketSoundOn,
+        'message_sound_on': availableAgentsDataSource.messageSoundOn,
         'browser_notification_on':
-            assignedAgentsDataSource.browserNotificationOn,
-        'is_deletable': assignedAgentsDataSource.isDeletable,
+            availableAgentsDataSource.browserNotificationOn,
+        'is_deletable': availableAgentsDataSource.isDeletable,
       };
 
   static String encode(
-          List<AssignedAgentsDataSource> assignedAgentsDataSourceList) =>
+          List<AvailableAgentsDataSource> availableAgentsDataSourceList) =>
       json.encode(
-        assignedAgentsDataSourceList
-            .map<Map<String, dynamic>>((assignedAgentsDataSource) =>
-                AssignedAgentsDataSource.toMap(assignedAgentsDataSource))
+        availableAgentsDataSourceList
+            .map<Map<String, dynamic>>((availableAgentsDataSource) =>
+                AvailableAgentsDataSource.toMap(availableAgentsDataSource))
             .toList(),
       );
 
-  static List<AssignedAgentsDataSource> decode(
-      String assignedAgentsDataSource) {
-    return assignedAgentsDataSource != null
-        ? (json.decode(assignedAgentsDataSource) ?? [])
-            .map<AssignedAgentsDataSource>(
-                (item) => AssignedAgentsDataSource.fromJson(item))
+  static List<AvailableAgentsDataSource> decode(
+      String availableAgentsDataSource) {
+    return availableAgentsDataSource != null
+        ? (json.decode(availableAgentsDataSource) ?? [])
+            .map<AvailableAgentsDataSource>(
+                (item) => AvailableAgentsDataSource.fromJson(item))
             .toList()
         : [];
   }
