@@ -6,7 +6,8 @@ class AvailableAgents {
 
   AvailableAgents({this.success, this.dataSource});
 
-  factory AvailableAgents.fromJson(Map<String, dynamic> json) => AvailableAgents(
+  factory AvailableAgents.fromJson(Map<String, dynamic> json) =>
+      AvailableAgents(
         success: json['success'] as bool?,
         dataSource: (json['dataSource'] as List<dynamic>?)
             ?.map((e) =>

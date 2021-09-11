@@ -6,6 +6,7 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
 import 'package:myalice/models/responseModels/availableGroups/available_groups.dart';
+import 'package:myalice/models/responseModels/cannedResponse/canned_response.dart';
 import 'package:myalice/models/responseModels/channels/channels.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/mainModal.dart';
@@ -32,6 +33,7 @@ class _InboxState extends State<Inbox> {
   late AvailableAgents _agents;
   late AvailableGroups _groups;
   late Tags _tags;
+  late CannedResponse _cannedResponse;
   var isTagsAvailable = false.obs;
   bool get tagsAvailable => isTagsAvailable.value;
   List<String>? _selectedAgentsID = [];
@@ -55,6 +57,7 @@ class _InboxState extends State<Inbox> {
     _channels = (await _inboxController.getChannels())!;
     _agents = (await _inboxController.getAvailableAgents())!;
     _groups = (await _inboxController.getAvailableGroups())!;
+    _cannedResponse = (await _inboxController.getCannedResponse())!;
     _tags = (await _inboxController.getTicketTags().whenComplete(() {
       setState(() {
         isTagsAvailable.value = true;
@@ -224,6 +227,7 @@ class _InboxState extends State<Inbox> {
               return Tickets(
                 tags: _tags,
                 agents: _agents,
+                cannedResponse : _cannedResponse
               );
             } else {
               return Center(child: CircularProgressIndicator());

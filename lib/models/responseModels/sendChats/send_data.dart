@@ -10,7 +10,8 @@ class SendData {
         success: json['success'] as bool?,
         dataSource: json['dataSource'] == null
             ? null
-            : SendDataSource.fromJson(json['dataSource'] as Map<String, dynamic>),
+            : SendDataSource.fromJson(
+                json['dataSource'] as Map<String, dynamic>),
       );
 
   Map<String, dynamic> toJson() => {

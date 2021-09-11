@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
+import 'package:myalice/models/responseModels/cannedResponse/canned_response.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/platform_icon.dart';
@@ -12,7 +13,8 @@ import 'package:myalice/utils/routes.dart';
 class Tickets extends GetView<InboxController> {
   final Tags? tags;
   final AvailableAgents? agents;
-  Tickets({Key? key, required this.tags, required this.agents})
+  final CannedResponse? cannedResponse;
+  Tickets({Key? key, required this.tags, required this.agents,required this.cannedResponse})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -174,7 +176,8 @@ class Tickets extends GetView<InboxController> {
                                   agents,
                                   controller.tickets.dataSource!
                                       .elementAt(index)
-                                      .agents
+                                      .agents,
+                                      cannedResponse
                                 ])));
                   },
                   itemCount: controller.tickets.dataSource!.length))

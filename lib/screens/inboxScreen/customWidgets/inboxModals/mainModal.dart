@@ -156,7 +156,8 @@ class _MainModalState extends State<MainModal> {
                   onTap: () async {
                     setState(() {
                       widget.sortNew = !widget.sortNew;
-                      widget.inboxController.isticketsDataAvailable.value = false;
+                      widget.inboxController.isticketsDataAvailable.value =
+                          false;
                       widget.sortNew
                           ? widget.inboxController.sort = "asc"
                           : widget.inboxController.sort = "desc";

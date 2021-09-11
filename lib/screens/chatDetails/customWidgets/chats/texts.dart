@@ -76,8 +76,8 @@ class Texts extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                               horizontal: 10, vertical: 5)))
                   : Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
-                    child: Text(
+                      padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                      child: Text(
                         object.chats.elementAt(index)!.source == "customer"
                             ? object.chats.elementAt(index)!.text!
                             : object.chats.elementAt(index)!.text!,
@@ -89,7 +89,7 @@ class Texts extends StatelessWidget {
                                 ? Colors.black
                                 : Colors.white)),
                       ),
-                  ),
+                    ),
         ),
       ),
     );

@@ -9,6 +9,7 @@ import 'package:myalice/controllers/pusherController/pusherController.dart';
 import 'package:myalice/customWidgets/botButton.dart';
 import 'package:myalice/models/chatModel/chat.dart';
 import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
+import 'package:myalice/models/responseModels/cannedResponse/canned_response.dart';
 import 'package:myalice/models/responseModels/chatResponse.dart';
 import 'package:myalice/models/responseModels/tags/data_source.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
@@ -38,6 +39,7 @@ class _ChatDetailsState extends State<ChatDetails>
   final _chatboxBottomSheet = GlobalKey<ScaffoldState>();
   late Tags _tags;
   late AvailableAgents _agents;
+  late CannedResponse _cannedResponse;
   late List<AssignedAgents> _assignedAgents;
   late var _items;
   late int _ticketId;
@@ -46,6 +48,14 @@ class _ChatDetailsState extends State<ChatDetails>
 
   //List<Animal> _selectedChannels = [];
   List<Object?> _selectedChannels2 = [];
+  final List<String> _suggestions = [
+    'Alligator',
+    'Buffalo',
+    'Chicken',
+    'Dog',
+    'Eagle',
+    'Frog'
+  ];
 
   @override
   void initState() {
@@ -69,6 +79,7 @@ class _ChatDetailsState extends State<ChatDetails>
     _agents = args[4];
     _assignedAgents = args[5];
     _items = _tags.dataSource!;
+    _cannedResponse = args[6];
     await pusherService.connectPusher('chat-C_$_customerId', "messages");
   }
 
@@ -178,7 +189,7 @@ class _ChatDetailsState extends State<ChatDetails>
             color: Colors.white,
             child: Column(
               children: <Widget>[
-                Expanded(
+                 Expanded(
                   child: Obx(() {
                     return ListView.builder(
                       itemCount: Get.find<ChatApiController>().chats.length,
@@ -202,6 +213,7 @@ class _ChatDetailsState extends State<ChatDetails>
                     );
                   }),
                 ),
+                  
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
@@ -278,6 +290,7 @@ class _ChatDetailsState extends State<ChatDetails>
                     visible: _visiblity,
                     child: Attachments(
                       ticketId: _ticketId.toString(),
+                      cannedResponse : _cannedResponse
                     ))
               ],
             )));

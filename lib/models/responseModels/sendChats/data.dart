@@ -8,7 +8,8 @@ class Data {
 
   Data.fromJson(Map<String, dynamic> json) {
     type = json['type'];
-    data = json['data'] != null ? new AttachedData.fromJson(json['data']) : null;
+    data =
+        json['data'] != null ? new AttachedData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {

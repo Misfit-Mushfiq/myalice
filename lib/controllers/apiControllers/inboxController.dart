@@ -5,6 +5,7 @@ import 'package:myalice/controllers/apiControllers/baseApiController.dart';
 import 'package:myalice/models/responseModels/UserResponse.dart';
 import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
 import 'package:myalice/models/responseModels/availableGroups/available_groups.dart';
+import 'package:myalice/models/responseModels/cannedResponse/canned_response.dart';
 import 'package:myalice/models/responseModels/channels/channels.dart';
 import 'package:myalice/models/responseModels/projectsModels/projects.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
@@ -19,6 +20,7 @@ class InboxController extends BaseApiController {
   static String _availableAgentsPath = "bots/projects/81/access";
   static String _availableGroupsPath = "bots/projects/81/groups";
   static String _ticketsTagsPath = "crm/projects/81/ticket-tags";
+  static String _cannedResponsePath = "crm/projects/81/canned-responses";
 
   final SharedPref _sharedPref = SharedPref();
 
@@ -158,5 +160,14 @@ class InboxController extends BaseApiController {
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) =>
             response.statusCode == 200 ? Tags.fromJson(response.data) : null);
+  }
+
+  Future<CannedResponse?> getCannedResponse() async {
+    return getDio()!
+        .get(_cannedResponsePath,
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((response) => response.statusCode == 200
+            ? CannedResponse.fromJson(response.data)
+            : null);
   }
 }

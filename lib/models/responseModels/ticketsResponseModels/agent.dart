@@ -5,7 +5,8 @@ class AssignedAgents {
   String? fullName;
   String? status;
 
-  AssignedAgents({this.id, this.email, this.avatar, this.fullName, this.status});
+  AssignedAgents(
+      {this.id, this.email, this.avatar, this.fullName, this.status});
 
   factory AssignedAgents.fromJson(Map<String, dynamic> json) => AssignedAgents(
         id: json['id'] as int?,
