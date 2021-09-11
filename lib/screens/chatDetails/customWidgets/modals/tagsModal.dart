@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/models/responseModels/tags/data_source.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
 class InboxTagsModal extends StatefulWidget {
-  final List<MultiSelectItem<TagsDataSource>> tags;
+  final List<TagsDataSource> tags;
+  final List<TagsDataSource> selectedTags;
   final Function(List<TagsDataSource> selectedTags) onsaved;
-  InboxTagsModal({Key? key, required this.tags, required this.onsaved})
+  InboxTagsModal(
+      {Key? key,
+      required this.tags,
+      required this.selectedTags,
+      required this.onsaved})
       : super(key: key);
 
   @override
@@ -17,9 +23,9 @@ class InboxTagsModal extends StatefulWidget {
 }
 
 class _InboxTagsModalState extends State<InboxTagsModal> {
-  List<MultiSelectItem<TagsDataSource>> _tags = [];
-  List<TagsDataSource> _selectedTags = [];
   SharedPref _pref = SharedPref();
+  var _selectedTags = <TagsDataSource>[];
+  var _tags;
   @override
   void initState() {
     getTags();
@@ -27,13 +33,13 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
   }
 
   getTags() async {
-    _tags = widget.tags;
-    _selectedTags =
-        TagsDataSource.decode(await _pref.readString("selectedInboxTags"));
-    _selectedTags.forEach((element) {
+    _selectedTags = widget.selectedTags;
+    _tags = widget.tags
+        .map((animal) => MultiSelectItem<TagsDataSource>(animal, animal.name!))
+        .toList();
+    widget.selectedTags.forEach((element) {
       print(element.name);
     });
-    setState(() {});
   }
 
   @override
@@ -95,39 +101,39 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
         Wrap(
           children: [
             Container(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    child: MultiSelectChipField<TagsDataSource>(
-                      items: _tags,
-                      showHeader: false,
-                      scroll: false,
-                      initialValue: _selectedTags,
-                      headerColor: Colors.white,
-                      chipShape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                      decoration: BoxDecoration(),
-                      selectedChipColor: AliceColors.ALICE_GREEN,
-                      searchable: true,
-                      selectedTextStyle: TextStyle(color: Colors.white),
-                      onTap: (values) {
-                        widget.onsaved(values);
-                        _selectedTags = values;
-                        _pref.saveString("selectedInboxTags",
-                            TagsDataSource.encode(_selectedTags));
-                      },
-                      icon: Icon(
-                        Icons.cancel,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
+                child: MultiSelectChipField<TagsDataSource>(
+              items: _tags,
+              showHeader: false,
+              scroll: false,
+              initialValue: _selectedTags,
+              headerColor: Colors.white,
+              chipShape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)),
+              decoration: BoxDecoration(),
+              selectedChipColor: AliceColors.ALICE_GREEN,
+              searchable: true,
+              selectedTextStyle: TextStyle(color: Colors.white),
+              onTap: (values) {
+                widget.onsaved(values);
+                _pref.saveString(
+                    "selectedInboxTags", TagsDataSource.encode(values));
+                addTag(values);
+              },
+              icon: Icon(
+                Icons.cancel,
+                color: Colors.white,
               ),
-            )
+            )),
           ],
         )
       ],
     ));
+  }
+
+  addTag(List<TagsDataSource> values) {
+    /* for(int i=0;i<1;i++) {
+      Get.find<ChatApiController>()
+          .addTicketTags("add", element.name!, element.id!);
+    } */
   }
 }

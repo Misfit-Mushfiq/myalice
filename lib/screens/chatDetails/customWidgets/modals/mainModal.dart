@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:myalice/controllers/apiControllers/chatApiController.dart';
+import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/customWidgets/botButton.dart';
 import 'package:myalice/models/responseModels/tags/data_source.dart';
 import 'package:myalice/models/responseModels/ticketsResponseModels/agent.dart';
@@ -11,7 +14,11 @@ class MainModal extends StatefulWidget {
   final tags;
   final agents;
   final List<AssignedAgents> assignAgents;
-  MainModal({Key? key, required this.tags, required this.agents,required this.assignAgents})
+  MainModal(
+      {Key? key,
+      required this.tags,
+      required this.agents,
+      required this.assignAgents})
       : super(key: key);
 
   @override
@@ -183,14 +190,12 @@ class _MainModalState extends State<MainModal> {
     showModalBottomSheet(
         context: context,
         backgroundColor: Colors.white,
-        useRootNavigator: true,
         builder: (context) {
           return InboxTagsModal(
             tags: widget.tags,
+            selectedTags: _selectedTags,
             onsaved: (List<TagsDataSource> selectedTags) {
               _selectedTags = selectedTags;
-              _sharedPref.saveString(
-                  "selectedInboxTags", TagsDataSource.encode(_selectedTags));
             },
           );
         }).whenComplete(() {

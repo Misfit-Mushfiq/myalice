@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/utils/colors.dart';
+import 'package:myalice/utils/routes.dart';
 
 class ReassignConfirm extends StatefulWidget {
   final String agentID;
@@ -99,7 +100,7 @@ class _ReassignConfirmState extends State<ReassignConfirm> {
                       .then((value) {
                     if (value!) {
                       widget.onSaved(widget.agentName);
-                      Get.back();
+                      Get.offAllNamed(INBOX_PAGE);
                     } else {
                       Get.snackbar("", "Something went wrong");
                     }

@@ -64,101 +64,35 @@ class _MainModalState extends State<MainModal> {
     return Container(
       height: 200,
       child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              title: Text(
-                widget.pendingSelected
-                    ? " Resolved Tickets"
-                    : " Pending Tickets",
-                style: TextStyle(fontSize: 14),
-              ),
-              leading: Icon(
-                widget.pendingSelected
-                    ? Icons.check_circle_outline
-                    : Icons.lock_clock,
-                color: Colors.black,
-                size: 25,
-              ),
-              minLeadingWidth: 0.0,
-              contentPadding: EdgeInsets.only(left: 10.0),
-              onTap: () {
-                setState(() async {
-                  widget.pendingSelected = !widget.pendingSelected;
-                  widget.resolvedSelected = !widget.resolvedSelected;
-                  widget.inboxController.isticketsDataAvailable.value = false;
-                  widget.resolvedSelected
-                      ? widget.inboxController.resolved = 1
-                      : widget.inboxController.resolved = 0;
-                  widget.inboxController.getTickets(
-                      order: widget.inboxController.sort,
-                      resolved: widget.inboxController.resolved,
-                      search: "",
-                      channels: _selectedChannelsID!,
-                      agents: _selectedAgentsID!,
-                      groups: [],
-                      tags: _selectedTagsID!,
-                      dates: _selectedTimes!);
-                });
-                widget.onChanged(widget.pendingSelected,
-                    widget.resolvedSelected, widget.sortNew);
-                Get.back();
-              },
-            ),
-            Divider(
-              thickness: 0.5,
-              color: Colors.grey,
-            ),
-            ListTile(
-              contentPadding: EdgeInsets.only(left: 10.0),
-              title: Text(
-                "Filter Tickets",
-                style: TextStyle(fontSize: 14),
-              ),
-              leading: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SvgPicture.asset("assets/launch_icon/filter.svg",
-                    color: Colors.black, height: 15),
-              ),
-              minLeadingWidth: 0.0,
-              onTap: () {
-                showFilterModal(context, widget.channels, widget.agents,
-                    widget.groups, widget.tags);
-              },
-            ),
-            Divider(
-              thickness: 0.5,
-              color: Colors.grey,
-            ),
-            ListTile(
-                contentPadding: EdgeInsets.only(left: 10.0),
-                title: widget.sortNew
-                    ? Text(
-                        "Sort by newest",
-                        style: TextStyle(fontSize: 14),
-                      )
-                    : Text(
-                        "Sort by oldest",
-                        style: TextStyle(fontSize: 14),
-                      ),
-                leading: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SvgPicture.asset(
-                    "assets/launch_icon/descending.svg",
-                    color: Colors.black,
-                    height: 15,
-                  ),
+        child: Scaffold(
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                title: Text(
+                  widget.pendingSelected
+                      ? " Resolved Tickets"
+                      : " Pending Tickets",
+                  style: TextStyle(fontSize: 14),
+                ),
+                leading: Icon(
+                  widget.pendingSelected
+                      ? Icons.check_circle_outline
+                      : Icons.lock_clock,
+                  color: Colors.black,
+                  size: 25,
                 ),
                 minLeadingWidth: 0.0,
-                onTap: () async {
-                  setState(() {
-                    widget.sortNew = !widget.sortNew;
+                contentPadding: EdgeInsets.only(left: 10.0),
+                onTap: () {
+                  setState(() async {
+                    widget.pendingSelected = !widget.pendingSelected;
+                    widget.resolvedSelected = !widget.resolvedSelected;
                     widget.inboxController.isticketsDataAvailable.value = false;
-                    widget.sortNew
-                        ? widget.inboxController.sort = "asc"
-                        : widget.inboxController.sort = "desc";
+                    widget.resolvedSelected
+                        ? widget.inboxController.resolved = 1
+                        : widget.inboxController.resolved = 0;
                     widget.inboxController.getTickets(
                         order: widget.inboxController.sort,
                         resolved: widget.inboxController.resolved,
@@ -172,8 +106,76 @@ class _MainModalState extends State<MainModal> {
                   widget.onChanged(widget.pendingSelected,
                       widget.resolvedSelected, widget.sortNew);
                   Get.back();
-                })
-          ],
+                },
+              ),
+              Divider(
+                thickness: 0.5,
+                color: Colors.grey,
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.only(left: 10.0),
+                title: Text(
+                  "Filter Tickets",
+                  style: TextStyle(fontSize: 14),
+                ),
+                leading: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SvgPicture.asset("assets/launch_icon/filter.svg",
+                      color: Colors.black, height: 15),
+                ),
+                minLeadingWidth: 0.0,
+                onTap: () {
+                  showFilterModal(context, widget.channels, widget.agents,
+                      widget.groups, widget.tags);
+                },
+              ),
+              Divider(
+                thickness: 0.5,
+                color: Colors.grey,
+              ),
+              ListTile(
+                  contentPadding: EdgeInsets.only(left: 10.0),
+                  title: widget.sortNew
+                      ? Text(
+                          "Sort by newest",
+                          style: TextStyle(fontSize: 14),
+                        )
+                      : Text(
+                          "Sort by oldest",
+                          style: TextStyle(fontSize: 14),
+                        ),
+                  leading: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SvgPicture.asset(
+                      "assets/launch_icon/descending.svg",
+                      color: Colors.black,
+                      height: 15,
+                    ),
+                  ),
+                  minLeadingWidth: 0.0,
+                  onTap: () async {
+                    setState(() {
+                      widget.sortNew = !widget.sortNew;
+                      widget.inboxController.isticketsDataAvailable.value = false;
+                      widget.sortNew
+                          ? widget.inboxController.sort = "asc"
+                          : widget.inboxController.sort = "desc";
+                      widget.inboxController.getTickets(
+                          order: widget.inboxController.sort,
+                          resolved: widget.inboxController.resolved,
+                          search: "",
+                          channels: _selectedChannelsID!,
+                          agents: _selectedAgentsID!,
+                          groups: [],
+                          tags: _selectedTagsID!,
+                          dates: _selectedTimes!);
+                    });
+                    widget.onChanged(widget.pendingSelected,
+                        widget.resolvedSelected, widget.sortNew);
+                    Get.back();
+                  })
+            ],
+          ),
         ),
       ),
     );

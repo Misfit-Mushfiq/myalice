@@ -67,11 +67,8 @@ class _ChatDetailsState extends State<ChatDetails>
     _name = args[2];
     _customerId = args[3];
     _agents = args[4];
-    _assignedAgents= args[5];
-    _items = _tags.dataSource!
-        .map((channel) =>
-            MultiSelectItem<TagsDataSource>(channel, channel.name!))
-        .toList();
+    _assignedAgents = args[5];
+    _items = _tags.dataSource!;
     await pusherService.connectPusher('chat-C_$_customerId', "messages");
   }
 
@@ -289,7 +286,6 @@ class _ChatDetailsState extends State<ChatDetails>
   void showModal(BuildContext context) {
     showModalBottomSheet(
         context: context,
-        useRootNavigator: true,
         builder: (context) {
           return MainModal(
             tags: _items,
