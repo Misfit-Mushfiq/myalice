@@ -15,6 +15,7 @@ import 'package:myalice/models/responseModels/tags/data_source.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/models/responseModels/ticketsResponseModels/agent.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/attachments/attachments.dart';
+import 'package:myalice/screens/chatDetails/customWidgets/auto.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/chats/actionText.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/chats/texts.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/modals/assignedModal.dart';
@@ -35,6 +36,7 @@ class _ChatDetailsState extends State<ChatDetails>
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _textEditingController = TextEditingController();
   bool _visiblity = false;
+  bool _spaceVisiblity = false;
   bool _botEnabled = false;
   final _chatboxBottomSheet = GlobalKey<ScaffoldState>();
   late Tags _tags;
@@ -189,7 +191,7 @@ class _ChatDetailsState extends State<ChatDetails>
             color: Colors.white,
             child: Column(
               children: <Widget>[
-                 Expanded(
+                Expanded(
                   child: Obx(() {
                     return ListView.builder(
                       itemCount: Get.find<ChatApiController>().chats.length,
@@ -213,85 +215,109 @@ class _ChatDetailsState extends State<ChatDetails>
                     );
                   }),
                 ),
-                  
                 Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    padding: EdgeInsets.only(bottom: 10, top: 10, right: 10),
-                    width: double.infinity,
-                    color: Colors.white,
-                    child: Row(
-                      children: <Widget>[
-                        IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _visiblity = !_visiblity;
-                              });
-                            },
-                            icon: Icon(
-                              Icons.add,
-                              color: AliceColors.ALICE_GREEN,
-                              size: 20,
-                            )),
-                        SizedBox(
-                          width: 10,
+                    alignment: Alignment.bottomCenter,
+                    child: Column(
+                      children: [
+                        AutoCompleteExample(
+                          onAttachmentTap: (bool visiblity) {
+                            setState(() {
+                              _visiblity = visiblity;
+                              _spaceVisiblity = false;
+                            });
+                            
+                          }, onTextTap: (bool spaceVisiblity) { 
+                            setState(() {
+                              _visiblity = false;
+                              _spaceVisiblity = spaceVisiblity;
+                            });
+                           }, cannedResponse: _cannedResponse,
                         ),
-                        Flexible(
-                          child: TextField(
-                            keyboardType: TextInputType.text,
-                            maxLines: null,
-                            controller: _textEditingController,
-                            decoration: InputDecoration(
-                              hintText: 'Aa',
-                              hintStyle: TextStyle(fontSize: 16),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                  width: 0,
-                                  style: BorderStyle.none,
+                        Visibility(
+                            visible: _spaceVisiblity,
+                            child: Container(
+                              height: 200,
+                            )
+
+                            /* Container(
+                          padding:
+                              EdgeInsets.only(bottom: 10, top: 10, right: 10),
+                          width: double.infinity,
+                          color: Colors.white,
+                          child: Row(
+                            children: <Widget>[
+                              IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _visiblity = !_visiblity;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    Icons.add,
+                                    color: AliceColors.ALICE_GREEN,
+                                    size: 20,
+                                  )),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                child: TextField(
+                                  keyboardType: TextInputType.text,
+                                  maxLines: null,
+                                  controller: _textEditingController,
+                                  decoration: InputDecoration(
+                                    hintText: 'Aa',
+                                    hintStyle: TextStyle(fontSize: 16),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                      borderSide: BorderSide(
+                                        width: 0,
+                                        style: BorderStyle.none,
+                                      ),
+                                    ),
+                                    filled: true,
+                                    contentPadding: EdgeInsets.all(5),
+                                  ),
                                 ),
                               ),
-                              filled: true,
-                              contentPadding: EdgeInsets.all(5),
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            //await pusherService.pusherTrigger('test-event');
-                            animateToScreenEnd();
+                              IconButton(
+                                onPressed: () async {
+                                  //await pusherService.pusherTrigger('test-event');
+                                  animateToScreenEnd();
 
-                            Get.find<ChatApiController>()
-                                .chatResponse
-                                .add(DataSource.fromJson({
-                                  "text": _textEditingController.text,
-                                  "source": "admin",
-                                  "sub_type": "",
-                                  "type": ""
-                                }));
-                            Get.find<ChatApiController>().sendChats(
-                                _ticketId.toString(),
-                                _textEditingController.text,
-                                "");
-                            _textEditingController.text = "";
-                            setState(() {});
-                          },
-                          icon: Icon(
-                            Icons.send,
-                            color: AliceColors.ALICE_GREEN,
-                            size: 20,
+                                  Get.find<ChatApiController>()
+                                      .chatResponse
+                                      .add(DataSource.fromJson({
+                                        "text": _textEditingController.text,
+                                        "source": "admin",
+                                        "sub_type": "",
+                                        "type": ""
+                                      }));
+                                  Get.find<ChatApiController>().sendChats(
+                                      _ticketId.toString(),
+                                      _textEditingController.text,
+                                      "");
+                                  _textEditingController.text = "";
+                                  setState(() {});
+                                },
+                                icon: Icon(
+                                  Icons.send,
+                                  color: AliceColors.ALICE_GREEN,
+                                  size: 20,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
+                       */
+                            )
                       ],
-                    ),
-                  ),
-                ),
+                    )),
                 Visibility(
                     visible: _visiblity,
                     child: Attachments(
-                      ticketId: _ticketId.toString(),
-                      cannedResponse : _cannedResponse
-                    ))
+                        ticketId: _ticketId.toString(),
+                        cannedResponse: _cannedResponse))
               ],
             )));
   }

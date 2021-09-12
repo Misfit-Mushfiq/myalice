@@ -19,6 +19,7 @@ class Attachments extends StatefulWidget {
   _AttachmentsState createState() => _AttachmentsState();
 }
 
+
 class _AttachmentsState extends State<Attachments> {
   final ImagePicker _picker = ImagePicker();
   var imageFile;

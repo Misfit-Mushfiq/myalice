@@ -2,7 +2,7 @@ import 'data_source.dart';
 
 class CannedResponse {
   bool? success;
-  List<DataSource>? dataSource;
+  List<CannedDataSource>? dataSource;
   int? total;
 
   CannedResponse({this.success, this.dataSource, this.total});
@@ -10,7 +10,7 @@ class CannedResponse {
   factory CannedResponse.fromJson(Map<String, dynamic> json) => CannedResponse(
         success: json['success'] as bool?,
         dataSource: (json['dataSource'] as List<dynamic>?)
-            ?.map((e) => DataSource.fromJson(e as Map<String, dynamic>))
+            ?.map((e) => CannedDataSource.fromJson(e as Map<String, dynamic>))
             .toList(),
         total: json['total'] as int?,
       );

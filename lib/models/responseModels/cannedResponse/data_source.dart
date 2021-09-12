@@ -1,6 +1,6 @@
 import 'project.dart';
 
-class DataSource {
+class CannedDataSource {
   int? id;
   int? admin;
   Project? project;
@@ -8,7 +8,7 @@ class DataSource {
   String? text;
   bool? forTeam;
 
-  DataSource({
+  CannedDataSource({
     this.id,
     this.admin,
     this.project,
@@ -17,7 +17,7 @@ class DataSource {
     this.forTeam,
   });
 
-  factory DataSource.fromJson(Map<String, dynamic> json) => DataSource(
+  factory CannedDataSource.fromJson(Map<String, dynamic> json) => CannedDataSource(
         id: json['id'] as int?,
         admin: json['admin'] as int?,
         project: json['project'] == null
