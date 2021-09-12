@@ -140,7 +140,7 @@ class _AutoCompleteExampleState extends State<AutoCompleteExample> {
               child: SingleChildScrollView(
                 physics: NeverScrollableScrollPhysics(),
                 child: Container(
-                  height: 300,
+                  height: 150,
                   color: Colors.white,
                   child: ListView.builder(
                     padding: EdgeInsets.all(10.0),
@@ -155,11 +155,16 @@ class _AutoCompleteExampleState extends State<AutoCompleteExample> {
                           onSelected(option);
                           widget.onTextTap(false);
                         },
-                        child: ListTile(
-                          title: Text("#" + option.title!,
-                              style: const TextStyle(color: Colors.black)),
-                          trailing: Text(option.text!,
-                              style: const TextStyle(color: Colors.grey)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(child:Text("#"+option.title!,style: TextStyle(fontWeight: FontWeight.bold),)),
+                              SizedBox(height: 0,),
+                              Expanded(child: Text(option.text!,style: TextStyle(color: Colors.grey)))
+                            ],
+                          ),
                         ),
                       );
                     },

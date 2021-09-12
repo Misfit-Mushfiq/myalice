@@ -236,7 +236,7 @@ class _ChatDetailsState extends State<ChatDetails>
                         Visibility(
                             visible: _spaceVisiblity,
                             child: Stack(children: [ Container(
-                              height: 300,
+                              height: 150,
                             )],)
 
                             /* Container(
