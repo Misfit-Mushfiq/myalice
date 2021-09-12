@@ -216,7 +216,7 @@ class _ChatDetailsState extends State<ChatDetails>
                   }),
                 ),
                 Align(
-                    alignment: Alignment.bottomCenter,
+                    alignment: Alignment.topCenter,
                     child: Column(
                       children: [
                         AutoCompleteExample(
@@ -235,9 +235,9 @@ class _ChatDetailsState extends State<ChatDetails>
                         ),
                         Visibility(
                             visible: _spaceVisiblity,
-                            child: Container(
-                              height: 200,
-                            )
+                            child: Stack(children: [ Container(
+                              height: 300,
+                            )],)
 
                             /* Container(
                           padding:

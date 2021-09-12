@@ -138,8 +138,9 @@ class _AutoCompleteExampleState extends State<AutoCompleteExample> {
             alignment: Alignment.topCenter,
             child: Material(
               child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
+                physics: NeverScrollableScrollPhysics(),
                 child: Container(
+                  height: 300,
                   color: Colors.white,
                   child: ListView.builder(
                     padding: EdgeInsets.all(10.0),
