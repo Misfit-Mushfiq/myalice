@@ -3,7 +3,9 @@ import 'package:myalice/utils/colors.dart';
 
 class ActionText extends StatefulWidget {
   final text;
-  ActionText({Key? key, required this.text}) : super(key: key);
+  final type;
+  ActionText({Key? key, required this.text, required this.type})
+      : super(key: key);
 
   @override
   _ActionTextState createState() => _ActionTextState();
@@ -21,20 +23,29 @@ class _ActionTextState extends State<ActionText> {
               thickness: 1.5,
             ),
           ),
-          Container(
-              alignment: Alignment.center,
-              child: Text(
-                widget.text,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
+          Expanded(
+            child: Container(
+                alignment: Alignment.center,
+                child: Text(
+                  widget.text,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 13,
+                  ),
                 ),
-              ),
-              decoration: BoxDecoration(
-                  border: Border.all(color: AliceColors.ALICE_GREY, width: 1.5),
-                  borderRadius: BorderRadius.circular(20)),
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5)),
+                decoration: widget.type == "action"? BoxDecoration(
+                  color: Colors.white,
+                    border: Border.all(color: Colors.grey, width: 0.5),
+                    borderRadius: BorderRadius.circular(20)):BoxDecoration(
+                    color:
+                         Colors.white,
+                    border: Border.all(color: Colors.grey, width: 0.5),
+                    borderRadius: BorderRadius.circular(5)),
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5)),
+          ),
           Expanded(
             child: Divider(
               thickness: 1.5,

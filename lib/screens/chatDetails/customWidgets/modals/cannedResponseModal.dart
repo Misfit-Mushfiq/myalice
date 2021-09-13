@@ -35,10 +35,15 @@ class _CannedResponseState extends State<CannedResponseModal> {
       ),
       body: ListView.separated(
           itemBuilder: (context, index) {
-            return ListTile(
-              leading: Text(
-                  "#${widget.cannedResponse.dataSource!.elementAt(index).title}"),
-              trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey),
+            return InkWell(
+              onTap: () {
+                _showResponseEdit(context);
+              },
+              child: ListTile(
+                leading: Text(
+                    "#${widget.cannedResponse.dataSource!.elementAt(index).title}"),
+                trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey),
+              ),
             );
           },
           separatorBuilder: (context, index) {
@@ -48,3 +53,5 @@ class _CannedResponseState extends State<CannedResponseModal> {
     );
   }
 }
+
+

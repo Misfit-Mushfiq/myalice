@@ -230,6 +230,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               showLoader = !showLoader;
                             });
                             _sharedPref.saveString("apiToken", value.access);
+                            _sharedPref.saveString(
+                                "apiRefreshToken", value.refresh);
                             //Get.offNamed('chatDetailsPage');
                             Get.offNamed(INBOX_PAGE);
                           }

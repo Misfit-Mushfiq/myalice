@@ -23,7 +23,7 @@ class Inbox extends StatefulWidget {
 class _InboxState extends State<Inbox> {
   final _inboxBottomSheet = GlobalKey<ScaffoldState>();
 
-  late InboxController _inboxController;
+  InboxController _inboxController = Get.put(InboxController());
   late bool pendingSelected;
   late bool resolvedSelected;
   late bool channelSelected;
@@ -45,7 +45,6 @@ class _InboxState extends State<Inbox> {
 
   @override
   void initState() {
-    _inboxController = Get.put(InboxController());
     readFilterParams();
     super.initState();
   }
@@ -201,7 +200,9 @@ class _InboxState extends State<Inbox> {
                           Future.delayed(const Duration(milliseconds: 500), () {
                             setState(() {});
                           });
-                          setState(() {});
+                          setState(() {
+                            initState();
+                          });
                         });
                       },
                       decoration: InputDecoration(
@@ -227,7 +228,11 @@ class _InboxState extends State<Inbox> {
               return Tickets(
                 tags: _tags,
                 agents: _agents,
-                cannedResponse : _cannedResponse
+                cannedResponse: _cannedResponse,
+                onRefresh: () {
+                  initState();
+                  setState(() {});
+                },
               );
             } else {
               return Center(child: CircularProgressIndicator());

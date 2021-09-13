@@ -10,12 +10,14 @@ class AutoCompleteExample extends StatefulWidget {
   final Function(bool) onAttachmentTap;
   final Function(bool) onTextTap;
   final CannedResponse cannedResponse;
+  final String ticketID;
 
   AutoCompleteExample(
       {Key? key,
       required this.onAttachmentTap,
       required this.onTextTap,
-      required this.cannedResponse})
+      required this.cannedResponse,
+      required this.ticketID})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => _AutoCompleteExampleState();
@@ -50,9 +52,8 @@ class _AutoCompleteExampleState extends State<AutoCompleteExample> {
             FocusNode fieldFocusNode,
             VoidCallback onFieldSubmitted) {
           return Container(
-            padding: EdgeInsets.all(0),
+            padding: EdgeInsets.only(top: 10, bottom: 10),
             width: double.infinity,
-            color: Colors.white,
             child: Row(
               children: <Widget>[
                 IconButton(
@@ -113,8 +114,10 @@ class _AutoCompleteExampleState extends State<AutoCompleteExample> {
                           "sub_type": "",
                           "type": ""
                         }));
-                    /* Get.find<ChatApiController>().sendChats(
-                        _ticketId.toString(),fieldTextEditingController.text, ""); */
+                    Get.find<ChatApiController>().sendChats(
+                        widget.ticketID.toString(),
+                        fieldTextEditingController.text,
+                        "");
                     fieldTextEditingController.text = "";
                     setState(() {});
                   },
@@ -140,7 +143,7 @@ class _AutoCompleteExampleState extends State<AutoCompleteExample> {
               child: SingleChildScrollView(
                 physics: NeverScrollableScrollPhysics(),
                 child: Container(
-                  height: 150,
+                  height: 200,
                   color: Colors.white,
                   child: ListView.builder(
                     padding: EdgeInsets.all(10.0),
@@ -149,7 +152,7 @@ class _AutoCompleteExampleState extends State<AutoCompleteExample> {
                     itemCount: options.length,
                     itemBuilder: (BuildContext context, int index) {
                       final CannedDataSource option = options.elementAt(index);
-              
+
                       return GestureDetector(
                         onTap: () {
                           onSelected(option);
@@ -160,9 +163,19 @@ class _AutoCompleteExampleState extends State<AutoCompleteExample> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Expanded(child:Text("#"+option.title!,style: TextStyle(fontWeight: FontWeight.bold),)),
-                              SizedBox(height: 0,),
-                              Expanded(child: Text(option.text!,style: TextStyle(color: Colors.grey)))
+                              Expanded(
+                                  child: Text(
+                                "#" + option.title!,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              )),
+                              SizedBox(
+                                height: 0,
+                              ),
+                              Expanded(
+                                  child: Text(option.text!,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(color: Colors.grey)))
                             ],
                           ),
                         ),

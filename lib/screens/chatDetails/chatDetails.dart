@@ -207,9 +207,12 @@ class _ChatDetailsState extends State<ChatDetails>
                           animateToScreenEnd();
                         }
                         //print(index);
-                        return obj.chats.elementAt(index)!.type == "action"
+                        return obj.chats.elementAt(index)!.type == "action" ||
+                                obj.chats.elementAt(index)!.type == "note"
                             ? ActionText(
-                                text: obj.chats.elementAt(index)!.text!)
+                                text: obj.chats.elementAt(index)!.text!,
+                                type: obj.chats.elementAt(index)!.type,
+                              )
                             : Texts(object: obj, index: index);
                       },
                     );
@@ -225,19 +228,25 @@ class _ChatDetailsState extends State<ChatDetails>
                               _visiblity = visiblity;
                               _spaceVisiblity = false;
                             });
-                            
-                          }, onTextTap: (bool spaceVisiblity) { 
+                          },
+                          onTextTap: (bool spaceVisiblity) {
                             setState(() {
                               _visiblity = false;
                               _spaceVisiblity = spaceVisiblity;
                             });
-                           }, cannedResponse: _cannedResponse,
+                          },
+                          cannedResponse: _cannedResponse,
+                          ticketID: _ticketId.toString(),
                         ),
                         Visibility(
                             visible: _spaceVisiblity,
-                            child: Stack(children: [ Container(
-                              height: 150,
-                            )],)
+                            child: Stack(
+                              children: [
+                                Container(
+                                  height: 200,
+                                )
+                              ],
+                            )
 
                             /* Container(
                           padding:

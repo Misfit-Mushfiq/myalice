@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:myalice/controllers/apiControllers/baseApiController.dart';
 import 'package:myalice/models/responseModels/chatResponse.dart';
 import 'package:myalice/models/responseModels/imageUpload/image_upload.dart';
+import 'package:myalice/models/responseModels/noteResponse/note_response.dart';
 
 import 'package:myalice/models/responseModels/sendChats/send_data.dart';
 import 'package:myalice/utils/db.dart';
@@ -147,5 +148,15 @@ class ChatApiController extends BaseApiController {
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) =>
             response.statusCode == 200 ? response.data["success"] : null);
+  }
+
+  Future<NoteResponse> saveNote(String note) async {
+    return getDio()!
+        .post("crm/tickets/$id/messenger-chat",
+            data: {"text": note, "image": null, "action": "write_note"},
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((response) => response.statusCode == 200
+            ? NoteResponse.fromJson(response.data)
+            : NoteResponse.fromJson(response.data));
   }
 }

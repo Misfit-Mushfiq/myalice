@@ -7,6 +7,7 @@ import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/models/responseModels/cannedResponse/canned_response.dart';
 import 'package:myalice/models/responseModels/chatResponse.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/modals/cannedResponseModal.dart';
+import 'package:myalice/screens/chatDetails/customWidgets/modals/noteModal.dart';
 import 'package:myalice/utils/colors.dart';
 
 class Attachments extends StatefulWidget {
@@ -18,7 +19,6 @@ class Attachments extends StatefulWidget {
   @override
   _AttachmentsState createState() => _AttachmentsState();
 }
-
 
 class _AttachmentsState extends State<Attachments> {
   final ImagePicker _picker = ImagePicker();
@@ -97,7 +97,7 @@ class _AttachmentsState extends State<Attachments> {
             ),
             InkWell(
               onTap: () {
-                _showCannedResponseModal(context,widget.cannedResponse);
+                _showCannedResponseModal(context, widget.cannedResponse);
               },
               child: Container(
                 height: 60,
@@ -128,30 +128,35 @@ class _AttachmentsState extends State<Attachments> {
                 ),
               ),
             ),
-            Container(
-              height: 60,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  color: AliceColors.ALICE_GREEN),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Icon(
-                      Icons.note,
-                      size: 20,
-                      color: Colors.white,
+            InkWell(
+              onTap: () {
+                _showNoteModal(context);
+              },
+              child: Container(
+                height: 60,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    color: AliceColors.ALICE_GREEN),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: Icon(
+                        Icons.note,
+                        size: 20,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
-                    child: Center(
-                        child: Text(
-                      "Note",
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    )),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(15.0, 5.0, 15.0, 5.0),
+                      child: Center(
+                          child: Text(
+                        "Note",
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                      )),
+                    )
+                  ],
+                ),
               ),
             ),
           ],
@@ -229,12 +234,42 @@ class _AttachmentsState extends State<Attachments> {
         });
   }
 
-  _showCannedResponseModal(BuildContext context,CannedResponse cannedResponse) {
+  _showCannedResponseModal(
+      BuildContext context, CannedResponse cannedResponse) {
     showModalBottomSheet(
         context: context,
         isDismissible: true,
         builder: (context) {
-          return CannedResponseModal(cannedResponse: cannedResponse,);
+          return CannedResponseModal(
+            cannedResponse: cannedResponse,
+          );
+        });
+  }
+
+  _showNoteModal(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        constraints: BoxConstraints(maxHeight: 200),
+        isDismissible: true,
+        builder: (context) {
+          return NoteModal(
+            onSaved: (String note) {
+              
+              Get.find<ChatApiController>().saveNote(note).then((value) {
+                if (value.success!) {
+                  Get.find<ChatApiController>()
+                      .chatResponse
+                      .add(DataSource.fromJson({
+                        "text": note,
+                        "source": value.dataSource!.source!,
+                        "sub_type": value.dataSource!.data!.data!.subType,
+                        "type": value.dataSource!.data!.type,
+                        "image_url": ""
+                      }));
+                }
+              });
+            },
+          );
         });
   }
 

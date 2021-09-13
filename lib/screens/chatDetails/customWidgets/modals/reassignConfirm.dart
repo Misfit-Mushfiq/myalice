@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/chatApiController.dart';
+import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/routes.dart';
 
@@ -100,7 +101,9 @@ class _ReassignConfirmState extends State<ReassignConfirm> {
                       .then((value) {
                     if (value!) {
                       widget.onSaved(widget.agentName);
+
                       Get.offAllNamed(INBOX_PAGE);
+                      Get.put(InboxController());
                     } else {
                       Get.snackbar("", "Something went wrong");
                     }

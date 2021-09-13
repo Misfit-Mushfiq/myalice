@@ -2,18 +2,23 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as pref;
+import 'package:myalice/controllers/apiControllers/chatApiController.dart';
+import 'package:myalice/controllers/apiControllers/inboxController.dart';
+import 'package:myalice/controllers/apiControllers/loginApiController.dart';
 import 'package:myalice/models/responseModels/loginResponse.dart';
 import 'package:myalice/utils/routes.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class LoggingInterceptors extends InterceptorsWrapper {
   int maxCharactersPerLine = 200;
+  SharedPref _sharedPref = SharedPref();
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     debugPrint("--> ${options.method} ${options.baseUrl}${options.path}");
     debugPrint("Content type: ${options.contentType}");
     debugPrint("QueryParams: ${options.queryParameters}");
-    debugPrint("QueryParams: ${options.headers}");
+    debugPrint("Headers: ${options.headers}");
     debugPrint("Data: ${options.data}");
     return super.onRequest(options, handler);
   }
@@ -40,9 +45,9 @@ class LoggingInterceptors extends InterceptorsWrapper {
   }
 
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
+  Future<void> onError(DioError err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
-      pref.Get.offNamed(LOGIN_PAGE);
+      // pref.Get.offNamed(LOGIN_PAGE);
       pref.Get.snackbar(
         err.response!.statusMessage!,
         LoginResponse.fromJson(err.response!.data!).detail!,
@@ -53,6 +58,16 @@ class LoggingInterceptors extends InterceptorsWrapper {
         borderRadius: 50.0,
         snackStyle: pref.SnackStyle.FLOATING,
       );
+      pref.Get.put(LoginApiController());
+      pref.Get.find<LoginApiController>()
+          .refreshToken(await _sharedPref.readString("apiRefreshToken"))
+          .then((value) {
+        _sharedPref.saveString("apiToken", value.access);
+      });
+      pref.Get.find<InboxController>().token =
+          await _sharedPref.readString("apiToken");
+      pref.Get.find<ChatApiController>().token =
+          await _sharedPref.readString("apiToken");
     }
     debugPrint(err.response!.statusMessage);
     debugPrint(

@@ -14,13 +14,21 @@ class Tickets extends GetView<InboxController> {
   final Tags? tags;
   final AvailableAgents? agents;
   final CannedResponse? cannedResponse;
-  Tickets({Key? key, required this.tags, required this.agents,required this.cannedResponse})
+  final Function onRefresh;
+  Tickets(
+      {Key? key,
+      required this.tags,
+      required this.agents,
+      required this.cannedResponse,
+      required this.onRefresh})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       return controller.ticketDataAvailable
           ? Expanded(
+              child: RefreshIndicator(
+              onRefresh: _refreshData,
               child: ListView.builder(
                   shrinkWrap: true,
                   padding: EdgeInsets.zero,
@@ -177,10 +185,11 @@ class Tickets extends GetView<InboxController> {
                                   controller.tickets.dataSource!
                                       .elementAt(index)
                                       .agents,
-                                      cannedResponse
+                                  cannedResponse
                                 ])));
                   },
-                  itemCount: controller.tickets.dataSource!.length))
+                  itemCount: controller.tickets.dataSource!.length),
+            ))
           : Padding(
               padding: const EdgeInsets.all(20.0),
               child: CircularProgressIndicator(),
@@ -215,5 +224,10 @@ class Tickets extends GetView<InboxController> {
     }
 
     return time;
+  }
+
+  Future _refreshData() async {
+    await Future.delayed(Duration(seconds: 3));
+    this.onRefresh();
   }
 }

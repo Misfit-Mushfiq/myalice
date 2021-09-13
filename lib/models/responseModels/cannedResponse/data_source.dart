@@ -17,7 +17,8 @@ class CannedDataSource {
     this.forTeam,
   });
 
-  factory CannedDataSource.fromJson(Map<String, dynamic> json) => CannedDataSource(
+  factory CannedDataSource.fromJson(Map<String, dynamic> json) =>
+      CannedDataSource(
         id: json['id'] as int?,
         admin: json['admin'] as int?,
         project: json['project'] == null
