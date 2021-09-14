@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/models/responseModels/cannedResponse/canned_response.dart';
 import 'package:myalice/models/responseModels/cannedResponse/data_source.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/modals/cannedResponseEdit.dart';
@@ -81,6 +82,7 @@ class _CannedResponseState extends State<CannedResponseModal> {
           return CannedResponsEdit(
             onSaved: (String text, int index) {
               setState(() {
+                Get.find<ChatApiController>().deleteCannedResponse(_dataSource.elementAt(index).id.toString());
                 _dataSource.removeAt(index);
                 SharedPref().saveString(
                     "cannedResponse", CannedDataSource.encode(_dataSource));
