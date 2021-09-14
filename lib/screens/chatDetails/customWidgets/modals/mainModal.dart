@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:multi_select_flutter/util/multi_select_item.dart';
+import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/customWidgets/botButton.dart';
 import 'package:myalice/models/responseModels/tags/data_source.dart';
-import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/models/responseModels/ticketsResponseModels/agent.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/modals/assignedModal.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/modals/tagsModal.dart';
@@ -12,13 +16,17 @@ class MainModal extends StatefulWidget {
   final usedTags;
   final availableTags;
   final agents;
+  final ticketID;
   final List<AssignedAgents> assignAgents;
+  final Function(List<TagsDataSource> tags) onsaVed;
   MainModal(
       {Key? key,
       required this.availableTags,
       required this.agents,
       required this.assignAgents,
-      required this.usedTags})
+      required this.usedTags,
+      required this.onsaVed,
+      required this.ticketID})
       : super(key: key);
 
   @override
@@ -39,10 +47,11 @@ class _MainModalState extends State<MainModal> {
   }
 
   getTags() async {
-    setState(() {
-       _usedTags = widget.usedTags;
-    _selectedTags = _usedTags;
-    });
+    _usedTags = widget.usedTags;
+    _selectedTags = TagsDataSource.decode(
+        await _sharedPref.readString("selectedInboxTags${widget.ticketID}"));
+
+    setState(() {});
   }
 
   @override
@@ -61,8 +70,39 @@ class _MainModalState extends State<MainModal> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Used Tags"),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Text("Used Tags"),
+                      ),
                       Flexible(
+                          flex: 1,
+                          child: MultiSelectChipDisplay<TagsDataSource>(
+                            scroll: true,
+                            scrollBar: HorizontalScrollBar(isAlwaysShown: true),
+                            icon: Icon(
+                              Icons.cancel,
+                              color: Colors.white,
+                              size: 5,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            chipColor: AliceColors.ALICE_SELECTED_CHANNEL,
+                            textStyle: TextStyle(color: Colors.green),
+                            onTap: (item) {
+                              _selectedTags.remove(item);
+                              widget.onsaVed(_selectedTags);
+                              Get.find<ChatApiController>().removeTicketTags(
+                                  action: 'remove',
+                                  name: item.name!,
+                                  tagId: item.id!);
+                              setState(() {});
+                            },
+                            items: _selectedTags
+                                .map((e) => MultiSelectItem(e, e.name!))
+                                .toList(),
+                          ))
+                      /* Flexible(
                         flex: 1,
                         fit: FlexFit.tight,
                         child: GridView.builder(
@@ -94,6 +134,8 @@ class _MainModalState extends State<MainModal> {
                                   mainAxisSpacing: 8.0),
                         ),
                       ),
+                       */
+                      ,
                       Icon(Icons.arrow_forward_ios, color: Colors.grey)
                     ],
                   ),
@@ -124,7 +166,9 @@ class _MainModalState extends State<MainModal> {
                             SizedBox(
                               width: 5,
                             ),
-                            Text(widget.assignAgents.length>0? widget.assignAgents.elementAt(0).fullName!:""),
+                            Text(widget.assignAgents.length > 0
+                                ? widget.assignAgents.elementAt(0).fullName!
+                                : ""),
                             SizedBox(
                               width: 5,
                             ),
@@ -185,10 +229,8 @@ class _MainModalState extends State<MainModal> {
             },
           );
         }).whenComplete(() {
-          setState(() {
-            
-          });
-        });
+      setState(() {});
+    });
   }
 
   void showTagsModal(BuildContext context) {
@@ -200,10 +242,17 @@ class _MainModalState extends State<MainModal> {
             tags: widget.availableTags,
             selectedTags: _selectedTags,
             onsaved: (List<TagsDataSource> selectedTags) {
-              _selectedTags = selectedTags;
+              _selectedTags.addAllIf(selectedTags.any((item) => !_selectedTags.contains(item)), selectedTags);
+              _sharedPref.saveString(
+                  "selectedInboxTags${widget.ticketID.toString()}",
+                  TagsDataSource.encode(_selectedTags));
             },
           );
         }).whenComplete(() {
+      for (int i = 0; i < _selectedTags.length; i++) {
+        Get.find<ChatApiController>().addTicketTags("add",
+            _selectedTags.elementAt(i).name!, _selectedTags.elementAt(i).id!);
+      }
       setState(() {});
     });
   }

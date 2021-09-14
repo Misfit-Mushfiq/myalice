@@ -5,10 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
 import 'package:myalice/models/responseModels/cannedResponse/canned_response.dart';
+import 'package:myalice/models/responseModels/tags/data_source.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/platform_icon.dart';
 import 'package:myalice/utils/routes.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class Tickets extends GetView<InboxController> {
   final Tags? availableTags;
@@ -33,6 +35,14 @@ class Tickets extends GetView<InboxController> {
                   shrinkWrap: true,
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
+                    SharedPref().saveString(
+                                  "selectedInboxTags${controller.tickets.dataSource!
+                                    .elementAt(index)
+                                    .id.toString()}",
+                                  TagsDataSource.encode(controller
+                                      .tickets.dataSource!
+                                      .elementAt(index)
+                                      .tags!));
                     return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
@@ -166,30 +176,31 @@ class Tickets extends GetView<InboxController> {
                                 )
                               ],
                             ),
-                            onTap: () =>
-                                Get.toNamed(CHAT_DETAILS_PAGE, arguments: [
-                                  availableTags,
-                                  controller.tickets.dataSource!
-                                      .elementAt(index)
-                                      .id,
-                                  controller.tickets.dataSource!
-                                      .elementAt(index)
-                                      .customer!
-                                      .fullName,
-                                  controller.tickets.dataSource!
-                                      .elementAt(index)
-                                      .customer!
-                                      .id
-                                      .toString(),
-                                  agents,
-                                  controller.tickets.dataSource!
-                                      .elementAt(index)
-                                      .agents,
-                                  cannedResponse,
-                                  controller.tickets.dataSource!
-                                      .elementAt(index)
-                                      .tags
-                                ])));
+                            onTap: () {
+                              Get.toNamed(CHAT_DETAILS_PAGE, arguments: [
+                                availableTags,
+                                controller.tickets.dataSource!
+                                    .elementAt(index)
+                                    .id,
+                                controller.tickets.dataSource!
+                                    .elementAt(index)
+                                    .customer!
+                                    .fullName,
+                                controller.tickets.dataSource!
+                                    .elementAt(index)
+                                    .customer!
+                                    .id
+                                    .toString(),
+                                agents,
+                                controller.tickets.dataSource!
+                                    .elementAt(index)
+                                    .agents,
+                                cannedResponse,
+                                controller.tickets.dataSource!
+                                    .elementAt(index)
+                                    .tags
+                              ]);
+                            }));
                   },
                   itemCount: controller.tickets.dataSource!.length),
             ))

@@ -132,7 +132,8 @@ class ChatApiController extends BaseApiController {
             response.statusCode == 200 ? response.data["success"] : null);
   }
 
-  Future<bool?> removeTicketTags(String action, String name, int tagId) async {
+  Future<bool?> removeTicketTags(
+      {required String action,required String name, required int tagId}) async {
     return getDio()!
         .post("crm/tickets/$id/tag",
             data: {"action": action, "name": name, "id": tagId},

@@ -23,6 +23,7 @@ import 'package:myalice/screens/chatDetails/customWidgets/modals/mainModal.dart'
 import 'package:myalice/screens/chatDetails/customWidgets/modals/tagsModal.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/routes.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class ChatDetails extends StatefulWidget {
   @override
@@ -47,6 +48,7 @@ class _ChatDetailsState extends State<ChatDetails>
   late int _ticketId;
   late String _name;
   late String _customerId;
+  SharedPref _sharedPref = SharedPref();
 
   //List<Animal> _selectedChannels = [];
   List<Object?> _selectedChannels2 = [];
@@ -82,6 +84,8 @@ class _ChatDetailsState extends State<ChatDetails>
     _assignedAgents = args[5];
     _cannedResponse = args[6];
     _usedTags = args[7];
+/*     _sharedPref.saveString(
+                  "selectedInboxTags", TagsDataSource.encode(_usedTags)); */
     await pusherService.connectPusher('chat-C_$_customerId', "messages");
   }
 
@@ -336,6 +340,11 @@ class _ChatDetailsState extends State<ChatDetails>
         context: context,
         builder: (context) {
           return MainModal(
+            onsaVed: (items) {
+              _sharedPref.saveString("selectedInboxTags${_ticketId.toString()}",
+                  TagsDataSource.encode(items));
+            },
+            ticketID:_ticketId,
             agents: _agents,
             assignAgents: _assignedAgents,
             availableTags: _availableTags.dataSource,

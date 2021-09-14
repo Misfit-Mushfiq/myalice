@@ -9,7 +9,7 @@ import 'package:myalice/utils/shared_pref.dart';
 
 class InboxTagsModal extends StatefulWidget {
   final List<TagsDataSource> tags;
-  final List<TagsDataSource>? selectedTags;
+  final List<TagsDataSource> selectedTags;
   final Function(List<TagsDataSource> selectedTags) onsaved;
   InboxTagsModal(
       {Key? key,
@@ -39,11 +39,16 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
         .toList();
     _lists = [widget.tags, widget.selectedTags];
 
-    _commonElements = _lists.fold<Set>(
-        _lists.first!.toSet(), (a, b) => a.intersection(b!.toSet()));
-    _commonElements.forEach((element) {
-      print(element.id);
-    });
+    /*  _commonElements = widget.tags.removeWhere((item) => !widget.selectedTags.contains(item)); 
+
+    List l1 = [1, 2, 3, 55, 7, 99, 21];
+  List l2 = [1, 4, 7, 65, 99, 20, 21];
+  List l3 = [0, 2, 6, 7, 21, 99, 26];
+
+  l1.removeWhere((item) => !l2.contains(item));
+  //l1.removeWhere((item) => !l3.contains(item));
+
+  print(l1); */
   }
 
   @override
@@ -105,13 +110,11 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
         Wrap(
           children: [
             Container(
-                child: MultiSelectChipField(
+                child: MultiSelectChipField<TagsDataSource>(
               items: _tags,
               showHeader: false,
               scroll: false,
-              initialValue:widget.tags.where((element){
-                return element.id==162;
-              }).toList(),
+              //initialValue:widget.selectedTags, 
               headerColor: Colors.white,
               chipShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5)),
@@ -120,10 +123,9 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
               searchable: true,
               selectedTextStyle: TextStyle(color: Colors.white),
               onTap: (values) {
-/*                 widget.onsaved(values);
-                _pref.saveString(
-                    "selectedInboxTags", TagsDataSource.encode(values));
-                addTag(values); */
+                widget.onsaved(values);
+                
+                addTag(values);
               },
               icon: Icon(
                 Icons.cancel,
@@ -137,9 +139,6 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
   }
 
   addTag(List<TagsDataSource> values) {
-    /* for(int i=0;i<1;i++) {
-      Get.find<ChatApiController>()
-          .addTicketTags("add", element.name!, element.id!);
-    } */
+    
   }
 }
