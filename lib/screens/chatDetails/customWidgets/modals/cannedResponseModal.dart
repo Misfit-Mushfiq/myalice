@@ -15,7 +15,7 @@ class CannedResponseModal extends StatefulWidget {
 }
 
 class _CannedResponseState extends State<CannedResponseModal> {
-  List<CannedDataSource>? _dataSource = [];
+  List<CannedDataSource> _dataSource = <CannedDataSource>[];
   @override
   void initState() {
     init();
@@ -31,51 +31,61 @@ class _CannedResponseState extends State<CannedResponseModal> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.0,
-        leading: IconButton(
-            onPressed: () {
-              Get.back();
-            },
-            icon: Icon(
-              Icons.arrow_back_ios_new,
-              color: Colors.grey,
-            )),
-        title: Text(
-          "Canned Response",
-          style: TextStyle(color: Colors.black),
-        ),
-        centerTitle: false,
-        leadingWidth: 25.0,
-      ),
-      body: ListView.separated(
-          itemBuilder: (context, index) {
-            return InkWell(
-              onTap: () {
-                _showResponseEdit(context,_dataSource!.elementAt(index).title!,_dataSource!.elementAt(index).text!,index);
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0.0,
+          leading: IconButton(
+              onPressed: () {
+                Get.back();
               },
-              child: ListTile(
-                leading: Text("#${_dataSource!.elementAt(index).title}"),
-                trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey),
-              ),
-            );
-          },
-          separatorBuilder: (context, index) {
-            return Divider(thickness: 0.8);
-          },
-          itemCount: widget.cannedResponse.dataSource!.length),
-    );
+              icon: Icon(
+                Icons.arrow_back_ios_new,
+                color: Colors.grey,
+              )),
+          title: Text(
+            "Canned Response",
+            style: TextStyle(color: Colors.black),
+          ),
+          centerTitle: false,
+          leadingWidth: 25.0,
+        ),
+        body: ListView.separated(
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  _showResponseEdit(
+                      context,
+                      _dataSource!.elementAt(index).title!,
+                      _dataSource!.elementAt(index).text!,
+                      index);
+                },
+                child: ListTile(
+                  leading: Text("#${_dataSource!.elementAt(index).title}"),
+                  trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey),
+                ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return Divider(thickness: 0.8);
+            },
+            itemCount: _dataSource.length));
   }
 
-  _showResponseEdit(BuildContext context,String title,String text, int index) {
+  _showResponseEdit(
+      BuildContext context, String title, String text, int index) {
     showModalBottomSheet(
         context: context,
         constraints: BoxConstraints(maxHeight: 800),
         backgroundColor: Colors.white,
         builder: (context) {
           return CannedResponsEdit(
-            onSaved: (String text) {},
+            onSaved: (String text, int index) {
+              setState(() {
+                _dataSource.removeAt(index);
+                SharedPref().saveString(
+                    "cannedResponse", CannedDataSource.encode(_dataSource));
+              });
+            },
             body: text,
             index: index,
             title: title,

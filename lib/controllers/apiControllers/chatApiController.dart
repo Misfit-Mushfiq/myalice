@@ -160,4 +160,11 @@ class ChatApiController extends BaseApiController {
             ? NoteResponse.fromJson(response.data)
             : NoteResponse.fromJson(response.data));
   }
+  Future<bool?> deleteCannedResponse(String responseID) async {
+    return getDio()!
+        .delete("crm/projects/$id/canned-responses/$responseID",
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((response) =>
+            response.statusCode == 200 ? response.data["success"] : null);
+  }
 }

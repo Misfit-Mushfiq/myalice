@@ -4,7 +4,7 @@ import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/utils/colors.dart';
 
 class CannedResponsEdit extends StatefulWidget {
-  final Function(String text) onSaved;
+  final Function(String text, int index) onSaved;
   final title;
   final body;
   final index;
@@ -55,7 +55,7 @@ class _CannedResponEditState extends State<CannedResponsEdit> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      widget.onSaved(text);
+                      widget.onSaved(text, widget.index);
                     },
                     child: Text("Save"),
                     style: ElevatedButton.styleFrom(
@@ -64,7 +64,8 @@ class _CannedResponEditState extends State<CannedResponsEdit> {
                 )),
             IconButton(
                 onPressed: () {
-                  // Get.find<ChatApiController>().saveno
+                  widget.onSaved(text, widget.index);
+                  Get.back();
                 },
                 icon: Icon(Icons.delete, color: Colors.grey))
           ],
@@ -72,10 +73,11 @@ class _CannedResponEditState extends State<CannedResponsEdit> {
         body: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(widget.title),
+                  child: Text("#" + widget.title),
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -88,20 +90,22 @@ class _CannedResponEditState extends State<CannedResponsEdit> {
                       elevation: 0.0,
                       child: Padding(
                         padding: EdgeInsets.all(8.0),
-                        child: TextField(
+                        child: TextFormField(
                           maxLines: null,
-                          autocorrect: true,
+                          initialValue: widget.body,
                           onChanged: (String value) {
                             if (value.isNotEmpty) {
-                              setState(() {
-                                _visiblity = true;
-                                text = value;
-                              });
-                            } else {
-                              setState(() {
-                                _visiblity = false;
-                                text = value;
-                              });
+                              if (widget.body != value) {
+                                setState(() {
+                                  _visiblity = true;
+                                  text = value;
+                                });
+                              } else {
+                                setState(() {
+                                  _visiblity = false;
+                                  text = value;
+                                });
+                              }
                             }
                           },
                           decoration: InputDecoration.collapsed(
@@ -110,51 +114,44 @@ class _CannedResponEditState extends State<CannedResponsEdit> {
                       )),
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Flexible(
                       flex: 1,
-                      child: InkWell(
-                        onTap: (){
-                          print(_team);
-                        },
-                        child: Row(
-                          children: [
-                            Radio<bool>(
-                                value: true,
-                                groupValue: _team,
-                                onChanged: (index) {
-                                  setState(() {
-                                    _team = index!;
-                                  });
-                                }),
-                            Expanded(
-                                child: Text(
-                              'For Team',
-                              maxLines: 2,
-                            ))
-                          ],
-                        ),
+                      child: Row(
+                        children: [
+                          Radio<bool>(
+                              activeColor: AliceColors.ALICE_GREEN,
+                              value: true,
+                              groupValue: _team,
+                              onChanged: (index) {
+                                setState(() {
+                                  _team = index!;
+                                });
+                              }),
+                          Expanded(
+                              child: Text(
+                            'For Team',
+                            maxLines: 2,
+                          ))
+                        ],
                       ),
                     ),
                     Flexible(
-                      flex: 1,
-                      child: InkWell(
-                        onTap: () {
-                          print(_team);
-                        },
-                        child: Row(
-                          children: [
-                            Radio<bool>(
-                                value: false,
-                                groupValue: _team,
-                                onChanged: (index) {
-                                  setState(() {
-                                    _team = index!;
-                                  });
-                                }),
-                            Text('For Individual')
-                          ],
-                        ),
+                      flex: 2,
+                      child: Row(
+                        children: [
+                          Radio<bool>(
+                              activeColor: AliceColors.ALICE_GREEN,
+                              value: false,
+                              groupValue: _team,
+                              onChanged: (index) {
+                                setState(() {
+                                  _team = index!;
+                                });
+                              }),
+                          Text('For Individual')
+                        ],
                       ),
                     ),
                   ],
