@@ -58,8 +58,6 @@ class _InboxState extends State<Inbox> {
     _agents = (await _inboxController.getAvailableAgents())!;
     _groups = (await _inboxController.getAvailableGroups())!;
     _cannedResponse = (await _inboxController.getCannedResponse())!;
-    _sharedPref.saveString(
-        "cannedResponse", CannedDataSource.encode(_cannedResponse.dataSource!));
     _availableTags = (await _inboxController.getTicketTags().whenComplete(() {
       setState(() {
         isTagsAvailable.value = true;

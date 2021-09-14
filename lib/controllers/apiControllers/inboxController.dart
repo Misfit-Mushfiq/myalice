@@ -6,6 +6,7 @@ import 'package:myalice/models/responseModels/UserResponse.dart';
 import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
 import 'package:myalice/models/responseModels/availableGroups/available_groups.dart';
 import 'package:myalice/models/responseModels/cannedResponse/canned_response.dart';
+import 'package:myalice/models/responseModels/cannedResponse/data_source.dart';
 import 'package:myalice/models/responseModels/channels/channels.dart';
 import 'package:myalice/models/responseModels/projectsModels/projects.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
@@ -166,8 +167,13 @@ class InboxController extends BaseApiController {
     return getDio()!
         .get(_cannedResponsePath,
             options: Options(headers: {"Authorization": "Token $token"}))
-        .then((response) => response.statusCode == 200
-            ? CannedResponse.fromJson(response.data)
-            : null);
+        .then((response) {
+      if (response.statusCode == 200) {
+        var cannedResponse = CannedResponse.fromJson(response.data);
+        SharedPref().saveString(
+            "cannedResponse", CannedDataSource.encode(cannedResponse.dataSource!));
+        return cannedResponse;
+      }
+    });
   }
 }

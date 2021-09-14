@@ -133,7 +133,9 @@ class ChatApiController extends BaseApiController {
   }
 
   Future<bool?> removeTicketTags(
-      {required String action,required String name, required int tagId}) async {
+      {required String action,
+      required String name,
+      required int tagId}) async {
     return getDio()!
         .post("crm/tickets/$id/tag",
             data: {"action": action, "name": name, "id": tagId},
@@ -160,9 +162,29 @@ class ChatApiController extends BaseApiController {
             ? NoteResponse.fromJson(response.data)
             : NoteResponse.fromJson(response.data));
   }
+
   Future<bool?> deleteCannedResponse(String responseID) async {
     return getDio()!
         .delete("crm/projects/$id/canned-responses/$responseID",
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((response) =>
+            response.statusCode == 200 ? response.data["success"] : null);
+  }
+
+  Future<bool?> editCannedResponse(
+      String responseID, String title, String body, bool team) async {
+    return getDio()!
+        .patch("crm/projects/$id/canned-responses/$responseID",
+            data: {"title": title, "text": body, "for_team": team},
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((response) =>
+            response.statusCode == 200 ? response.data["success"] : null);
+  }
+
+  Future<bool?> addCannedResponse(String title, String body, bool team) async {
+    return getDio()!
+        .post("crm/projects/81/canned-responses",
+            data: {"title": title, "text": body, "for_team": team,"teamId":"81"},
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) =>
             response.statusCode == 200 ? response.data["success"] : null);

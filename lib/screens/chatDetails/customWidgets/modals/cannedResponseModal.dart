@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/chatApiController.dart';
+import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/models/responseModels/cannedResponse/canned_response.dart';
 import 'package:myalice/models/responseModels/cannedResponse/data_source.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/modals/cannedResponseEdit.dart';
+import 'package:myalice/screens/chatDetails/customWidgets/modals/newCannedResponse.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
 class CannedResponseModal extends StatefulWidget {
@@ -17,6 +19,7 @@ class CannedResponseModal extends StatefulWidget {
 
 class _CannedResponseState extends State<CannedResponseModal> {
   List<CannedDataSource> _dataSource = <CannedDataSource>[];
+  late int? _responseID;
   @override
   void initState() {
     init();
@@ -45,8 +48,41 @@ class _CannedResponseState extends State<CannedResponseModal> {
               )),
           title: Text(
             "Canned Response",
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.black, fontSize: 16),
           ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: InkWell(
+                  onTap: () {
+                    _showNewResponse(context);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.add,
+                            size: 20,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            "New Response",
+                            style: TextStyle(fontSize: 12, color: Colors.black),
+                          )
+                        ],
+                      ),
+                    ),
+                  )),
+            )
+          ],
           centerTitle: false,
           leadingWidth: 25.0,
         ),
@@ -58,7 +94,8 @@ class _CannedResponseState extends State<CannedResponseModal> {
                       context,
                       _dataSource!.elementAt(index).title!,
                       _dataSource!.elementAt(index).text!,
-                      index);
+                      index,
+                      _dataSource!.elementAt(index).forTeam!);
                 },
                 child: ListTile(
                   leading: Text("#${_dataSource!.elementAt(index).title}"),
@@ -73,24 +110,84 @@ class _CannedResponseState extends State<CannedResponseModal> {
   }
 
   _showResponseEdit(
-      BuildContext context, String title, String text, int index) {
+      BuildContext context, String title, String text, int index, bool team) {
     showModalBottomSheet(
         context: context,
         constraints: BoxConstraints(maxHeight: 800),
         backgroundColor: Colors.white,
         builder: (context) {
           return CannedResponsEdit(
-            onSaved: (String text, int index) {
+            onDelete: (int index) {
               setState(() {
-                Get.find<ChatApiController>().deleteCannedResponse(_dataSource.elementAt(index).id.toString());
-                _dataSource.removeAt(index);
-                SharedPref().saveString(
-                    "cannedResponse", CannedDataSource.encode(_dataSource));
+                try {
+                  Get.find<ChatApiController>()
+                      .deleteCannedResponse(
+                          _dataSource.elementAt(index).id.toString())
+                      .then((value) {
+                    if (value!) {
+                      _dataSource.removeAt(index);
+                      SharedPref().saveString("cannedResponse",
+                          CannedDataSource.encode(_dataSource));
+                    }
+                  });
+                } catch (e) {}
               });
             },
             body: text,
             index: index,
             title: title,
+            team: team,
+            onSaved: (String title, String body, bool team, int index) {
+              try {
+                Get.find<ChatApiController>()
+                    .editCannedResponse(
+                        _dataSource.elementAt(index).id.toString(),
+                        title,
+                        body,
+                        team)
+                    .then((value) {
+                  if (value!) {
+                    _responseID = _dataSource.elementAt(index).id;
+                    _dataSource.removeAt(index);
+                    _dataSource.insert(
+                        index,
+                        CannedDataSource(
+                            id: _responseID,
+                            title: title,
+                            text: body,
+                            forTeam: team));
+                    SharedPref().saveString(
+                        "cannedResponse", CannedDataSource.encode(_dataSource));
+                  }
+                });
+              } catch (e) {}
+            },
+          );
+        }).whenComplete(() {
+      setState(() {});
+    });
+  }
+
+  _showNewResponse(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        constraints: BoxConstraints(maxHeight: 800),
+        backgroundColor: Colors.white,
+        builder: (context) {
+          return NewCannedResponse(
+            onSaved: (String title, String body, bool team) {
+              Get.find<ChatApiController>()
+                  .addCannedResponse(title, body, team)
+                  .then((value) {
+                if (value!) {
+                  _dataSource.add(CannedDataSource(
+                      title: title, text: body, forTeam: team));
+                  SharedPref().saveString(
+                      "cannedResponse", CannedDataSource.encode(_dataSource));
+                  Get.find<InboxController>().getCannedResponse();
+                }
+              });
+            },
           );
         }).whenComplete(() {
       setState(() {});

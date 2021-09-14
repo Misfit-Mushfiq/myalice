@@ -1,40 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myalice/controllers/apiControllers/chatApiController.dart';
 import 'package:myalice/utils/colors.dart';
 
-class CannedResponsEdit extends StatefulWidget {
-  final Function(int index) onDelete;
-  final Function(String title, String body, bool team, int index) onSaved;
-  final title;
-  final body;
-  final index;
-  final team;
-  CannedResponsEdit(
+class NewCannedResponse extends StatefulWidget {
+  final Function(String title, String body, bool team) onSaved;
+  NewCannedResponse(
       {Key? key,
-      required this.onDelete,
-      required this.onSaved,
-      required this.body,
-      required this.index,
-      required this.title,
-      required this.team})
+      required this.onSaved})
       : super(key: key);
 
   @override
-  _CannedResponEditState createState() => _CannedResponEditState();
+  _NewCannedResponseState createState() => _NewCannedResponseState();
 }
 
-class _CannedResponEditState extends State<CannedResponsEdit> {
+class _NewCannedResponseState extends State<NewCannedResponse> {
   bool _visiblity = false;
   String _text = '';
   String _title = '';
-  late bool _team;
+  bool _team=false;
 
   @override
   void initState() {
-    _text = widget.body;
-    _title = widget.title;
-    _team = widget.team;
     super.initState();
   }
 
@@ -68,21 +54,14 @@ class _CannedResponEditState extends State<CannedResponsEdit> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     onPressed: () {
-                       Get.back();
-                      widget.onSaved(_title, _text, _team, widget.index);
-                     
+                      widget.onSaved(_title, _text, _team);
+                      Get.back();
                     },
                     child: Text("Save"),
                     style: ElevatedButton.styleFrom(
                         primary: AliceColors.ALICE_GREEN),
                   ),
                 )),
-            IconButton(
-                onPressed: () {
-                  widget.onDelete(widget.index);
-                  Get.back();
-                },
-                icon: Icon(Icons.delete, color: Colors.grey))
           ],
         ),
         body: Padding(
@@ -100,24 +79,22 @@ class _CannedResponEditState extends State<CannedResponsEdit> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextFormField(
                         maxLines: 1,
-                        initialValue: widget.title,
                         onChanged: (String value) {
                           if (value.isNotEmpty) {
-                            if (widget.title != value) {
-                              setState(() {
+                            setState(() {
                                 _visiblity = true;
                                 _title = value;
                               });
-                            } else {
-                              setState(() {
+                          } else{
+                            setState(() {
                                 _visiblity = false;
                                 _title = value;
                               });
-                            }
                           }
                         },
                         decoration: InputDecoration.collapsed(
-                            hintText: "Enter your text here"),
+                            hintText: "e.g. payment",
+                            hintStyle: TextStyle(fontSize: 14)),
                       ),
                     ),
                   ),
@@ -135,24 +112,22 @@ class _CannedResponEditState extends State<CannedResponsEdit> {
                         padding: EdgeInsets.all(8.0),
                         child: TextFormField(
                           maxLines: null,
-                          initialValue: widget.body,
                           onChanged: (String value) {
                             if (value.isNotEmpty) {
-                              if (widget.body != value) {
-                                setState(() {
-                                  _visiblity = true;
-                                  _text = value;
-                                });
-                              } else {
-                                setState(() {
-                                  _visiblity = false;
-                                  _text = value;
-                                });
-                              }
-                            }
+                            setState(() {
+                                _visiblity = true;
+                                _text = value;
+                              });
+                          } else{
+                            setState(() {
+                                _visiblity = false;
+                                _text = value;
+                              });
+                          }
                           },
                           decoration: InputDecoration.collapsed(
-                              hintText: "Enter your text here"),
+                               hintText: "e.g. We can only accept payment",
+                            hintStyle: TextStyle(fontSize: 15)),
                         ),
                       )),
                 ),
@@ -200,7 +175,8 @@ class _CannedResponEditState extends State<CannedResponsEdit> {
                       ),
                     ),
                   ],
-                ) ],
+                )
+              ],
             )),
       ),
     );
