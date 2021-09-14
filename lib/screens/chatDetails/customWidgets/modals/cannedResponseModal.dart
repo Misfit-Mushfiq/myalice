@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/models/responseModels/cannedResponse/canned_response.dart';
+import 'package:myalice/models/responseModels/cannedResponse/data_source.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/modals/cannedResponseEdit.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
 class CannedResponseModal extends StatefulWidget {
   final CannedResponse cannedResponse;
@@ -13,6 +15,19 @@ class CannedResponseModal extends StatefulWidget {
 }
 
 class _CannedResponseState extends State<CannedResponseModal> {
+  List<CannedDataSource>? _dataSource = [];
+  @override
+  void initState() {
+    init();
+    super.initState();
+  }
+
+  init() async {
+    _dataSource = CannedDataSource.decode(
+        await SharedPref().readString("cannedResponse"));
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,11 +53,10 @@ class _CannedResponseState extends State<CannedResponseModal> {
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                _showResponseEdit(context);
+                _showResponseEdit(context,_dataSource!.elementAt(index).title!,_dataSource!.elementAt(index).text!,index);
               },
               child: ListTile(
-                leading: Text(
-                    "#${widget.cannedResponse.dataSource!.elementAt(index).title}"),
+                leading: Text("#${_dataSource!.elementAt(index).title}"),
                 trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey),
               ),
             );
@@ -53,20 +67,21 @@ class _CannedResponseState extends State<CannedResponseModal> {
           itemCount: widget.cannedResponse.dataSource!.length),
     );
   }
-   _showResponseEdit(BuildContext context) {
+
+  _showResponseEdit(BuildContext context,String title,String text, int index) {
     showModalBottomSheet(
         context: context,
-        constraints: BoxConstraints(maxHeight: 250),
+        constraints: BoxConstraints(maxHeight: 800),
         backgroundColor: Colors.white,
         builder: (context) {
-          return CannedResponsEdit(onSaved: (String text) {  },
-           
+          return CannedResponsEdit(
+            onSaved: (String text) {},
+            body: text,
+            index: index,
+            title: title,
           );
         }).whenComplete(() {
       setState(() {});
     });
   }
-  
 }
-
-

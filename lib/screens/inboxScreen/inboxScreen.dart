@@ -7,6 +7,7 @@ import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
 import 'package:myalice/models/responseModels/availableGroups/available_groups.dart';
 import 'package:myalice/models/responseModels/cannedResponse/canned_response.dart';
+import 'package:myalice/models/responseModels/cannedResponse/data_source.dart';
 import 'package:myalice/models/responseModels/channels/channels.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/mainModal.dart';
@@ -57,6 +58,8 @@ class _InboxState extends State<Inbox> {
     _agents = (await _inboxController.getAvailableAgents())!;
     _groups = (await _inboxController.getAvailableGroups())!;
     _cannedResponse = (await _inboxController.getCannedResponse())!;
+    _sharedPref.saveString(
+        "cannedResponse", CannedDataSource.encode(_cannedResponse.dataSource!));
     _availableTags = (await _inboxController.getTicketTags().whenComplete(() {
       setState(() {
         isTagsAvailable.value = true;

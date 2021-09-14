@@ -124,8 +124,6 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
               selectedTextStyle: TextStyle(color: Colors.white),
               onTap: (values) {
                 widget.onsaved(values);
-                
-                addTag(values);
               },
               icon: Icon(
                 Icons.cancel,
@@ -136,9 +134,5 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
         )
       ],
     ));
-  }
-
-  addTag(List<TagsDataSource> values) {
-    
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'project.dart';
 
 class CannedDataSource {
@@ -37,4 +39,28 @@ class CannedDataSource {
         'text': text,
         'for_team': forTeam,
       };
+
+
+        static Map<String, dynamic> toMap(CannedDataSource tags) => {
+        'id': tags.id,
+        'admin': tags.admin,
+        'project': tags.project?.toJson(),
+        'title': tags.title,
+        'text': tags.text,
+        'for_team': tags.forTeam,
+      };
+
+      static String encode(List<CannedDataSource> tagsList) => json.encode(
+        tagsList
+            .map<Map<String, dynamic>>((tags) => CannedDataSource.toMap(tags))
+            .toList(),
+      );
+
+  static List<CannedDataSource> decode(String tags) {
+    return tags != null
+        ? (json.decode(tags) ?? [])
+            .map<CannedDataSource>((item) => CannedDataSource.fromJson(item))
+            .toList()
+        : [];
+  }
 }
