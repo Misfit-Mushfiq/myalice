@@ -189,4 +189,13 @@ class ChatApiController extends BaseApiController {
         .then((response) =>
             response.statusCode == 200 ? response.data["success"] : null);
   }
+
+  Future<bool?> resolveTicket() async {
+    return getDio()!
+        .post("crm/tickets/$id/action-resolve",
+            data: {"status":true},
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((response) =>
+            response.statusCode == 200 ? response.data["success"] : null);
+  }
 }

@@ -121,19 +121,37 @@ class _ChatDetailsState extends State<ChatDetails>
                   Get.back();
                 },
               ),
-              CircleAvatar(),
-              SizedBox(
-                width: 5,
-              ),
               Flexible(
-                child: Text(
-                  _name,
-                  style: TextStyle(
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black,
-                      fontSize: 16),
+                flex: 4,
+                child: InkWell(
+                  onTap: () {
+                    Get.toNamed(CUSTOMER_PROFILE_PAGE);
+                  },
+                  child: Row(
+                    children: [
+                      CircleAvatar(radius: 18,),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Expanded(
+                        child: Text(
+                          _name,
+                          style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              color: Colors.black,
+                              fontSize: 16,
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
+              Flexible(
+                  flex: 1,
+                  child: SizedBox(
+                    width:2,
+                  ))
             ],
           ),
           centerTitle: false,
@@ -142,6 +160,13 @@ class _ChatDetailsState extends State<ChatDetails>
             Row(
               children: [
                 InkWell(
+                  onTap: () {
+                    Get.find<ChatApiController>().resolveTicket().then((value) {
+                      if (value!) {
+                        Get.toNamed(INBOX_PAGE);
+                      }
+                    });
+                  },
                   child: Container(
                       child: Text(
                         'Resolve',
@@ -152,9 +177,9 @@ class _ChatDetailsState extends State<ChatDetails>
                           color: AliceColors.ALICE_GREEN,
                           borderRadius: BorderRadius.circular(5)),
                       padding:
-                          EdgeInsets.symmetric(horizontal: 5, vertical: 5)),
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 8)),
                 ),
-                SizedBox(width: 5),
+                SizedBox(width: 15),
                 IconButton(
                   constraints: BoxConstraints(),
                   padding: EdgeInsets.zero,
@@ -169,18 +194,6 @@ class _ChatDetailsState extends State<ChatDetails>
                 ),
                 SizedBox(
                   width: 5,
-                ),
-                IconButton(
-                  constraints: BoxConstraints(),
-                  padding: EdgeInsets.zero,
-                  icon: Icon(
-                    Icons.info_outline,
-                    size: 20,
-                  ),
-                  color: AliceColors.ALICE_GREEN,
-                  onPressed: () {
-                    Get.toNamed(CUSTOMER_PROFILE_PAGE);
-                  },
                 ),
                 SizedBox(
                   width: 8,
@@ -344,7 +357,7 @@ class _ChatDetailsState extends State<ChatDetails>
               _sharedPref.saveString("selectedInboxTags${_ticketId.toString()}",
                   TagsDataSource.encode(items));
             },
-            ticketID:_ticketId,
+            ticketID: _ticketId,
             agents: _agents,
             assignAgents: _assignedAgents,
             availableTags: _availableTags.dataSource,
