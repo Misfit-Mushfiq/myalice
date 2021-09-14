@@ -114,7 +114,7 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
               items: _tags,
               showHeader: false,
               scroll: false,
-              //initialValue:widget.selectedTags, 
+              //initialValue:widget.selectedTags,
               headerColor: Colors.white,
               chipShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5)),

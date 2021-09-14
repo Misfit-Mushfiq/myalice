@@ -56,7 +56,7 @@ class DataSource {
         agents: (json['agents'] as List<dynamic>?)
             ?.map((e) => AssignedAgents.fromJson(e as Map<String, dynamic>))
             .toList(),
-         tags: (json['tags'] as List<dynamic>?)
+        tags: (json['tags'] as List<dynamic>?)
             ?.map((e) => TagsDataSource.fromJson(e as Map<String, dynamic>))
             .toList(),
         groups: json['groups'] as List<dynamic>?,

@@ -24,18 +24,18 @@ class NoteResponse {
 class NoteDataSource {
   var nId;
   int? timestamp;
-  int ?customerId;
-  int ?platformId;
-  int ?projectId;
+  int? customerId;
+  int? platformId;
+  int? projectId;
   String? platformType;
   String? conversationId;
-  Data ?data;
-  String ?source;
+  Data? data;
+  String? source;
   String? type;
-  int ?adminId;
+  int? adminId;
   AdminInfo? adminInfo;
-  bool ?success;
-  String ?pusherKey;
+  bool? success;
+  String? pusherKey;
 
   NoteDataSource(
       {this.nId,
@@ -119,7 +119,7 @@ class Data {
 
 class NData {
   String? subType;
-  String ?text;
+  String? text;
 
   NData({this.subType, this.text});
 
@@ -139,8 +139,8 @@ class NData {
 class AdminInfo {
   int? id;
   String? email;
-  String ?avatar;
-  String ?fullName;
+  String? avatar;
+  String? fullName;
 
   AdminInfo({this.id, this.email, this.avatar, this.fullName});
 

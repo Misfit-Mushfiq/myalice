@@ -86,6 +86,7 @@ class _ChatDetailsState extends State<ChatDetails>
     _usedTags = args[7];
 /*     _sharedPref.saveString(
                   "selectedInboxTags", TagsDataSource.encode(_usedTags)); */
+
     await pusherService.connectPusher('chat-C_$_customerId', "messages");
   }
 
@@ -106,7 +107,9 @@ class _ChatDetailsState extends State<ChatDetails>
   @override
   Widget build(BuildContext context) {
     final obj = Get.put(ChatApiController());
+    obj.updateCustomerID(int.parse(_customerId));
     obj.updateID(_ticketId);
+
     return Scaffold(
         key: _chatboxBottomSheet,
         appBar: AppBar(
@@ -129,7 +132,9 @@ class _ChatDetailsState extends State<ChatDetails>
                   },
                   child: Row(
                     children: [
-                      CircleAvatar(radius: 18,),
+                      CircleAvatar(
+                        radius: 18,
+                      ),
                       SizedBox(
                         width: 5,
                       ),
@@ -150,7 +155,7 @@ class _ChatDetailsState extends State<ChatDetails>
               Flexible(
                   flex: 1,
                   child: SizedBox(
-                    width:2,
+                    width: 2,
                   ))
             ],
           ),
@@ -359,6 +364,7 @@ class _ChatDetailsState extends State<ChatDetails>
             },
             ticketID: _ticketId,
             agents: _agents,
+            customerID: _customerId,
             assignAgents: _assignedAgents,
             availableTags: _availableTags.dataSource,
             usedTags: _usedTags,

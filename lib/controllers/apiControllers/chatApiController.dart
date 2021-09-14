@@ -8,6 +8,7 @@ import 'package:myalice/models/responseModels/imageUpload/image_upload.dart';
 import 'package:myalice/models/responseModels/noteResponse/note_response.dart';
 
 import 'package:myalice/models/responseModels/sendChats/send_data.dart';
+import 'package:myalice/models/responseModels/ticketMeta/customer_meta.dart';
 import 'package:myalice/utils/db.dart';
 import 'package:myalice/utils/shared_pref.dart';
 import 'package:http_parser/http_parser.dart';
@@ -21,16 +22,22 @@ class ChatApiController extends BaseApiController {
   final SharedPref _sharedPref = SharedPref();
   late String? token;
   int id = 0;
+  int customerID = 0;
   int get getId => id;
+  int get getCustomerID => customerID;
   @override
   Future<void> onInit() async {
     super.onInit();
     token = await _sharedPref.readString("apiToken");
+    getMeta(customerID: getCustomerID.toString());
     getChats(getId.toString());
   }
 
   void updateID(var ticketsID) {
     id = ticketsID;
+  }
+  void updateCustomerID(var id) {
+    customerID = id;
   }
 
   void getChats(String id) async {
@@ -184,7 +191,12 @@ class ChatApiController extends BaseApiController {
   Future<bool?> addCannedResponse(String title, String body, bool team) async {
     return getDio()!
         .post("crm/projects/81/canned-responses",
-            data: {"title": title, "text": body, "for_team": team,"teamId":"81"},
+            data: {
+              "title": title,
+              "text": body,
+              "for_team": team,
+              "teamId": "81"
+            },
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) =>
             response.statusCode == 200 ? response.data["success"] : null);
@@ -193,9 +205,30 @@ class ChatApiController extends BaseApiController {
   Future<bool?> resolveTicket() async {
     return getDio()!
         .post("crm/tickets/$id/action-resolve",
-            data: {"status":true},
+            data: {"status": true},
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) =>
             response.statusCode == 200 ? response.data["success"] : null);
+  }
+
+  Future<bool?> actionBot(bool status) async {
+    return getDio()!
+        .post("crm/tickets/$id/action-bot",
+            data: {"status": status},
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((response) =>
+            response.statusCode == 200 ? response.data["success"] : null);
+  }
+
+  Future<CustomerMeta?> getMeta({String? customerID}) async {
+    return getDio()!
+        .get("bots/customers/$customerID/meta",
+            options: Options(headers: {"Authorization": "Token $token"}))
+        .then((response) {
+      if (response.statusCode == 200) {
+        var meta = CustomerMeta.fromJson(response.data);
+        SharedPref().saveBool("bot${meta.data!.id}", meta.data!.botEnabled!);
+      }
+    });
   }
 }

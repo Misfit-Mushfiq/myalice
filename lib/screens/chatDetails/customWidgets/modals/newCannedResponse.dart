@@ -4,10 +4,7 @@ import 'package:myalice/utils/colors.dart';
 
 class NewCannedResponse extends StatefulWidget {
   final Function(String title, String body, bool team) onSaved;
-  NewCannedResponse(
-      {Key? key,
-      required this.onSaved})
-      : super(key: key);
+  NewCannedResponse({Key? key, required this.onSaved}) : super(key: key);
 
   @override
   _NewCannedResponseState createState() => _NewCannedResponseState();
@@ -17,7 +14,7 @@ class _NewCannedResponseState extends State<NewCannedResponse> {
   bool _visiblity = false;
   String _text = '';
   String _title = '';
-  bool _team=false;
+  bool _team = false;
 
   @override
   void initState() {
@@ -82,14 +79,14 @@ class _NewCannedResponseState extends State<NewCannedResponse> {
                         onChanged: (String value) {
                           if (value.isNotEmpty) {
                             setState(() {
-                                _visiblity = true;
-                                _title = value;
-                              });
-                          } else{
+                              _visiblity = true;
+                              _title = value;
+                            });
+                          } else {
                             setState(() {
-                                _visiblity = false;
-                                _title = value;
-                              });
+                              _visiblity = false;
+                              _title = value;
+                            });
                           }
                         },
                         decoration: InputDecoration.collapsed(
@@ -114,20 +111,20 @@ class _NewCannedResponseState extends State<NewCannedResponse> {
                           maxLines: null,
                           onChanged: (String value) {
                             if (value.isNotEmpty) {
-                            setState(() {
+                              setState(() {
                                 _visiblity = true;
                                 _text = value;
                               });
-                          } else{
-                            setState(() {
+                            } else {
+                              setState(() {
                                 _visiblity = false;
                                 _text = value;
                               });
-                          }
+                            }
                           },
                           decoration: InputDecoration.collapsed(
-                               hintText: "e.g. We can only accept payment",
-                            hintStyle: TextStyle(fontSize: 15)),
+                              hintText: "e.g. We can only accept payment",
+                              hintStyle: TextStyle(fontSize: 15)),
                         ),
                       )),
                 ),

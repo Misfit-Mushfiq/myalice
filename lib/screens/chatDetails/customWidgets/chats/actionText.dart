@@ -36,14 +36,15 @@ class _ActionTextState extends State<ActionText> {
                     fontSize: 13,
                   ),
                 ),
-                decoration: widget.type == "action"? BoxDecoration(
-                  color: Colors.white,
-                    border: Border.all(color: Colors.grey, width: 0.5),
-                    borderRadius: BorderRadius.circular(20)):BoxDecoration(
-                    color:
-                         Colors.white,
-                    border: Border.all(color: Colors.grey, width: 0.5),
-                    borderRadius: BorderRadius.circular(5)),
+                decoration: widget.type == "action"
+                    ? BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.grey, width: 0.5),
+                        borderRadius: BorderRadius.circular(20))
+                    : BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.grey, width: 0.5),
+                        borderRadius: BorderRadius.circular(5)),
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5)),
           ),
           Expanded(

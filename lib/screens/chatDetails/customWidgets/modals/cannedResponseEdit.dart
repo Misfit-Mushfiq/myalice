@@ -68,9 +68,8 @@ class _CannedResponEditState extends State<CannedResponsEdit> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                     onPressed: () {
-                       Get.back();
+                      Get.back();
                       widget.onSaved(_title, _text, _team, widget.index);
-                     
                     },
                     child: Text("Save"),
                     style: ElevatedButton.styleFrom(
@@ -200,7 +199,8 @@ class _CannedResponEditState extends State<CannedResponsEdit> {
                       ),
                     ),
                   ],
-                ) ],
+                )
+              ],
             )),
       ),
     );

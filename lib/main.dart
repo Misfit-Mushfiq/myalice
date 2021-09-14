@@ -30,8 +30,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
       theme: ThemeData(
-
-        
         textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
       ),
       getPages: [

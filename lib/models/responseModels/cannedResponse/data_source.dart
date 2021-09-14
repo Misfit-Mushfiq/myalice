@@ -40,8 +40,7 @@ class CannedDataSource {
         'for_team': forTeam,
       };
 
-
-        static Map<String, dynamic> toMap(CannedDataSource tags) => {
+  static Map<String, dynamic> toMap(CannedDataSource tags) => {
         'id': tags.id,
         'admin': tags.admin,
         'project': tags.project?.toJson(),
@@ -50,7 +49,7 @@ class CannedDataSource {
         'for_team': tags.forTeam,
       };
 
-      static String encode(List<CannedDataSource> tagsList) => json.encode(
+  static String encode(List<CannedDataSource> tagsList) => json.encode(
         tagsList
             .map<Map<String, dynamic>>((tags) => CannedDataSource.toMap(tags))
             .toList(),

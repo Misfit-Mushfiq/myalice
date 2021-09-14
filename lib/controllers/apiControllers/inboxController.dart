@@ -170,8 +170,8 @@ class InboxController extends BaseApiController {
         .then((response) {
       if (response.statusCode == 200) {
         var cannedResponse = CannedResponse.fromJson(response.data);
-        SharedPref().saveString(
-            "cannedResponse", CannedDataSource.encode(cannedResponse.dataSource!));
+        SharedPref().saveString("cannedResponse",
+            CannedDataSource.encode(cannedResponse.dataSource!));
         return cannedResponse;
       }
     });

@@ -36,13 +36,10 @@ class Tickets extends GetView<InboxController> {
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
                     SharedPref().saveString(
-                                  "selectedInboxTags${controller.tickets.dataSource!
-                                    .elementAt(index)
-                                    .id.toString()}",
-                                  TagsDataSource.encode(controller
-                                      .tickets.dataSource!
-                                      .elementAt(index)
-                                      .tags!));
+                        "selectedInboxTags${controller.tickets.dataSource!.elementAt(index).id.toString()}",
+                        TagsDataSource.encode(controller.tickets.dataSource!
+                            .elementAt(index)
+                            .tags!));
                     return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(

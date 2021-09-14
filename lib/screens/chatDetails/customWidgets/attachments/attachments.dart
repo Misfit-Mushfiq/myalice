@@ -254,7 +254,6 @@ class _AttachmentsState extends State<Attachments> {
         builder: (context) {
           return NoteModal(
             onSaved: (String note) {
-              
               Get.find<ChatApiController>().saveNote(note).then((value) {
                 if (value.success!) {
                   Get.find<ChatApiController>()

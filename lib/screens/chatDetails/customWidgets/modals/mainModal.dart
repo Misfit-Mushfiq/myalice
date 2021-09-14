@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
@@ -17,6 +18,7 @@ class MainModal extends StatefulWidget {
   final availableTags;
   final agents;
   final ticketID;
+  final customerID;
   final List<AssignedAgents> assignAgents;
   final Function(List<TagsDataSource> tags) onsaVed;
   MainModal(
@@ -26,7 +28,8 @@ class MainModal extends StatefulWidget {
       required this.assignAgents,
       required this.usedTags,
       required this.onsaVed,
-      required this.ticketID})
+      required this.ticketID,
+      required this.customerID})
       : super(key: key);
 
   @override
@@ -34,11 +37,11 @@ class MainModal extends StatefulWidget {
 }
 
 class _MainModalState extends State<MainModal> {
-  bool _botEnabled = false;
   late List<TagsDataSource> _selectedTags;
   List<TagsDataSource> _usedTags = [];
   SharedPref _sharedPref = SharedPref();
   String _selectedAgent = '';
+  late bool _botEnabled = false;
 
   @override
   void initState() {
@@ -48,6 +51,7 @@ class _MainModalState extends State<MainModal> {
 
   getTags() async {
     _usedTags = widget.usedTags;
+    _botEnabled = await _sharedPref.readBool("bot${widget.customerID}");
     _selectedTags = TagsDataSource.decode(
         await _sharedPref.readString("selectedInboxTags${widget.ticketID}"));
 
@@ -160,9 +164,10 @@ class _MainModalState extends State<MainModal> {
                         ),
                         Row(
                           children: [
-                            CircleAvatar(
+                           widget.assignAgents.length > 0? CircleAvatar(
+                             backgroundImage: CachedNetworkImageProvider(widget.assignAgents.elementAt(0).avatar!),
                               radius: 10,
-                            ),
+                            ):Container(),
                             SizedBox(
                               width: 5,
                             ),
@@ -201,6 +206,14 @@ class _MainModalState extends State<MainModal> {
                             switchValue: _botEnabled,
                             valueChanged: (value) {
                               _botEnabled = value;
+                              Get.find<ChatApiController>()
+                                  .actionBot(value)
+                                  .then((value) {
+                                if (value!) {
+                                  _sharedPref.saveBool(
+                                      "bot${widget.customerID}", _botEnabled);
+                                }
+                              });
                             },
                           )
                         ],
@@ -242,7 +255,9 @@ class _MainModalState extends State<MainModal> {
             tags: widget.availableTags,
             selectedTags: _selectedTags,
             onsaved: (List<TagsDataSource> selectedTags) {
-              _selectedTags.addAllIf(selectedTags.any((item) => !_selectedTags.contains(item)), selectedTags);
+              _selectedTags.addAllIf(
+                  selectedTags.any((item) => !_selectedTags.contains(item)),
+                  selectedTags);
               _sharedPref.saveString(
                   "selectedInboxTags${widget.ticketID.toString()}",
                   TagsDataSource.encode(_selectedTags));
