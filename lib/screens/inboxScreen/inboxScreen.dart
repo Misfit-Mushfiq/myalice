@@ -32,7 +32,7 @@ class _InboxState extends State<Inbox> {
   late Channels _channels;
   late AvailableAgents _agents;
   late AvailableGroups _groups;
-  late Tags _tags;
+  late Tags _availableTags;
   late CannedResponse _cannedResponse;
   var isTagsAvailable = false.obs;
   bool get tagsAvailable => isTagsAvailable.value;
@@ -57,7 +57,7 @@ class _InboxState extends State<Inbox> {
     _agents = (await _inboxController.getAvailableAgents())!;
     _groups = (await _inboxController.getAvailableGroups())!;
     _cannedResponse = (await _inboxController.getCannedResponse())!;
-    _tags = (await _inboxController.getTicketTags().whenComplete(() {
+    _availableTags = (await _inboxController.getTicketTags().whenComplete(() {
       setState(() {
         isTagsAvailable.value = true;
       });
@@ -121,7 +121,7 @@ class _InboxState extends State<Inbox> {
                                           channels: _channels,
                                           agents: _agents,
                                           groups: _groups,
-                                          tags: _tags,
+                                          tags: _availableTags,
                                           inboxController:
                                               Get.find<InboxController>(),
                                           pendingSelected: pendingSelected,
@@ -226,7 +226,7 @@ class _InboxState extends State<Inbox> {
           Obx(() {
             if (tagsAvailable) {
               return Tickets(
-                tags: _tags,
+                availableTags: _availableTags,
                 agents: _agents,
                 cannedResponse: _cannedResponse,
                 onRefresh: () {

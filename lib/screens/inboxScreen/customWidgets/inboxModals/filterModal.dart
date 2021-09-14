@@ -366,7 +366,7 @@ class _FilterModalState extends State<FilterModal> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text("Tags",
+                        Text("TagsDataSource",
                             style: TextStyle(
                               fontWeight: _selectedTags.length <= 0
                                   ? FontWeight.normal

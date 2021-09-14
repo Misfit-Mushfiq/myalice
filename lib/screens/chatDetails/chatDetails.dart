@@ -39,11 +39,11 @@ class _ChatDetailsState extends State<ChatDetails>
   bool _spaceVisiblity = false;
   bool _botEnabled = false;
   final _chatboxBottomSheet = GlobalKey<ScaffoldState>();
-  late Tags _tags;
+  late Tags _availableTags;
+  late List<TagsDataSource> _usedTags;
   late AvailableAgents _agents;
   late CannedResponse _cannedResponse;
   late List<AssignedAgents> _assignedAgents;
-  late var _items;
   late int _ticketId;
   late String _name;
   late String _customerId;
@@ -74,14 +74,14 @@ class _ChatDetailsState extends State<ChatDetails>
   Future<void> init() async {
     pusherService = PusherService();
     var args = Get.arguments;
-    _tags = args[0];
+    _availableTags = args[0];
     _ticketId = args[1];
     _name = args[2];
     _customerId = args[3];
     _agents = args[4];
     _assignedAgents = args[5];
-    _items = _tags.dataSource!;
     _cannedResponse = args[6];
+    _usedTags = args[7];
     await pusherService.connectPusher('chat-C_$_customerId', "messages");
   }
 
@@ -336,9 +336,10 @@ class _ChatDetailsState extends State<ChatDetails>
         context: context,
         builder: (context) {
           return MainModal(
-            tags: _items,
             agents: _agents,
             assignAgents: _assignedAgents,
+            availableTags: _availableTags.dataSource,
+            usedTags: _usedTags,
           );
         });
   }

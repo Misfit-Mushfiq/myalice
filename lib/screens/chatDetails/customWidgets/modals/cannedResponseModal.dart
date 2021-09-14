@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/models/responseModels/cannedResponse/canned_response.dart';
+import 'package:myalice/screens/chatDetails/customWidgets/modals/cannedResponseEdit.dart';
 
 class CannedResponseModal extends StatefulWidget {
   final CannedResponse cannedResponse;
@@ -52,6 +53,20 @@ class _CannedResponseState extends State<CannedResponseModal> {
           itemCount: widget.cannedResponse.dataSource!.length),
     );
   }
+   _showResponseEdit(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        constraints: BoxConstraints(maxHeight: 250),
+        backgroundColor: Colors.white,
+        builder: (context) {
+          return CannedResponsEdit(onSaved: (String text) {  },
+           
+          );
+        }).whenComplete(() {
+      setState(() {});
+    });
+  }
+  
 }
 
 

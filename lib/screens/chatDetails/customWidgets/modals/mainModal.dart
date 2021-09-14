@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:myalice/controllers/apiControllers/chatApiController.dart';
-import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/customWidgets/botButton.dart';
 import 'package:myalice/models/responseModels/tags/data_source.dart';
+import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/models/responseModels/ticketsResponseModels/agent.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/modals/assignedModal.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/modals/tagsModal.dart';
@@ -11,14 +9,16 @@ import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
 class MainModal extends StatefulWidget {
-  final tags;
+  final usedTags;
+  final availableTags;
   final agents;
   final List<AssignedAgents> assignAgents;
   MainModal(
       {Key? key,
-      required this.tags,
+      required this.availableTags,
       required this.agents,
-      required this.assignAgents})
+      required this.assignAgents,
+      required this.usedTags})
       : super(key: key);
 
   @override
@@ -27,7 +27,8 @@ class MainModal extends StatefulWidget {
 
 class _MainModalState extends State<MainModal> {
   bool _botEnabled = false;
-  List<TagsDataSource> _selectedTags = [];
+  late List<TagsDataSource> _selectedTags;
+  List<TagsDataSource> _usedTags = [];
   SharedPref _sharedPref = SharedPref();
   String _selectedAgent = '';
 
@@ -38,10 +39,10 @@ class _MainModalState extends State<MainModal> {
   }
 
   getTags() async {
-    _selectedTags = TagsDataSource.decode(
-            await _sharedPref.readString("selectedInboxTags")) ??
-        [];
-    setState(() {});
+    setState(() {
+       _usedTags = widget.usedTags;
+    _selectedTags = _usedTags;
+    });
   }
 
   @override
@@ -123,7 +124,7 @@ class _MainModalState extends State<MainModal> {
                             SizedBox(
                               width: 5,
                             ),
-                            Text(widget.assignAgents.elementAt(0).fullName!),
+                            Text(widget.assignAgents.length>0? widget.assignAgents.elementAt(0).fullName!:""),
                             SizedBox(
                               width: 5,
                             ),
@@ -183,7 +184,11 @@ class _MainModalState extends State<MainModal> {
               _selectedAgent = selectedAgent;
             },
           );
-        }).whenComplete(() {});
+        }).whenComplete(() {
+          setState(() {
+            
+          });
+        });
   }
 
   void showTagsModal(BuildContext context) {
@@ -192,7 +197,7 @@ class _MainModalState extends State<MainModal> {
         backgroundColor: Colors.white,
         builder: (context) {
           return InboxTagsModal(
-            tags: widget.tags,
+            tags: widget.availableTags,
             selectedTags: _selectedTags,
             onsaved: (List<TagsDataSource> selectedTags) {
               _selectedTags = selectedTags;

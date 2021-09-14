@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/utils/colors.dart';
 
-class CannedResponEdit extends StatefulWidget {
+class CannedResponsEdit extends StatefulWidget {
   final Function(String text) onSaved;
-  CannedResponEdit({Key? key, required this.onSaved}) : super(key: key);
+  CannedResponsEdit({Key? key, required this.onSaved}) : super(key: key);
 
   @override
   _CannedResponEditState createState() => _CannedResponEditState();
 }
 
-class _CannedResponEditState extends State<CannedResponEdit> {
+class _CannedResponEditState extends State<CannedResponsEdit> {
   bool _visiblity = false;
   String text = '';
 

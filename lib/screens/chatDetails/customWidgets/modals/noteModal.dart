@@ -45,6 +45,7 @@ class _NoteModalState extends State<NoteModal> {
                   child: ElevatedButton(
                     onPressed: () {
                       widget.onSaved(text);
+                      Get.back();
                     },
                     child: Text("Save"),
                     style: ElevatedButton.styleFrom(

@@ -41,7 +41,7 @@ class ChatDataBase {
     final List<Map<String, dynamic>> maps = await db!.query('chats');
 
     maps.forEach((element) {
-      print("BAAL::" + element.toString());
+      print( element.toString());
     });
     // Convert the List<Map<String, dynamic> into a List<Dog>.
     return List.generate(maps.length, (i) {

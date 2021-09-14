@@ -9,7 +9,7 @@ import 'package:myalice/utils/shared_pref.dart';
 
 class InboxTagsModal extends StatefulWidget {
   final List<TagsDataSource> tags;
-  final List<TagsDataSource> selectedTags;
+  final List<TagsDataSource>? selectedTags;
   final Function(List<TagsDataSource> selectedTags) onsaved;
   InboxTagsModal(
       {Key? key,
@@ -24,8 +24,9 @@ class InboxTagsModal extends StatefulWidget {
 
 class _InboxTagsModalState extends State<InboxTagsModal> {
   SharedPref _pref = SharedPref();
-  var _selectedTags = <TagsDataSource>[];
   var _tags;
+  var _lists = <List<TagsDataSource>?>[];
+  var _commonElements;
   @override
   void initState() {
     getTags();
@@ -33,12 +34,15 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
   }
 
   getTags() async {
-    _selectedTags = widget.selectedTags;
     _tags = widget.tags
         .map((animal) => MultiSelectItem<TagsDataSource>(animal, animal.name!))
         .toList();
-    widget.selectedTags.forEach((element) {
-      print(element.name);
+    _lists = [widget.tags, widget.selectedTags];
+
+    _commonElements = _lists.fold<Set>(
+        _lists.first!.toSet(), (a, b) => a.intersection(b!.toSet()));
+    _commonElements.forEach((element) {
+      print(element.id);
     });
   }
 
@@ -83,7 +87,7 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
                             width: 5,
                           ),
                           Text(
-                            "Add New Tags",
+                            "Add New TagsDataSource",
                             style: TextStyle(fontSize: 12),
                           )
                         ],
@@ -101,11 +105,13 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
         Wrap(
           children: [
             Container(
-                child: MultiSelectChipField<TagsDataSource>(
+                child: MultiSelectChipField(
               items: _tags,
               showHeader: false,
               scroll: false,
-              initialValue: _selectedTags,
+              initialValue:widget.tags.where((element){
+                return element.id==162;
+              }).toList(),
               headerColor: Colors.white,
               chipShape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5)),
@@ -114,10 +120,10 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
               searchable: true,
               selectedTextStyle: TextStyle(color: Colors.white),
               onTap: (values) {
-                widget.onsaved(values);
+/*                 widget.onsaved(values);
                 _pref.saveString(
                     "selectedInboxTags", TagsDataSource.encode(values));
-                addTag(values);
+                addTag(values); */
               },
               icon: Icon(
                 Icons.cancel,

@@ -1,3 +1,4 @@
+import 'package:myalice/models/responseModels/tags/data_source.dart';
 import 'package:myalice/models/responseModels/ticketsResponseModels/agent.dart';
 
 import 'customer.dart';
@@ -12,7 +13,7 @@ class DataSource {
   bool? isReplied;
   Customer? customer;
   List<AssignedAgents>? agents;
-  List<dynamic>? tags;
+  List<TagsDataSource>? tags;
   List<dynamic>? groups;
   bool? isResolved;
   dynamic resolvedAt;
@@ -55,7 +56,9 @@ class DataSource {
         agents: (json['agents'] as List<dynamic>?)
             ?.map((e) => AssignedAgents.fromJson(e as Map<String, dynamic>))
             .toList(),
-        tags: json['tags'] as List<dynamic>?,
+         tags: (json['tags'] as List<dynamic>?)
+            ?.map((e) => TagsDataSource.fromJson(e as Map<String, dynamic>))
+            .toList(),
         groups: json['groups'] as List<dynamic>?,
         isResolved: json['is_resolved'] as bool?,
         resolvedAt: json['resolved_at'],
