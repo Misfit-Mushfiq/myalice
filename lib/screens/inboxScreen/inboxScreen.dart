@@ -30,11 +30,8 @@ class _InboxState extends State<Inbox> {
   late bool channelSelected;
   late bool sortNew;
   final SharedPref _sharedPref = SharedPref();
-  late Channels _channels;
-  late AvailableAgents _agents;
-  late AvailableGroups _groups;
-  late Tags _availableTags;
-  late CannedResponse _cannedResponse;
+ 
+  
   var isTagsAvailable = false.obs;
   bool get tagsAvailable => isTagsAvailable.value;
   List<String>? _selectedAgentsID = [];
@@ -54,15 +51,7 @@ class _InboxState extends State<Inbox> {
     pendingSelected = await _sharedPref.readBool("pendingSelected") ?? true;
     resolvedSelected = await _sharedPref.readBool("resolvedSelected") ?? false;
     sortNew = await _sharedPref.readBool('sortNew') ?? false;
-    _channels = (await _inboxController.getChannels())!;
-    _agents = (await _inboxController.getAvailableAgents())!;
-    _groups = (await _inboxController.getAvailableGroups())!;
-    _cannedResponse = (await _inboxController.getCannedResponse())!;
-    _availableTags = (await _inboxController.getTicketTags().whenComplete(() {
-      setState(() {
-        isTagsAvailable.value = true;
-      });
-    }))!;
+
     _selectedChannelsID =
         await _sharedPref.readStringList("selectedChannelsID") ?? [];
     _selectedAgentsID =
@@ -119,10 +108,10 @@ class _InboxState extends State<Inbox> {
                                       isDismissible: true,
                                       builder: (context) {
                                         return MainModal(
-                                          channels: _channels,
-                                          agents: _agents,
-                                          groups: _groups,
-                                          tags: _availableTags,
+                                          channels: _inboxController.channels,
+                                          agents: _inboxController.agents,
+                                          groups: _inboxController.groups,
+                                          tags: _inboxController.tags,
                                           inboxController:
                                               Get.find<InboxController>(),
                                           pendingSelected: pendingSelected,
@@ -227,9 +216,9 @@ class _InboxState extends State<Inbox> {
           Obx(() {
             if (tagsAvailable) {
               return Tickets(
-                availableTags: _availableTags,
-                agents: _agents,
-                cannedResponse: _cannedResponse,
+                availableTags: _inboxController.tags,
+                agents: _inboxController.agents,
+                cannedResponse: _inboxController.cannedResponse,
                 onRefresh: () {
                   initState();
                   setState(() {});

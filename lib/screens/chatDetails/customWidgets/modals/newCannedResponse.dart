@@ -66,6 +66,7 @@ class _NewCannedResponseState extends State<NewCannedResponse> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text("Title"),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Container(
@@ -96,6 +97,7 @@ class _NewCannedResponseState extends State<NewCannedResponse> {
                     ),
                   ),
                 ),
+                Text("Response"),
                 Container(
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),

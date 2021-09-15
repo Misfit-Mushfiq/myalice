@@ -48,7 +48,7 @@ class LoggingInterceptors extends InterceptorsWrapper {
   Future<void> onError(DioError err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
       // pref.Get.offNamed(LOGIN_PAGE);
-      pref.Get.snackbar(
+     /*  pref.Get.snackbar(
         err.response!.statusMessage!,
         LoginResponse.fromJson(err.response!.data!).detail!,
         backgroundColor: Colors.red,
@@ -57,7 +57,7 @@ class LoggingInterceptors extends InterceptorsWrapper {
         margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
         borderRadius: 50.0,
         snackStyle: pref.SnackStyle.FLOATING,
-      );
+      ); */
       pref.Get.put(LoginApiController());
       pref.Get.find<LoginApiController>()
           .refreshToken(await _sharedPref.readString("apiRefreshToken"))

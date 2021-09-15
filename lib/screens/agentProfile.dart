@@ -4,26 +4,40 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/customWidgets/botButton.dart';
 import 'package:myalice/models/responseModels/UserResponse.dart';
+import 'package:myalice/models/responseModels/projectsModels/projects.dart';
 import 'package:myalice/utils/colors.dart';
+import 'package:myalice/utils/shared_pref.dart';
 
-class UserProfile extends StatefulWidget {
-  UserProfile({Key? key}) : super(key: key);
+class AgentProfile extends StatefulWidget {
+  AgentProfile({Key? key}) : super(key: key);
 
   @override
   _UserProfileState createState() => _UserProfileState();
 }
 
-class _UserProfileState extends State<UserProfile> {
+class _UserProfileState extends State<AgentProfile> {
   bool active_show = false;
   bool _pushNotification = false;
   bool _incomingTickets = false;
   bool _incomingMesaage = false;
   late UserInfoResponse _userInfoResponse;
+  late Projects _projects;
+  late String _projectName;
+  SharedPref _sharedPref = SharedPref();
 
   @override
   void initState() {
     super.initState();
-    _userInfoResponse = Get.arguments;
+    _userInfoResponse = Get.arguments[0];
+    _projects = Get.arguments[1];
+    getProjectName();
+  }
+
+  getProjectName() async {
+    _projectName = await _sharedPref.readString("projectName") ??
+        _projects.dataSource!.elementAt(0).name!;
+        setState(() {
+        });
   }
 
   @override
@@ -66,14 +80,19 @@ class _UserProfileState extends State<UserProfile> {
                       style: TextStyle(fontSize: 16),
                     ),
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _showTeamModal(context, _projects);
+                        },
                         style: TextButton.styleFrom(
                             backgroundColor: AliceColors.ALICE_GREY,
                             padding: EdgeInsets.all(2.0),
                             elevation: 1.0),
-                        child: Text(
-                          "Team",
-                          style: TextStyle(color: Colors.black),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            _projectName,
+                            style: TextStyle(color: Colors.black),
+                          ),
                         )),
                     Text(_userInfoResponse.dataSource!.email!),
                     SizedBox(
@@ -111,7 +130,7 @@ class _UserProfileState extends State<UserProfile> {
                             ],
                           ),
                           onTap: () {
-                            showModal(context);
+                            _showModal(context);
                           },
                         ),
                         SizedBox(
@@ -309,7 +328,7 @@ class _UserProfileState extends State<UserProfile> {
         )));
   }
 
-  void showModal(BuildContext context) {
+  void _showModal(BuildContext context) {
     showModalBottomSheet(
         context: context,
         useRootNavigator: true,
@@ -403,6 +422,39 @@ class _UserProfileState extends State<UserProfile> {
                     ),
                   )
                 ],
+              ),
+            ),
+          );
+        });
+  }
+
+  void _showTeamModal(BuildContext context, Projects projects) {
+    showModalBottomSheet(
+        context: context,
+        useRootNavigator: true,
+        builder: (context) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              color: Colors.white,
+              height: 200,
+              child: Center(
+                child: ListView.separated(
+                    separatorBuilder: (context, index) {
+                      return Divider(
+                        height: 0.2,
+                        color: Colors.grey,
+                      );
+                    },
+                    itemCount: projects.dataSource!.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(
+                          projects.dataSource!.elementAt(index).name!,
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      );
+                    }),
               ),
             ),
           );

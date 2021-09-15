@@ -6,28 +6,15 @@ import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/routes.dart';
 
-class ReassignConfirm extends StatefulWidget {
-  final String agentID;
-  final String agentName;
-  final String groupID;
-  final String groupName;
-  final  ticketID;
-  final Function(String name) onSaved;
-  ReassignConfirm(
-      {Key? key,
-      required this.agentID,
-      required this.groupID,
-      required this.onSaved,
-      required this.agentName,
-      required this.groupName,
-      required this.ticketID})
-      : super(key: key);
+class BotTurnOffConfirm extends StatefulWidget {
+  final Function() onConfirm;
+  BotTurnOffConfirm({Key? key, required this.onConfirm}) : super(key: key);
 
   @override
-  _ReassignConfirmState createState() => _ReassignConfirmState();
+  _BotTurnOffConfirmState createState() => _BotTurnOffConfirmState();
 }
 
-class _ReassignConfirmState extends State<ReassignConfirm> {
+class _BotTurnOffConfirmState extends State<BotTurnOffConfirm> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,14 +34,14 @@ class _ReassignConfirmState extends State<ReassignConfirm> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Confirm Reassignment",
+              "Turn Off Bot",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "You are about to reassign Ticket #${widget.ticketID.toString()}\nPlease confirm your action.",
+              "You are about to turn of all bot activities for this ticket. Please confirm your action.",
               textAlign: TextAlign.center,
               style: TextStyle(
                   wordSpacing: 1,
@@ -91,25 +78,15 @@ class _ReassignConfirmState extends State<ReassignConfirm> {
                     16.0,
                   ),
                   child: Text(
-                    'Reassign',
+                    'Confirm',
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
                 //color: AliceColors.ALICE_GREEN,
                 onPressed: () {
-                  Get.find<ChatApiController>()
-                      .reassign(widget.agentID, widget.groupID)
-                      .then((value) {
-                    if (value!) {
-                      widget.onSaved(widget.agentName);
-
-                      Get.offAllNamed(INBOX_PAGE);
-                      Get.put(InboxController());
-                    } else {
-                      Get.snackbar("", "Something went wrong");
-                    }
-                  });
+                  widget.onConfirm();
+                  Get.back();
                 },
               ),
             ),

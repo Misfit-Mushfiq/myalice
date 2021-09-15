@@ -27,7 +27,7 @@ class ProfileImage extends GetView<InboxController> {
                 ),
               ),
               onTap: () {
-                Get.toNamed(USER_PROFILE_PAGE, arguments: controller.user);
+                Get.toNamed(USER_PROFILE_PAGE, arguments: [controller.user,controller.projects]);
               },
             )
           : CircularProgressIndicator();

@@ -11,18 +11,10 @@ import 'package:myalice/models/responseModels/channels/channels.dart';
 import 'package:myalice/models/responseModels/projectsModels/projects.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/models/responseModels/ticketsResponseModels/ticketResponse.dart';
+import 'package:myalice/screens/inboxScreen/inboxScreen.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
 class InboxController extends BaseApiController {
-  static String _accountPath = "accounts/info";
-  static String _ticketsPath = "crm/projects/81/tickets";
-  static String _projectsPath = "bots/projects";
-  static String _channelsPath = "bots/projects/81/platforms/list";
-  static String _availableAgentsPath = "bots/projects/81/access";
-  static String _availableGroupsPath = "bots/projects/81/groups";
-  static String _ticketsTagsPath = "crm/projects/81/ticket-tags";
-  static String _cannedResponsePath = "crm/projects/81/canned-responses";
-
   final SharedPref _sharedPref = SharedPref();
 
   var _sort;
@@ -41,25 +33,60 @@ class InboxController extends BaseApiController {
 
   var _user;
   var _ticketResponse;
-  late Projects _projectResponse;
+  late Projects _projects;
+  late Channels _channels;
+  late AvailableAgents _agents;
+  late AvailableGroups _groups;
+  late CannedResponse _cannedResponse;
+  late Tags _availableTags;
 
   var _userDataAvailable = false.obs;
   var isticketsDataAvailable = false.obs;
 
   bool get userDataAvailable => _userDataAvailable.value;
   UserInfoResponse get user => _user;
+  Projects get projects => _projects;
+  Channels get channels => _channels;
+  AvailableAgents get agents => _agents;
+  AvailableGroups get groups => _groups;
+  CannedResponse get cannedResponse => _cannedResponse;
+  Tags get tags => _availableTags;
 
   bool get ticketDataAvailable => isticketsDataAvailable.value;
   TicketResponse get tickets => _ticketResponse;
 
   late String? token;
+  static late String _projectID;
+  static String get projectId => _projectID;
+
+  static String _projectsPath = "bots/projects";
+  static String _accountPath = "accounts/info";
+  static String _ticketsPath = "crm/projects/$projectId/tickets";
+  static String _channelsPath = "bots/projects/$projectId/platforms/list";
+  static String _availableAgentsPath = "bots/projects/$projectId/access";
+  static String _availableGroupsPath = "bots/projects/$projectId/groups";
+  static String _ticketsTagsPath = "crm/projects/$projectId/ticket-tags";
+  static String _cannedResponsePath =
+      "crm/projects/$projectId/canned-responses";
+
+  void _updateID(var projectID) {
+    _projectID = projectID;
+  }
 
   @override
   Future<void> onInit() async {
     super.onInit();
     token = await _sharedPref.readString("apiToken");
     await getUser();
-    await getProjects();
+    await getProjects().then((value) {
+      if (value!.success!) {
+        getChannels();
+        getAvailableAgents();
+        getAvailableGroups();
+        getCannedResponse();
+        getTicketTags();
+      }
+    });
     await _sharedPref.saveBool("sortNew", false);
     await _sharedPref.saveBool("resolvedSelected", false);
     sort = await _sharedPref.readBool("sortNew") ? "asc" : "desc";
@@ -114,7 +141,7 @@ class InboxController extends BaseApiController {
         .then((response) => response.statusCode == 200
             ? _ticketResponse = TicketResponse.fromJson(response.data)
             : null)
-        .catchError((err) => _ticketResponse)
+        .catchError((err) => print(err.toString()))
         .whenComplete(
             () => isticketsDataAvailable.value = _ticketResponse != null);
   }
@@ -123,9 +150,14 @@ class InboxController extends BaseApiController {
     return getDio()!
         .get(_projectsPath,
             options: Options(headers: {"Authorization": "Token $token"}))
-        .then((response) => response.statusCode == 200
-            ? Projects.fromJson(response.data)
-            : null);
+        .then((response) async {
+      if (response.statusCode == 200) {
+        _projects = Projects.fromJson(response.data);
+        _updateID(await _sharedPref.readString("projectID") ??
+            _projects.dataSource!.elementAt(0).id.toString());
+        return _projects;
+      }
+    });
   }
 
   Future<Channels?> getChannels() async {
@@ -133,7 +165,7 @@ class InboxController extends BaseApiController {
         .get(_channelsPath,
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) => response.statusCode == 200
-            ? Channels.fromJson(response.data)
+            ?  _channels = Channels.fromJson(response.data)
             : null);
   }
 
@@ -142,8 +174,9 @@ class InboxController extends BaseApiController {
         .get(_availableAgentsPath,
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) => response.statusCode == 200
-            ? AvailableAgents.fromJson(response.data)
-            : null);
+            ? _agents = AvailableAgents.fromJson(response.data)
+            : null)
+        .whenComplete(() => _agents);
   }
 
   Future<AvailableGroups?> getAvailableGroups() async {
@@ -151,16 +184,21 @@ class InboxController extends BaseApiController {
         .get(_availableGroupsPath,
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) => response.statusCode == 200
-            ? AvailableGroups.fromJson(response.data)
-            : null);
+            ? _groups = AvailableGroups.fromJson(response.data)
+            : null)
+        .whenComplete(() => _groups);
   }
 
   Future<Tags?> getTicketTags() async {
     return getDio()!
         .get(_ticketsTagsPath,
             options: Options(headers: {"Authorization": "Token $token"}))
-        .then((response) =>
-            response.statusCode == 200 ? Tags.fromJson(response.data) : null);
+        .then((response) => response.statusCode == 200
+            ? _availableTags = Tags.fromJson(response.data)
+            : null)
+        .whenComplete(() {
+      return _availableTags;
+    });
   }
 
   Future<CannedResponse?> getCannedResponse() async {
@@ -169,10 +207,10 @@ class InboxController extends BaseApiController {
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) {
       if (response.statusCode == 200) {
-        var cannedResponse = CannedResponse.fromJson(response.data);
+        _cannedResponse = CannedResponse.fromJson(response.data);
         SharedPref().saveString("cannedResponse",
-            CannedDataSource.encode(cannedResponse.dataSource!));
-        return cannedResponse;
+            CannedDataSource.encode(_cannedResponse.dataSource!));
+        return _cannedResponse;
       }
     });
   }

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:multi_select_flutter/chip_display/multi_select_chip_display.dart';
@@ -9,6 +10,7 @@ import 'package:myalice/customWidgets/botButton.dart';
 import 'package:myalice/models/responseModels/tags/data_source.dart';
 import 'package:myalice/models/responseModels/ticketsResponseModels/agent.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/modals/assignedModal.dart';
+import 'package:myalice/screens/chatDetails/customWidgets/modals/botTurnOff.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/modals/tagsModal.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/shared_pref.dart';
@@ -164,10 +166,15 @@ class _MainModalState extends State<MainModal> {
                         ),
                         Row(
                           children: [
-                           widget.assignAgents.length > 0? CircleAvatar(
-                             backgroundImage: CachedNetworkImageProvider(widget.assignAgents.elementAt(0).avatar!),
-                              radius: 10,
-                            ):Container(),
+                            widget.assignAgents.length > 0
+                                ? CircleAvatar(
+                                    backgroundImage: CachedNetworkImageProvider(
+                                        widget.assignAgents
+                                            .elementAt(0)
+                                            .avatar!),
+                                    radius: 10,
+                                  )
+                                : Container(),
                             SizedBox(
                               width: 5,
                             ),
@@ -202,21 +209,52 @@ class _MainModalState extends State<MainModal> {
                       ),
                       Row(
                         children: [
-                          BottomSheetSwitch(
+                          CupertinoSwitch(
+                              activeColor: AliceColors.ALICE_GREEN,
+                              value: _botEnabled,
+                              onChanged: (bool value) {
+                                 if (!value) {
+                                /* setState(() {
+                                  _botEnabled = true;
+                                }); */
+                                 _showBotOffConfirmModal(context);
+                              } else {
+                                setState(() {
+                                  _botEnabled = value;
+                                });
+                                /* Get.find<ChatApiController>()
+                                    .actionBot(value)
+                                    .then((value) {
+                                  if (value!) {
+                                    _sharedPref.saveBool(
+                                        "bot${widget.customerID}", _botEnabled);
+                                  }
+                                }); */
+                              }
+                               
+                              }),
+                        /*   BottomSheetSwitch(
                             switchValue: _botEnabled,
                             valueChanged: (value) {
-                              _botEnabled = value;
-                              Get.find<ChatApiController>()
-                                  .actionBot(value)
-                                  .then((value) {
-                                if (value!) {
-                                  _sharedPref.saveBool(
-                                      "bot${widget.customerID}", _botEnabled);
-                                }
-                              });
+                              if (!value) {
+                                setState(() {
+                                  _botEnabled = true;
+                                });
+                                // _showBotOffConfirmModal(context);
+                              } else {
+                                _botEnabled = value;
+                                /* Get.find<ChatApiController>()
+                                    .actionBot(value)
+                                    .then((value) {
+                                  if (value!) {
+                                    _sharedPref.saveBool(
+                                        "bot${widget.customerID}", _botEnabled);
+                                  }
+                                }); */
+                              }
                             },
                           )
-                        ],
+                        */ ],
                       )
                     ],
                   ),
@@ -237,6 +275,7 @@ class _MainModalState extends State<MainModal> {
         builder: (context) {
           return InboxAssignedModal(
             agents: widget.agents,
+            ticketID: widget.ticketID,
             onSaved: (String selectedAgent) {
               _selectedAgent = selectedAgent;
             },
@@ -268,6 +307,22 @@ class _MainModalState extends State<MainModal> {
         Get.find<ChatApiController>().addTicketTags("add",
             _selectedTags.elementAt(i).name!, _selectedTags.elementAt(i).id!);
       }
+      setState(() {});
+    });
+  }
+
+  void _showBotOffConfirmModal(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return BotTurnOffConfirm(onConfirm: () {
+            Get.find<ChatApiController>().actionBot(false).then((value) {
+              if (value!) {
+                _sharedPref.saveBool("bot${widget.customerID}", _botEnabled);
+              }
+            });
+          });
+        }).whenComplete(() {
       setState(() {});
     });
   }

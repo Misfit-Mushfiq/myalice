@@ -92,7 +92,7 @@ class _InboxTagsModalState extends State<InboxTagsModal> {
                             width: 5,
                           ),
                           Text(
-                            "Add New TagsDataSource",
+                            "Add New Tag",
                             style: TextStyle(fontSize: 12),
                           )
                         ],
