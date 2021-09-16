@@ -86,14 +86,16 @@ class _MainModalState extends State<MainModal> {
                 minLeadingWidth: 0.0,
                 contentPadding: EdgeInsets.only(left: 10.0),
                 onTap: () {
-                  setState(() async {
+                  setState(()  {
                     widget.pendingSelected = !widget.pendingSelected;
                     widget.resolvedSelected = !widget.resolvedSelected;
                     widget.inboxController.isticketsDataAvailable.value = false;
                     widget.resolvedSelected
                         ? widget.inboxController.resolved = 1
                         : widget.inboxController.resolved = 0;
-                    widget.inboxController.getTickets(
+                   
+                  });
+                   widget.inboxController.getTickets(
                        projectID: widget.inboxController.projectID,
                         order: widget.inboxController.sort,
                         resolved: widget.inboxController.resolved,
@@ -103,7 +105,6 @@ class _MainModalState extends State<MainModal> {
                         groups: [],
                         tags: _selectedTagsID!,
                         dates: _selectedTimes!);
-                  });
                   widget.onChanged(widget.pendingSelected,
                       widget.resolvedSelected, widget.sortNew);
                   Get.back();

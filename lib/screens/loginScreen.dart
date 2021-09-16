@@ -19,7 +19,6 @@ class _LoginScreenState extends State<LoginScreen> {
   late bool showLoader;
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  final LoginApiController loginApiController = Get.put(LoginApiController());
   final SharedPref _sharedPref = SharedPref();
 
   @override
@@ -31,6 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final LoginApiController loginApiController = Get.put(LoginApiController());
     return Scaffold(
         backgroundColor: Colors.white,
         body: Container(

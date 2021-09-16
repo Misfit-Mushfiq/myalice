@@ -66,8 +66,6 @@ class LoggingInterceptors extends InterceptorsWrapper {
       });
       pref.Get.find<InboxController>().token =
           await _sharedPref.readString("apiToken");
-      pref.Get.find<ChatApiController>().token =
-          await _sharedPref.readString("apiToken");
     }
     debugPrint(err.response!.statusMessage);
     debugPrint(

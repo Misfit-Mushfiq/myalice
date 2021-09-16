@@ -2,12 +2,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myalice/controllers/apiControllers/agentProfileController.dart';
 import 'package:myalice/customWidgets/botButton.dart';
 import 'package:myalice/models/responseModels/UserResponse.dart';
 import 'package:myalice/models/responseModels/projectsModels/data_source.dart';
 import 'package:myalice/models/responseModels/projectsModels/projects.dart';
 import 'package:myalice/screens/agentProfile/customWidget/teamSelection.dart';
 import 'package:myalice/utils/colors.dart';
+import 'package:myalice/utils/routes.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
 class AgentProfile extends StatefulWidget {
@@ -24,9 +26,9 @@ class _UserProfileState extends State<AgentProfile> {
   bool _incomingMesaage = false;
   late UserInfoResponse _userInfoResponse;
   late Projects _projects;
-  late String _projectName;
+  String _projectName="";
   SharedPref _sharedPref = SharedPref();
-
+  AgentProfileController _controller = Get.put(AgentProfileController());
 
   @override
   void initState() {
@@ -320,7 +322,14 @@ class _UserProfileState extends State<AgentProfile> {
                             "Sign Out",
                             style: TextStyle(color: Colors.red, fontSize: 18),
                           ),
-                          onPressed: () {})
+                          onPressed: () {
+                            _controller.logOut().then((value) {
+                              if (value != null && value) {
+                                _sharedPref.clear();
+                                Get.offAllNamed(LOGIN_PAGE);
+                              }
+                            });
+                          })
                     ],
                   ),
                 )

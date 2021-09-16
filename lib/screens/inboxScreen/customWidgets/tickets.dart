@@ -12,7 +12,7 @@ import 'package:myalice/utils/platform_icon.dart';
 import 'package:myalice/utils/routes.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
-class Tickets extends GetView<InboxController> {
+class Tickets extends StatefulWidget {
   final Tags? availableTags;
   final AvailableAgents? agents;
   final CannedResponse? cannedResponse;
@@ -24,10 +24,22 @@ class Tickets extends GetView<InboxController> {
       required this.cannedResponse,
       required this.onRefresh})
       : super(key: key);
+
+  @override
+  _TicketsState createState() => _TicketsState();
+}
+
+class _TicketsState extends State<Tickets> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    InboxController _inboxController = Get.put(InboxController());
     return Obx(() {
-      return controller.ticketDataAvailable
+      return _inboxController.ticketDataAvailable
           ? Expanded(
               child: RefreshIndicator(
               onRefresh: _refreshData,
@@ -36,8 +48,9 @@ class Tickets extends GetView<InboxController> {
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
                     SharedPref().saveString(
-                        "selectedInboxTags${controller.tickets.dataSource!.elementAt(index).id.toString()}",
-                        TagsDataSource.encode(controller.tickets.dataSource!
+                        "selectedInboxTags${_inboxController.tickets.dataSource!.elementAt(index).id.toString()}",
+                        TagsDataSource.encode(_inboxController
+                            .tickets.dataSource!
                             .elementAt(index)
                             .tags!));
                     return Padding(
@@ -48,18 +61,19 @@ class Tickets extends GetView<InboxController> {
                                 Stack(
                                   children: [
                                     CircleAvatar(
-                                      backgroundImage: NetworkImage(controller
-                                              .tickets.dataSource!
-                                              .elementAt(index)
-                                              .customer!
-                                              .avatar ??
-                                          ""),
+                                      backgroundImage: NetworkImage(
+                                          _inboxController.tickets.dataSource!
+                                                  .elementAt(index)
+                                                  .customer!
+                                                  .avatar ??
+                                              ""),
                                       radius: 25,
                                     ),
                                     Positioned(
                                         top: 30,
                                         left: 30,
-                                        child: controller.tickets.dataSource!
+                                        child: _inboxController
+                                                    .tickets.dataSource!
                                                     .elementAt(index)
                                                     .agents!
                                                     .length >
@@ -67,7 +81,7 @@ class Tickets extends GetView<InboxController> {
                                             ? CircleAvatar(
                                                 child: CircleAvatar(
                                                   backgroundImage: NetworkImage(
-                                                      controller
+                                                      _inboxController
                                                           .tickets.dataSource!
                                                           .elementAt(index)
                                                           .agents!
@@ -91,7 +105,7 @@ class Tickets extends GetView<InboxController> {
                                       Row(
                                         children: [
                                           Text(
-                                            controller.tickets.dataSource!
+                                            _inboxController.tickets.dataSource!
                                                 .elementAt(index)
                                                 .customer!
                                                 .fullName!,
@@ -102,19 +116,20 @@ class Tickets extends GetView<InboxController> {
                                             width: 8,
                                           ),
                                           FaIcon(
-                                            platformIcon(controller
+                                            platformIcon(_inboxController
                                                 .tickets.dataSource!
                                                 .elementAt(index)
                                                 .customer!
                                                 .platform!
                                                 .type!),
                                             size: 15,
-                                            color: platformColor(controller
-                                                .tickets.dataSource!
-                                                .elementAt(index)
-                                                .customer!
-                                                .platform!
-                                                .type!),
+                                            color: platformColor(
+                                                _inboxController
+                                                    .tickets.dataSource!
+                                                    .elementAt(index)
+                                                    .customer!
+                                                    .platform!
+                                                    .type!),
                                           )
                                         ],
                                       ),
@@ -122,7 +137,7 @@ class Tickets extends GetView<InboxController> {
                                         height: 10,
                                       ),
                                       Text(
-                                        controller.tickets.dataSource!
+                                        _inboxController.tickets.dataSource!
                                             .elementAt(index)
                                             .customer!
                                             .lastMessageText!,
@@ -136,7 +151,7 @@ class Tickets extends GetView<InboxController> {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      readTimestamp(int.parse(controller
+                                      readTimestamp(int.parse(_inboxController
                                           .tickets.dataSource!
                                           .elementAt(index)
                                           .createdAt!)),
@@ -148,7 +163,7 @@ class Tickets extends GetView<InboxController> {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         CircleAvatar(
-                                          backgroundColor: controller
+                                          backgroundColor: _inboxController
                                                   .tickets.dataSource!
                                                   .elementAt(index)
                                                   .isReplied!
@@ -160,7 +175,7 @@ class Tickets extends GetView<InboxController> {
                                           width: 10,
                                         ),
                                         Icon(
-                                          controller.tickets.dataSource!
+                                          _inboxController.tickets.dataSource!
                                                   .elementAt(index)
                                                   .isLocked!
                                               ? Icons.lock
@@ -175,37 +190,42 @@ class Tickets extends GetView<InboxController> {
                             ),
                             onTap: () {
                               Get.toNamed(CHAT_DETAILS_PAGE, arguments: [
-                                availableTags,
-                                controller.tickets.dataSource!
+                                widget.availableTags,
+                                _inboxController.tickets.dataSource!
                                     .elementAt(index)
                                     .id,
-                                controller.tickets.dataSource!
+                                _inboxController.tickets.dataSource!
                                     .elementAt(index)
                                     .customer!
                                     .fullName,
-                                controller.tickets.dataSource!
+                                _inboxController.tickets.dataSource!
                                     .elementAt(index)
                                     .customer!
                                     .id
                                     .toString(),
-                                agents,
-                                controller.tickets.dataSource!
+                                widget.agents,
+                                _inboxController.tickets.dataSource!
                                     .elementAt(index)
                                     .agents,
-                                cannedResponse,
-                                controller.tickets.dataSource!
+                                widget.cannedResponse,
+                                _inboxController.tickets.dataSource!
                                     .elementAt(index)
                                     .tags
                               ]);
                             }));
                   },
-                  itemCount: controller.tickets.dataSource!.length),
+                  itemCount: _inboxController.tickets.dataSource!.length),
             ))
           : Padding(
               padding: const EdgeInsets.all(20.0),
               child: CircularProgressIndicator(),
             );
     });
+  }
+
+  Future _refreshData() async {
+    await Future.delayed(Duration(seconds: 3));
+    widget.onRefresh();
   }
 
   String readTimestamp(int timestamp) {
@@ -235,10 +255,5 @@ class Tickets extends GetView<InboxController> {
     }
 
     return time;
-  }
-
-  Future _refreshData() async {
-    await Future.delayed(Duration(seconds: 3));
-    this.onRefresh();
   }
 }

@@ -31,13 +31,6 @@ class MyApp extends StatelessWidget {
       navigatorKey: Get.key,
       home: SplashScreen(),
       enableLog: true,
-      routingCallback: (route) {
-        if (route.current == INBOX_PAGE) {
-          InboxController inboxController = Get.put(InboxController());
-          inboxController.onInit();
-          return;
-        }
-      },
       theme: ThemeData(
         textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
       ),

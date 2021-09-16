@@ -105,7 +105,6 @@ class _ReassignConfirmState extends State<ReassignConfirm> {
                       widget.onSaved(widget.agentName);
 
                       Get.offAllNamed(INBOX_PAGE);
-                      Get.put(InboxController());
                     } else {
                       Get.snackbar("", "Something went wrong");
                     }

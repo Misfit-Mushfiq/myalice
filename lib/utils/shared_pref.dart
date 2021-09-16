@@ -67,4 +67,9 @@ class SharedPref {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove(key);
   }
+
+  clear() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+  }
 }

@@ -7,8 +7,9 @@ import 'package:myalice/utils/routes.dart';
 class ProfileImage extends GetView<InboxController> {
   @override
   Widget build(BuildContext context) {
+      InboxController   _inboxController = Get.put(InboxController());
     return Obx(() {
-      return controller.userDataAvailable
+      return _inboxController.userDataAvailable
           ? GestureDetector(
               child: new Container(
                 width: 40.0,
@@ -22,12 +23,12 @@ class ProfileImage extends GetView<InboxController> {
                   image: new DecorationImage(
                     fit: BoxFit.fill,
                     image: new CachedNetworkImageProvider(
-                        controller.user.dataSource!.avatar!),
+                        _inboxController.user.dataSource!.avatar!),
                   ),
                 ),
               ),
               onTap: () {
-                Get.toNamed(USER_PROFILE_PAGE, arguments: [controller.user,controller.projects]);
+                Get.toNamed(USER_PROFILE_PAGE, arguments: [_inboxController.user,_inboxController.projects]);
               },
             )
           : CircularProgressIndicator();

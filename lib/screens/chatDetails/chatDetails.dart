@@ -92,8 +92,8 @@ class _ChatDetailsState extends State<ChatDetails>
 
   void animateToScreenEnd() {
     _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent + 100,
-      duration: Duration(milliseconds: 300),
+      _scrollController.position.maxScrollExtent ,
+      duration: Duration(milliseconds: 3),
       curve: Curves.easeOut,
     );
   }
@@ -223,11 +223,11 @@ class _ChatDetailsState extends State<ChatDetails>
                       padding: EdgeInsets.only(top: 10, bottom: 00),
                       physics: AlwaysScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        //jumpToScreenEnd();
-                        if (index + 1 ==
+                        animateToScreenEnd();
+                        /* if (index + 1 ==
                             Get.find<ChatApiController>().chats.length) {
                           animateToScreenEnd();
-                        }
+                        } */
                         //print(index);
                         return obj.chats.elementAt(index)!.type == "action" ||
                                 obj.chats.elementAt(index)!.type == "note"

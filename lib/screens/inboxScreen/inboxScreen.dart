@@ -23,15 +23,12 @@ class Inbox extends StatefulWidget {
 
 class _InboxState extends State<Inbox> {
   final _inboxBottomSheet = GlobalKey<ScaffoldState>();
-
-  late InboxController _inboxController;
   late bool pendingSelected;
   late bool resolvedSelected;
   late bool channelSelected;
   late bool sortNew;
   final SharedPref _sharedPref = SharedPref();
 
- 
   List<String>? _selectedAgentsID = [];
   List<String>? _selectedChannelsID = [];
   List<String>? _selectedTagsID = [];
@@ -41,9 +38,15 @@ class _InboxState extends State<Inbox> {
 
   @override
   void initState() {
-    _inboxController = Get.put(InboxController());
-    readFilterParams();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    print("hello");
+ 
+    readFilterParams();
+    super.didChangeDependencies();
   }
 
   void readFilterParams() async {
@@ -67,6 +70,9 @@ class _InboxState extends State<Inbox> {
 
   @override
   Widget build(BuildContext context) {
+    print("Hello");
+      InboxController _inboxController = Get.put(InboxController());
+    _inboxController.onInit();
     return Scaffold(
         key: _inboxBottomSheet,
         body: Container(
@@ -143,6 +149,7 @@ class _InboxState extends State<Inbox> {
                                     const Duration(milliseconds: 300), () {
                                   setState(() {});
                                 });
+
                               });
                             }))
                   ],
@@ -175,7 +182,7 @@ class _InboxState extends State<Inbox> {
                       onChanged: (String text) {
                         _inboxController
                             .getTickets(
-                              projectID: _inboxController.projectID,
+                                projectID: _inboxController.projectID,
                                 order: sortNew ? "desc" : "",
                                 resolved: resolvedSelected ? 1 : 0,
                                 search: text,
@@ -189,9 +196,6 @@ class _InboxState extends State<Inbox> {
                             .whenComplete(() {
                           Future.delayed(const Duration(milliseconds: 500), () {
                             setState(() {});
-                          });
-                          setState(() {
-                            initState();
                           });
                         });
                       },
@@ -220,7 +224,6 @@ class _InboxState extends State<Inbox> {
                 agents: _inboxController.agents,
                 cannedResponse: _inboxController.cannedResponse,
                 onRefresh: () {
-                  initState();
                   setState(() {});
                 },
               );
