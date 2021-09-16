@@ -12,7 +12,7 @@ import 'package:myalice/screens/inboxScreen/inboxScreen.dart';
 import 'package:myalice/screens/loginScreen.dart';
 import 'package:myalice/screens/signUpScreen.dart';
 import 'package:myalice/screens/splashScreen.dart';
-import 'package:myalice/screens/agentProfile.dart';
+import 'package:myalice/screens/agentProfile/agentProfile.dart';
 import 'package:myalice/utils/routes.dart';
 
 void main() {

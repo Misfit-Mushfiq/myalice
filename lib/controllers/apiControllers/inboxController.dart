@@ -43,6 +43,9 @@ class InboxController extends BaseApiController {
   var _userDataAvailable = false.obs;
   var isticketsDataAvailable = false.obs;
 
+  var isTagsAvailable = false.obs;
+  bool get tagsAvailable => isTagsAvailable.value;
+
   bool get userDataAvailable => _userDataAvailable.value;
   UserInfoResponse get user => _user;
   Projects get projects => _projects;
@@ -153,8 +156,7 @@ class InboxController extends BaseApiController {
         .then((response) async {
       if (response.statusCode == 200) {
         _projects = Projects.fromJson(response.data);
-        _updateID(await _sharedPref.readString("projectID") ??
-            _projects.dataSource!.elementAt(0).id.toString());
+        _updateID(await _sharedPref.readString("projectID"));
         return _projects;
       }
     });
@@ -165,7 +167,7 @@ class InboxController extends BaseApiController {
         .get(_channelsPath,
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) => response.statusCode == 200
-            ?  _channels = Channels.fromJson(response.data)
+            ? _channels = Channels.fromJson(response.data)
             : null);
   }
 
@@ -193,11 +195,12 @@ class InboxController extends BaseApiController {
     return getDio()!
         .get(_ticketsTagsPath,
             options: Options(headers: {"Authorization": "Token $token"}))
-        .then((response) => response.statusCode == 200
-            ? _availableTags = Tags.fromJson(response.data)
-            : null)
-        .whenComplete(() {
-      return _availableTags;
+        .then((response) {
+      if (response.statusCode == 200) {
+        _availableTags = Tags.fromJson(response.data);
+        isTagsAvailable.value = _availableTags != null;
+        return _availableTags;
+      }
     });
   }
 

@@ -24,16 +24,14 @@ class Inbox extends StatefulWidget {
 class _InboxState extends State<Inbox> {
   final _inboxBottomSheet = GlobalKey<ScaffoldState>();
 
-  InboxController _inboxController = Get.put(InboxController());
+  late InboxController _inboxController;
   late bool pendingSelected;
   late bool resolvedSelected;
   late bool channelSelected;
   late bool sortNew;
   final SharedPref _sharedPref = SharedPref();
+
  
-  
-  var isTagsAvailable = false.obs;
-  bool get tagsAvailable => isTagsAvailable.value;
   List<String>? _selectedAgentsID = [];
   List<String>? _selectedChannelsID = [];
   List<String>? _selectedTagsID = [];
@@ -43,6 +41,7 @@ class _InboxState extends State<Inbox> {
 
   @override
   void initState() {
+    _inboxController = Get.put(InboxController());
     readFilterParams();
     super.initState();
   }
@@ -214,7 +213,7 @@ class _InboxState extends State<Inbox> {
             }),
           ),
           Obx(() {
-            if (tagsAvailable) {
+            if (_inboxController.tagsAvailable) {
               return Tickets(
                 availableTags: _inboxController.tags,
                 agents: _inboxController.agents,

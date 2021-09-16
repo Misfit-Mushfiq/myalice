@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/customWidgets/botButton.dart';
 import 'package:myalice/models/responseModels/UserResponse.dart';
+import 'package:myalice/models/responseModels/projectsModels/data_source.dart';
 import 'package:myalice/models/responseModels/projectsModels/projects.dart';
+import 'package:myalice/screens/agentProfile/customWidget/teamSelection.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
@@ -25,6 +27,7 @@ class _UserProfileState extends State<AgentProfile> {
   late String _projectName;
   SharedPref _sharedPref = SharedPref();
 
+
   @override
   void initState() {
     super.initState();
@@ -36,8 +39,7 @@ class _UserProfileState extends State<AgentProfile> {
   getProjectName() async {
     _projectName = await _sharedPref.readString("projectName") ??
         _projects.dataSource!.elementAt(0).name!;
-        setState(() {
-        });
+    setState(() {});
   }
 
   @override
@@ -433,31 +435,7 @@ class _UserProfileState extends State<AgentProfile> {
         context: context,
         useRootNavigator: true,
         builder: (context) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              color: Colors.white,
-              height: 200,
-              child: Center(
-                child: ListView.separated(
-                    separatorBuilder: (context, index) {
-                      return Divider(
-                        height: 0.2,
-                        color: Colors.grey,
-                      );
-                    },
-                    itemCount: projects.dataSource!.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(
-                          projects.dataSource!.elementAt(index).name!,
-                          style: TextStyle(fontSize: 14),
-                        ),
-                      );
-                    }),
-              ),
-            ),
-          );
+          return TeamSelection(teams: projects.dataSource!);
         });
   }
 }
