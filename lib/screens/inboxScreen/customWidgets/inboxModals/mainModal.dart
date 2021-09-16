@@ -94,6 +94,7 @@ class _MainModalState extends State<MainModal> {
                         ? widget.inboxController.resolved = 1
                         : widget.inboxController.resolved = 0;
                     widget.inboxController.getTickets(
+                       projectID: widget.inboxController.projectID,
                         order: widget.inboxController.sort,
                         resolved: widget.inboxController.resolved,
                         search: "",
@@ -162,6 +163,7 @@ class _MainModalState extends State<MainModal> {
                           ? widget.inboxController.sort = "asc"
                           : widget.inboxController.sort = "desc";
                       widget.inboxController.getTickets(
+                        projectID: widget.inboxController.projectID,
                           order: widget.inboxController.sort,
                           resolved: widget.inboxController.resolved,
                           search: "",

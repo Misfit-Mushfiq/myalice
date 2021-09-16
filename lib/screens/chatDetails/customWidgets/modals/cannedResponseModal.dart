@@ -20,6 +20,7 @@ class CannedResponseModal extends StatefulWidget {
 class _CannedResponseState extends State<CannedResponseModal> {
   List<CannedDataSource> _dataSource = <CannedDataSource>[];
   late int? _responseID;
+  InboxController _inboxController=Get.find<InboxController>();
   @override
   void initState() {
     init();
@@ -184,7 +185,7 @@ class _CannedResponseState extends State<CannedResponseModal> {
                       title: title, text: body, forTeam: team));
                   SharedPref().saveString(
                       "cannedResponse", CannedDataSource.encode(_dataSource));
-                  Get.find<InboxController>().getCannedResponse();
+                  _inboxController.getCannedResponse(_inboxController.projectID);
                 }
               });
             },

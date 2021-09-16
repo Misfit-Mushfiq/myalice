@@ -54,10 +54,11 @@ class _TeamSelectionState extends State<TeamSelection> {
                         setState(() {
                           _selectedIndex = index;
                         });
-                        _sharedPref.saveString("projectID",
+                       await _sharedPref.saveString("projectID",
                             widget.teams.elementAt(index).id.toString());
-                        await Get.toNamed(INBOX_PAGE);
-                        setState(() {});
+                        print("HELLO::" +
+                            await _sharedPref.readString("projectID"));
+                        Get.offAllNamed(INBOX_PAGE);
                       },
                       trailing: _selectedIndex == index
                           ? Icon(

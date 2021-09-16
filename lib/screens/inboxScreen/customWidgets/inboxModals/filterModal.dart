@@ -41,6 +41,7 @@ class FilterModal extends StatefulWidget {
 class _FilterModalState extends State<FilterModal> {
   List<ChannelDataSource?> _selectedChannels = [];
   List<AvailableAgentsDataSource?> _selectedAgents = [];
+  InboxController _inboxController = Get.find<InboxController>();
   List<TagsDataSource?> _selectedTags = [];
   List<String> _selectedAgentsID = [];
   List<String> _selectedChannelsID = [];
@@ -133,7 +134,8 @@ class _FilterModalState extends State<FilterModal> {
                                 _pref.remove("selectedTags");
                                 _pref.remove("selectedTimes");
 
-                                Get.find<InboxController>().getTickets(
+                                _inboxController.getTickets(
+                                  projectID: _inboxController.projectID,
                                     order: widget.sortNew ? "desc" : "",
                                     resolved: widget.resolvedSelected ? 1 : 0,
                                     search: "",
@@ -168,7 +170,8 @@ class _FilterModalState extends State<FilterModal> {
                               onTap: () {
                                 Navigator.pop(context, true);
 
-                                Get.find<InboxController>().getTickets(
+                                _inboxController.getTickets(
+                                   projectID: _inboxController.projectID,
                                     order: widget.sortNew ? "desc" : "",
                                     resolved: widget.resolvedSelected ? 1 : 0,
                                     search: "",

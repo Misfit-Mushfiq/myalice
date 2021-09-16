@@ -32,7 +32,7 @@ class InboxController extends BaseApiController {
   }
 
   var _user;
-  var _ticketResponse;
+  late TicketResponse _ticketResponse;
   late Projects _projects;
   late Channels _channels;
   late AvailableAgents _agents;
@@ -59,35 +59,30 @@ class InboxController extends BaseApiController {
   TicketResponse get tickets => _ticketResponse;
 
   late String? token;
-  static late String _projectID;
-  static String get projectId => _projectID;
+  late String _projectId;
+
+  String get projectID {
+    return _projectId;
+  }
+
+  set projectID(String id) {
+    this._projectId = id;
+  }
 
   static String _projectsPath = "bots/projects";
   static String _accountPath = "accounts/info";
-  static String _ticketsPath = "crm/projects/$projectId/tickets";
-  static String _channelsPath = "bots/projects/$projectId/platforms/list";
-  static String _availableAgentsPath = "bots/projects/$projectId/access";
-  static String _availableGroupsPath = "bots/projects/$projectId/groups";
-  static String _ticketsTagsPath = "crm/projects/$projectId/ticket-tags";
-  static String _cannedResponsePath =
-      "crm/projects/$projectId/canned-responses";
-
-  void _updateID(var projectID) {
-    _projectID = projectID;
-  }
 
   @override
   Future<void> onInit() async {
-    super.onInit();
     token = await _sharedPref.readString("apiToken");
     await getUser();
     await getProjects().then((value) {
       if (value!.success!) {
-        getChannels();
-        getAvailableAgents();
-        getAvailableGroups();
-        getCannedResponse();
-        getTicketTags();
+        getChannels(projectID);
+        getAvailableAgents(projectID);
+        getAvailableGroups(projectID);
+        getCannedResponse(projectID);
+        getTicketTags(projectID);
       }
     });
     await _sharedPref.saveBool("sortNew", false);
@@ -95,6 +90,7 @@ class InboxController extends BaseApiController {
     sort = await _sharedPref.readBool("sortNew") ? "asc" : "desc";
     resolved = 0;
     getTickets(
+      projectID: projectID,
         order: sort,
         resolved: resolved,
         search: "",
@@ -103,6 +99,7 @@ class InboxController extends BaseApiController {
         groups: [],
         tags: [],
         dates: []);
+    super.onInit();
   }
 
   Future<dynamic> getUser() async {
@@ -117,7 +114,8 @@ class InboxController extends BaseApiController {
   }
 
   Future<dynamic> getTickets(
-      {required String order,
+      {required String projectID,
+      required String order,
       required int resolved,
       required String search,
       required List<String> channels,
@@ -126,7 +124,7 @@ class InboxController extends BaseApiController {
       required List<String> tags,
       required List<String> dates}) async {
     getDio()!
-        .get(_ticketsPath,
+        .get("crm/projects/$projectID/tickets",
             queryParameters: {
               "resolved": resolved,
               "offset": 0,
@@ -146,7 +144,7 @@ class InboxController extends BaseApiController {
             : null)
         .catchError((err) => print(err.toString()))
         .whenComplete(
-            () => isticketsDataAvailable.value = _ticketResponse != null);
+            () => isticketsDataAvailable.value = _ticketResponse.dataSource!.length>0?true:false);
   }
 
   Future<Projects?> getProjects() async {
@@ -156,24 +154,25 @@ class InboxController extends BaseApiController {
         .then((response) async {
       if (response.statusCode == 200) {
         _projects = Projects.fromJson(response.data);
-        _updateID(await _sharedPref.readString("projectID"));
+         projectID = await _sharedPref.readString("projectID") ??
+        _projects.dataSource!.elementAt(0).id.toString();
         return _projects;
       }
     });
   }
 
-  Future<Channels?> getChannels() async {
+  Future<Channels?> getChannels(String projectID) async {
     return getDio()!
-        .get(_channelsPath,
+        .get("bots/projects/$projectID/platforms/list",
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) => response.statusCode == 200
             ? _channels = Channels.fromJson(response.data)
             : null);
   }
 
-  Future<AvailableAgents?> getAvailableAgents() async {
+  Future<AvailableAgents?> getAvailableAgents(String projectID) async {
     return getDio()!
-        .get(_availableAgentsPath,
+        .get("bots/projects/$projectID/access",
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) => response.statusCode == 200
             ? _agents = AvailableAgents.fromJson(response.data)
@@ -181,9 +180,9 @@ class InboxController extends BaseApiController {
         .whenComplete(() => _agents);
   }
 
-  Future<AvailableGroups?> getAvailableGroups() async {
+  Future<AvailableGroups?> getAvailableGroups(String projectID) async {
     return getDio()!
-        .get(_availableGroupsPath,
+        .get("bots/projects/$projectID/groups",
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) => response.statusCode == 200
             ? _groups = AvailableGroups.fromJson(response.data)
@@ -191,9 +190,9 @@ class InboxController extends BaseApiController {
         .whenComplete(() => _groups);
   }
 
-  Future<Tags?> getTicketTags() async {
+  Future<Tags?> getTicketTags(String projectID) async {
     return getDio()!
-        .get(_ticketsTagsPath,
+        .get("crm/projects/$projectID/ticket-tags",
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) {
       if (response.statusCode == 200) {
@@ -204,9 +203,9 @@ class InboxController extends BaseApiController {
     });
   }
 
-  Future<CannedResponse?> getCannedResponse() async {
+  Future<CannedResponse?> getCannedResponse(String projectID) async {
     return getDio()!
-        .get(_cannedResponsePath,
+        .get("crm/projects/$projectID/canned-responses",
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) {
       if (response.statusCode == 200) {

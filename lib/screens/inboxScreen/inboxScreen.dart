@@ -175,6 +175,7 @@ class _InboxState extends State<Inbox> {
                       onChanged: (String text) {
                         _inboxController
                             .getTickets(
+                              projectID: _inboxController.projectID,
                                 order: sortNew ? "desc" : "",
                                 resolved: resolvedSelected ? 1 : 0,
                                 search: text,
