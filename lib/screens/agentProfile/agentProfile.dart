@@ -20,15 +20,15 @@ class AgentProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<AgentProfile> {
-  bool active_show = false;
   bool _pushNotification = false;
   bool _incomingTickets = false;
   bool _incomingMesaage = false;
   late UserInfoResponse _userInfoResponse;
   late Projects _projects;
-  String _projectName="";
+  String _projectName = "";
   SharedPref _sharedPref = SharedPref();
   AgentProfileController _controller = Get.put(AgentProfileController());
+  bool _online = true;
 
   @override
   void initState() {
@@ -41,6 +41,7 @@ class _UserProfileState extends State<AgentProfile> {
   getProjectName() async {
     _projectName = await _sharedPref.readString("projectName") ??
         _projects.dataSource!.elementAt(0).name!;
+    _online = _userInfoResponse.dataSource!.status == "online" ? true : false;
     setState(() {});
   }
 
@@ -71,10 +72,27 @@ class _UserProfileState extends State<AgentProfile> {
               children: [
                 Column(
                   children: [
-                    CircleAvatar(
-                      radius: 30,
-                      backgroundImage: CachedNetworkImageProvider(
-                          _userInfoResponse.dataSource!.avatar!),
+                    Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 35,
+                          backgroundImage: CachedNetworkImageProvider(
+                              _userInfoResponse.dataSource!.avatar!),
+                        ),
+                        Positioned(
+                            top: 52,
+                            left: 45,
+                            child: CircleAvatar(
+                              child: CircleAvatar(
+                                backgroundColor: _online
+                                    ? AliceColors.ALICE_GREEN
+                                    : Colors.grey,
+                                radius: 7,
+                              ),
+                              radius: 10,
+                              backgroundColor: Colors.white,
+                            ))
+                      ],
                     ),
                     SizedBox(
                       height: 10,
@@ -155,18 +173,31 @@ class _UserProfileState extends State<AgentProfile> {
                                 width: 10,
                               ),
                               Expanded(
-                                  child: Text("Show when active",
+                                  child: Text(
+                                      _online
+                                          ? "Set yourself as Away"
+                                          : "Set yourself as Active",
                                       style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 16))),
                               CupertinoSwitch(
                                 activeColor: AliceColors.ALICE_GREEN,
-                                onChanged: (bool value) {
-                                  setState(() {
-                                    active_show = value;
+                                onChanged:  (values) {
+                                  _controller
+                                      .changeStatus(_online?"away":"online")
+                                      .then((value) {
+                                    if (value != null && value=="online") {
+                                      setState(() {
+                                        _online = true;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        _online = false;
+                                      });
+                                    }
                                   });
                                 },
-                                value: active_show,
+                                value: _online?true:false,
                               )
                             ],
                           ),
