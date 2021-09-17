@@ -213,16 +213,22 @@ class _MainModalState extends State<MainModal> {
                               activeColor: AliceColors.ALICE_GREEN,
                               value: _botEnabled,
                               onChanged: (bool value) {
-                                 if (!value) {
-                                /* setState(() {
-                                  _botEnabled = true;
-                                }); */
-                                 _showBotOffConfirmModal(context);
-                              } else {
-                                setState(() {
-                                  _botEnabled = value;
-                                });
-                                /* Get.find<ChatApiController>()
+                                if (!value) {
+                                  _showBotOffConfirmModal(context);
+                                } else {
+                                  setState(() {
+                                    _botEnabled = value;
+                                    Get.find<ChatApiController>()
+                                        .actionBot(value)
+                                        .then((value) {
+                                      if (value!) {
+                                        _sharedPref.saveBool(
+                                            "bot${widget.customerID}",
+                                            _botEnabled);
+                                      }
+                                    });
+                                  });
+                                  /* Get.find<ChatApiController>()
                                     .actionBot(value)
                                     .then((value) {
                                   if (value!) {
@@ -230,10 +236,9 @@ class _MainModalState extends State<MainModal> {
                                         "bot${widget.customerID}", _botEnabled);
                                   }
                                 }); */
-                              }
-                               
+                                }
                               }),
-                        /*   BottomSheetSwitch(
+                          /*   BottomSheetSwitch(
                             switchValue: _botEnabled,
                             valueChanged: (value) {
                               if (!value) {
@@ -254,7 +259,8 @@ class _MainModalState extends State<MainModal> {
                               }
                             },
                           )
-                        */ ],
+                        */
+                        ],
                       )
                     ],
                   ),
@@ -318,12 +324,13 @@ class _MainModalState extends State<MainModal> {
           return BotTurnOffConfirm(onConfirm: () {
             Get.find<ChatApiController>().actionBot(false).then((value) {
               if (value!) {
-                _sharedPref.saveBool("bot${widget.customerID}", _botEnabled);
+                _sharedPref.saveBool("bot${widget.customerID}", false);
+                setState(() {
+                  _botEnabled = false;
+                });
               }
             });
           });
-        }).whenComplete(() {
-      setState(() {});
-    });
+        }).whenComplete(() {});
   }
 }

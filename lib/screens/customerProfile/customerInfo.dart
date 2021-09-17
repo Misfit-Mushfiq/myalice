@@ -99,7 +99,7 @@ class _CustomerInfoState extends State<CustomerInfo> {
                         TextButton(
                             onPressed: () async {
                               var result = await Get.toNamed(CUSTOMER_INFO_EDIT,
-                                  arguments: [_fixedData, _customer.id]);
+                                  arguments: [_fixedData, _customer.id,_variableData]);
 
                               if (result) {
                                 getMapdata();

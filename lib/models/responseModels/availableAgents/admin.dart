@@ -18,7 +18,7 @@ class Admin {
   factory Admin.fromJson(Map<String, dynamic> json) => Admin(
         id: json['id'] as int?,
         email: json['email'] as String?,
-        avatar: json['avatar'] as String?,
+        avatar: json['avatar']??"" as String?,
         fullName: json['full_name'] as String?,
         status: json['status'] as String?,
         lastOnlineTime: json['last_online_time'] as String?,
