@@ -14,6 +14,7 @@ import 'package:myalice/models/responseModels/chatResponse.dart';
 import 'package:myalice/models/responseModels/tags/data_source.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/models/responseModels/ticketsResponseModels/agent.dart';
+import 'package:myalice/models/responseModels/ticketsResponseModels/customer.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/attachments/attachments.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/auto.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/chats/actionText.dart';
@@ -46,8 +47,7 @@ class _ChatDetailsState extends State<ChatDetails>
   late CannedResponse _cannedResponse;
   late List<AssignedAgents> _assignedAgents;
   late int _ticketId;
-  late String _name;
-  late String _customerId;
+  late Customer _customer;
   SharedPref _sharedPref = SharedPref();
 
   //List<Animal> _selectedChannels = [];
@@ -78,16 +78,15 @@ class _ChatDetailsState extends State<ChatDetails>
     var args = Get.arguments;
     _availableTags = args[0];
     _ticketId = args[1];
-    _name = args[2];
-    _customerId = args[3];
-    _agents = args[4];
-    _assignedAgents = args[5];
-    _cannedResponse = args[6];
-    _usedTags = args[7];
+    _customer = args[2];
+    _agents = args[3];
+    _assignedAgents = args[4];
+    _cannedResponse = args[5];
+    _usedTags = args[6];
 /*     _sharedPref.saveString(
                   "selectedInboxTags", TagsDataSource.encode(_usedTags)); */
 
-    await pusherService.connectPusher('chat-C_$_customerId', "messages");
+    await pusherService.connectPusher('chat-C_${_customer.id!.toString()}', "messages");
   }
 
   void animateToScreenEnd() {
@@ -107,7 +106,7 @@ class _ChatDetailsState extends State<ChatDetails>
   @override
   Widget build(BuildContext context) {
     final obj = Get.put(ChatApiController());
-    obj.updateCustomerID(int.parse(_customerId));
+    obj.updateCustomerID(int.parse(_customer.id!.toString()));
     obj.updateID(_ticketId);
 
     return Scaffold(
@@ -128,7 +127,7 @@ class _ChatDetailsState extends State<ChatDetails>
                 flex: 4,
                 child: InkWell(
                   onTap: () {
-                    Get.toNamed(CUSTOMER_PROFILE_PAGE);
+                    Get.toNamed(CUSTOMER_PROFILE_PAGE,arguments: [_customer]);
                   },
                   child: Row(
                     children: [
@@ -140,7 +139,7 @@ class _ChatDetailsState extends State<ChatDetails>
                       ),
                       Expanded(
                         child: Text(
-                          _name,
+                          _customer.fullName!,
                           style: TextStyle(
                               fontWeight: FontWeight.normal,
                               color: Colors.black,
@@ -168,7 +167,7 @@ class _ChatDetailsState extends State<ChatDetails>
                   onTap: () {
                     Get.find<ChatApiController>().resolveTicket().then((value) {
                       if (value!) {
-                        Get.toNamed(INBOX_PAGE);
+                        Get.offAllNamed(INBOX_PAGE);
                       }
                     });
                   },
@@ -364,7 +363,7 @@ class _ChatDetailsState extends State<ChatDetails>
             },
             ticketID: _ticketId,
             agents: _agents,
-            customerID: _customerId,
+            customerID: _customer.id!.toString(),
             assignAgents: _assignedAgents,
             availableTags: _availableTags.dataSource,
             usedTags: _usedTags,

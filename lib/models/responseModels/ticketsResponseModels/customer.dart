@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'meta.dart';
 import 'platform.dart';
 
@@ -62,7 +64,7 @@ class Customer {
         createdAt: json['created_at'] as String?,
         lastMessageText: json['last_message_text'] as String?,
         lastMessageTime: json['last_message_time'] as String?,
-      );
+      ); 
 
   Map<String, dynamic> toJson() => {
         'id': id,

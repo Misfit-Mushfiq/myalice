@@ -6,3 +6,4 @@ const SIGNUP_PAGE = 'signUpPage';
 const USER_PROFILE_PAGE = 'userProfilePage';
 const CUSTOMER_PROFILE_PAGE = 'customerProfilePage';
 const CUSTOMER_INFO_PAGE = 'customerInfoPage';
+const CUSTOMER_INFO_EDIT = "customerInfoEdit";

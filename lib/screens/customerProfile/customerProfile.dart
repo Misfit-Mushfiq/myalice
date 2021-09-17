@@ -1,8 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:myalice/controllers/apiControllers/customerProfileController.dart';
 import 'package:myalice/customWidgets/botButton.dart';
+import 'package:myalice/models/responseModels/ticketsResponseModels/customer.dart';
 import 'package:myalice/utils/colors.dart';
+import 'package:myalice/utils/platform_icon.dart';
 import 'package:myalice/utils/routes.dart';
 
 class CustomerProfile extends StatefulWidget {
@@ -13,6 +18,15 @@ class CustomerProfile extends StatefulWidget {
 }
 
 class _CustomerProfileState extends State<CustomerProfile> {
+  late Customer _customer;
+    CustomerProfileController _controller = Get.put(CustomerProfileController());
+  @override
+  void initState() {
+    var _args = Get.arguments;
+    _customer = _args[0];
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,13 +55,15 @@ class _CustomerProfileState extends State<CustomerProfile> {
                 Column(
                   children: [
                     CircleAvatar(
+                      backgroundImage:
+                          CachedNetworkImageProvider(_customer.avatar),
                       radius: 30,
                     ),
                     SizedBox(
                       height: 10,
                     ),
                     Text(
-                      "Richard Cooper",
+                      _customer.fullName!,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
@@ -61,16 +77,16 @@ class _CustomerProfileState extends State<CustomerProfile> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
-                              Icons.facebook,
-                              color: AliceColors.ALICE_BLUE,
+                            FaIcon(
+                              platformIcon(_customer.platform!.type!),
                               size: 15,
+                              color: platformColor(_customer.platform!.type!),
                             ),
                             SizedBox(
                               width: 5,
                             ),
                             Text(
-                              "Online Customer Support",
+                              _customer.platform!.name!,
                               style: TextStyle(fontSize: 12),
                             )
                           ],
@@ -103,7 +119,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
                             ],
                           ),
                           onTap: () {
-                            Get.toNamed(CUSTOMER_INFO_PAGE);
+                            Get.toNamed(CUSTOMER_INFO_PAGE,
+                                arguments: [_customer]);
                           },
                         ),
                         SizedBox(

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'platform.dart';
 
 class MetaData {
@@ -67,6 +69,8 @@ class MetaData {
         isLinkedWithEcommerceAccount:
             json['is_linked_with_ecommerce_account'] as bool?,
       );
+
+  Map<dynamic, dynamic> toMap(value) => jsonDecode(value);
 
   Map<String, dynamic> toJson() => {
         'id': id,

@@ -67,6 +67,7 @@ class _NewCannedResponseState extends State<NewCannedResponse> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("Title"),
+                SizedBox(height: 5,),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Container(
@@ -98,11 +99,12 @@ class _NewCannedResponseState extends State<NewCannedResponse> {
                   ),
                 ),
                 Text("Response"),
+                SizedBox(height: 5,),
                 Container(
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(5)),
-                  height: 200,
+                  height: 160,
                   child: Card(
                       color: Colors.white,
                       clipBehavior: Clip.hardEdge,

@@ -11,6 +11,7 @@ import 'package:myalice/screens/agentProfile/customWidget/teamSelection.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/routes.dart';
 import 'package:myalice/utils/shared_pref.dart';
+import 'package:package_info/package_info.dart';
 
 class AgentProfile extends StatefulWidget {
   AgentProfile({Key? key}) : super(key: key);
@@ -29,6 +30,12 @@ class _UserProfileState extends State<AgentProfile> {
   SharedPref _sharedPref = SharedPref();
   AgentProfileController _controller = Get.put(AgentProfileController());
   bool _online = true;
+  PackageInfo _packageInfo = PackageInfo(
+    appName: 'Unknown',
+    packageName: 'Unknown',
+    version: 'Unknown',
+    buildNumber: 'Unknown',
+  );
 
   @override
   void initState() {
@@ -36,13 +43,21 @@ class _UserProfileState extends State<AgentProfile> {
     _userInfoResponse = Get.arguments[0];
     _projects = Get.arguments[1];
     getProjectName();
+    _initPackageInfo();
   }
 
-  getProjectName() async {
+  Future<void>  getProjectName() async {
     _projectName = await _sharedPref.readString("projectName") ??
         _projects.dataSource!.elementAt(0).name!;
     _online = _userInfoResponse.dataSource!.status == "online" ? true : false;
     setState(() {});
+  }
+
+  Future<void> _initPackageInfo() async {
+    final PackageInfo info = await PackageInfo.fromPlatform();
+    setState(() {
+      _packageInfo = info;
+    });
   }
 
   @override
@@ -182,11 +197,11 @@ class _UserProfileState extends State<AgentProfile> {
                                           fontSize: 16))),
                               CupertinoSwitch(
                                 activeColor: AliceColors.ALICE_GREEN,
-                                onChanged:  (values) {
+                                onChanged: (values) {
                                   _controller
-                                      .changeStatus(_online?"away":"online")
+                                      .changeStatus(_online ? "away" : "online")
                                       .then((value) {
-                                    if (value != null && value=="online") {
+                                    if (value != null && value == "online") {
                                       setState(() {
                                         _online = true;
                                       });
@@ -197,7 +212,7 @@ class _UserProfileState extends State<AgentProfile> {
                                     }
                                   });
                                 },
-                                value: _online?true:false,
+                                value: _online ? true : false,
                               )
                             ],
                           ),
@@ -324,7 +339,7 @@ class _UserProfileState extends State<AgentProfile> {
                                           fontWeight: FontWeight.w500,
                                           fontSize: 16))),
                               Text(
-                                "Version 1.0.10",
+                                _packageInfo.version,
                                 style:
                                     TextStyle(color: Colors.grey, fontSize: 12),
                               ),

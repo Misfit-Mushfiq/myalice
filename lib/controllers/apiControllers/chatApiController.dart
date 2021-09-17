@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as pref;
@@ -36,6 +38,7 @@ class ChatApiController extends BaseApiController {
   void updateID(var ticketsID) {
     id = ticketsID;
   }
+
   void updateCustomerID(var id) {
     customerID = id;
   }
@@ -231,4 +234,5 @@ class ChatApiController extends BaseApiController {
       }
     });
   }
+
 }

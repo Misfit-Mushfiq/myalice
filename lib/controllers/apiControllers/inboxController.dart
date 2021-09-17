@@ -90,7 +90,7 @@ class InboxController extends BaseApiController {
     sort = await _sharedPref.readBool("sortNew") ? "asc" : "desc";
     resolved = 0;
     getTickets(
-      projectID: projectID,
+        projectID: projectID,
         order: sort,
         resolved: resolved,
         search: "",
@@ -139,12 +139,17 @@ class InboxController extends BaseApiController {
               "end": dates.length > 0 ? dates.elementAt(1) : ""
             },
             options: Options(headers: {"Authorization": "Token $token"}))
-        .then((response) => response.statusCode == 200
-            ? _ticketResponse = TicketResponse.fromJson(response.data)
-            : null)
+        .then((response) {
+          if (response.statusCode == 200) {
+            _ticketResponse = TicketResponse.fromJson(response.data);
+            
+          } else {
+            return null;
+          }
+        })
         .catchError((err) => print(err.toString()))
-        .whenComplete(
-            () => isticketsDataAvailable.value = _ticketResponse.dataSource!.length>0?true:false);
+        .whenComplete(() => isticketsDataAvailable.value =
+            _ticketResponse.dataSource!.length > 0 ? true : false);
   }
 
   Future<Projects?> getProjects() async {
@@ -154,8 +159,8 @@ class InboxController extends BaseApiController {
         .then((response) async {
       if (response.statusCode == 200) {
         _projects = Projects.fromJson(response.data);
-         projectID = await _sharedPref.readString("projectID") ??
-        _projects.dataSource!.elementAt(0).id.toString();
+        projectID = await _sharedPref.readString("projectID") ??
+            _projects.dataSource!.elementAt(0).id.toString();
         return _projects;
       }
     });

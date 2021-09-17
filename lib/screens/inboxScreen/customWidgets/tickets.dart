@@ -196,13 +196,7 @@ class _TicketsState extends State<Tickets> {
                                     .id,
                                 _inboxController.tickets.dataSource!
                                     .elementAt(index)
-                                    .customer!
-                                    .fullName,
-                                _inboxController.tickets.dataSource!
-                                    .elementAt(index)
-                                    .customer!
-                                    .id
-                                    .toString(),
+                                    .customer,
                                 widget.agents,
                                 _inboxController.tickets.dataSource!
                                     .elementAt(index)
