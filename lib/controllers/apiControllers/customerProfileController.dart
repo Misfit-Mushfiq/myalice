@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:myalice/controllers/apiControllers/baseApiController.dart';
 import 'package:myalice/models/responseModels/customerOrder/customer_order_history.dart';
 import 'package:myalice/models/responseModels/customerSummary/customer_summary.dart';
+import 'package:myalice/models/responseModels/productInteraction/product_interaction.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
 class CustomerProfileController extends BaseApiController {
@@ -60,13 +61,27 @@ class CustomerProfileController extends BaseApiController {
     });
   }
 
-    Future<dynamic> getCustomerSummary({String? customerID}) async {
+  Future<dynamic> getCustomerSummary({String? customerID}) async {
     return getDio()!
         .get("ecommerce/customers/$customerID/order-summary",
             options: Options(headers: {"Authorization": "Token $_token"}))
         .then((response) async {
       if (response.statusCode == 200) {
         var _order = CustomerSummary.fromJson(response.data);
+        return _order;
+      } else {
+        return null;
+      }
+    });
+  }
+
+  Future<dynamic> getInteraction({String? customerID}) async {
+    return getDio()!
+        .get("ecommerce/customers/$customerID/product-interactions",
+            options: Options(headers: {"Authorization": "Token $_token"}))
+        .then((response) async {
+      if (response.statusCode == 200) {
+        var _order = ProductInteraction.fromJson(response.data);
         return _order;
       } else {
         return null;

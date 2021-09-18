@@ -15,7 +15,8 @@ class SummaryDataSource {
     this.totalTickets,
   });
 
-  factory SummaryDataSource.fromJson(Map<String, dynamic> json) => SummaryDataSource(
+  factory SummaryDataSource.fromJson(Map<String, dynamic> json) =>
+      SummaryDataSource(
         totalOrders: json['total_orders'] as int?,
         frequencyDays: json['frequency_days'] as int?,
         lifetimeValue: (json['lifetime_value'] as num?)?.toDouble(),

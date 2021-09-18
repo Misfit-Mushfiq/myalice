@@ -11,7 +11,8 @@ class CustomerSummary {
         success: json['success'] as bool?,
         dataSource: json['dataSource'] == null
             ? null
-            : SummaryDataSource.fromJson(json['dataSource'] as Map<String, dynamic>),
+            : SummaryDataSource.fromJson(
+                json['dataSource'] as Map<String, dynamic>),
       );
 
   Map<String, dynamic> toJson() => {

@@ -125,9 +125,8 @@ class _CustomerSummaryState extends State<CustomerSummaryScreen> {
                             Row(
                               children: [
                                 Text(
-                                 
-                                      _customerSummary.dataSource!.totalOrders
-                                          .toString(),
+                                  _customerSummary.dataSource!.totalOrders
+                                      .toString(),
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
@@ -243,7 +242,7 @@ class _CustomerSummaryState extends State<CustomerSummaryScreen> {
                         thickness: 1.5,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left:15.0),
+                        padding: const EdgeInsets.only(left: 15.0),
                         child: Row(
                           children: [
                             Expanded(
@@ -258,7 +257,8 @@ class _CustomerSummaryState extends State<CustomerSummaryScreen> {
                                   ),
                                   SizedBox(width: 10),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         "Total Visits",
@@ -280,11 +280,15 @@ class _CustomerSummaryState extends State<CustomerSummaryScreen> {
                                   )
                                 ],
                               ),
-                            )
-                          , Container(margin: EdgeInsets.only(right: 15), width: 1,height: 50,color: Colors.grey,),
-                          
-                          Expanded(
-                            child: Row(
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(right: 15),
+                              width: 1,
+                              height: 50,
+                              color: Colors.grey,
+                            ),
+                            Expanded(
+                              child: Row(
                                 children: [
                                   Container(
                                     padding: EdgeInsets.all(5.0),
@@ -295,7 +299,8 @@ class _CustomerSummaryState extends State<CustomerSummaryScreen> {
                                   ),
                                   SizedBox(width: 10),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         "Total Tickets",
@@ -307,7 +312,8 @@ class _CustomerSummaryState extends State<CustomerSummaryScreen> {
                                         height: 2,
                                       ),
                                       Text(
-                                        _customerSummary.dataSource!.totalTickets
+                                        _customerSummary
+                                            .dataSource!.totalTickets
                                             .toString(),
                                         style: TextStyle(
                                             fontSize: 16,
@@ -317,8 +323,7 @@ class _CustomerSummaryState extends State<CustomerSummaryScreen> {
                                   )
                                 ],
                               ),
-                          )
-                          
+                            )
                           ],
                         ),
                       ),

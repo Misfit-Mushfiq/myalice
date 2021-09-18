@@ -37,3 +37,12 @@ String getDateFromTimeStamp(int timestamp) {
 
   return date;
 }
+
+String getDateWithTime(int timestamp) {
+  var now = DateTime.now();
+  var format = DateFormat('d MMM yyyy, HH:mm a');
+  var date =
+      format.format(DateTime.fromMillisecondsSinceEpoch(timestamp * 1));
+
+  return date;
+}

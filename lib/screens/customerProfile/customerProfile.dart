@@ -179,7 +179,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
                             ],
                           ),
                           onTap: () {
-                            Get.toNamed(CUSTOMER_SUMMARY,arguments: [_customer.id!] );
+                            Get.toNamed(CUSTOMER_SUMMARY,
+                                arguments: [_customer.id!]);
                           },
                         ),
                         SizedBox(
@@ -208,7 +209,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
                             ],
                           ),
                           onTap: () {
-                            print("object");
+                            Get.toNamed(CUSTOMER_PRODUCT_INTERACTION,
+                                arguments: [_customer.id!]);
                           },
                         ),
                       ],

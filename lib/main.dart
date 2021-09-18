@@ -11,6 +11,7 @@ import 'package:myalice/screens/customerProfile/customerProfile.dart';
 import 'package:myalice/screens/customerProfile/customerSummary.dart';
 import 'package:myalice/screens/customerProfile/editCustomerInfo.dart';
 import 'package:myalice/screens/customerProfile/orderHistory.dart';
+import 'package:myalice/screens/customerProfile/productInteraction.dart';
 import 'package:myalice/screens/inboxScreen/inboxScreen.dart';
 import 'package:myalice/screens/loginScreen.dart';
 import 'package:myalice/screens/signUpScreen.dart';
@@ -48,7 +49,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: CUSTOMER_INFO_EDIT, page: () => EditCustomerInfo()),
         GetPage(name: CUSTOMER_ORDER, page: () => OrderHistory()),
         GetPage(name: CUSTOMER_SUMMARY, page: () => CustomerSummaryScreen()),
-       // GetPage(name: CUSTOMER_PRODUCT_INTERACTION, page: () => ())
+        GetPage(
+            name: CUSTOMER_PRODUCT_INTERACTION,
+            page: () => ProductInteractionScreen())
       ],
     );
   }
