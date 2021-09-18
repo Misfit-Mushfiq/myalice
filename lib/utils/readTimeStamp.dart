@@ -1,38 +1,39 @@
- import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 
 String readTimestamp(int timestamp) {
-    var now = DateTime.now();
-    var format = DateFormat('HH:mm a');
-    var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-    var diff = now.difference(date);
-    var time = '';
+  var now = DateTime.now();
+  var format = DateFormat('HH:mm a');
+  var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+  var diff = now.difference(date);
+  var time = '';
 
-    if (diff.inSeconds <= 0 ||
-        diff.inSeconds > 0 && diff.inMinutes == 0 ||
-        diff.inMinutes > 0 && diff.inHours == 0 ||
-        diff.inHours > 0 && diff.inDays == 0) {
-      time = format.format(date);
-    } else if (diff.inDays > 0 && diff.inDays < 7) {
-      if (diff.inDays == 1) {
-        time = diff.inDays.toString() + ' DAY AGO';
-      } else {
-        time = diff.inDays.toString() + ' DAYS AGO';
-      }
+  if (diff.inSeconds <= 0 ||
+      diff.inSeconds > 0 && diff.inMinutes == 0 ||
+      diff.inMinutes > 0 && diff.inHours == 0 ||
+      diff.inHours > 0 && diff.inDays == 0) {
+    time = format.format(date);
+  } else if (diff.inDays > 0 && diff.inDays < 7) {
+    if (diff.inDays == 1) {
+      time = diff.inDays.toString() + ' DAY AGO';
     } else {
-      if (diff.inDays == 7) {
-        time = (diff.inDays / 7).floor().toString() + ' WEEK AGO';
-      } else {
-        time = (diff.inDays / 7).floor().toString() + ' WEEKS AGO';
-      }
+      time = diff.inDays.toString() + ' DAYS AGO';
     }
-
-    return time;
+  } else {
+    if (diff.inDays == 7) {
+      time = (diff.inDays / 7).floor().toString() + ' WEEK AGO';
+    } else {
+      time = (diff.inDays / 7).floor().toString() + ' WEEKS AGO';
+    }
   }
 
-  String getDateFromTimeStamp(int timestamp) {
-    var now = DateTime.now();
-    var format = DateFormat('dd MMM,yyyy');
-    var date = format.format(DateTime.fromMillisecondsSinceEpoch(timestamp * 1000));
+  return time;
+}
 
-    return date;
-  }
+String getDateFromTimeStamp(int timestamp) {
+  var now = DateTime.now();
+  var format = DateFormat('dd MMM,yyyy');
+  var date =
+      format.format(DateTime.fromMillisecondsSinceEpoch(timestamp * 1000));
+
+  return date;
+}

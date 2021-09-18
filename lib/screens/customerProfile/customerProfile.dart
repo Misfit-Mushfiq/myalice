@@ -179,7 +179,7 @@ class _CustomerProfileState extends State<CustomerProfile> {
                             ],
                           ),
                           onTap: () {
-                            print("object");
+                            Get.toNamed(CUSTOMER_SUMMARY,arguments: [_customer.id!] );
                           },
                         ),
                         SizedBox(

@@ -42,7 +42,26 @@ class _OrderHistoryState extends State<OrderHistory> {
     Locale locale = Localizations.localeOf(context);
     var format = NumberFormat.simpleCurrency(locale: locale.toString());
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(
+          "Order History",
+          style: TextStyle(color: Colors.black, fontSize: 16),
+        ),
+        elevation: 0.0,
+        centerTitle: false,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        titleSpacing: 0.0,
+        leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: Icon(
+              Icons.arrow_back_ios_new,
+              color: Colors.black,
+              size: 18,
+            )),
+      ),
       body: SingleChildScrollView(
           physics: ScrollPhysics(),
           child: Container(
@@ -230,7 +249,13 @@ class _OrderHistoryState extends State<OrderHistory> {
                                                                 .billingAddress!
                                                                 .addressOne
                                                                 .toString()));
-                                                    Get.snackbar("","",snackPosition: SnackPosition.BOTTOM,titleText: Center(child: Text("Copied")));
+                                                    Get.snackbar("", "",
+                                                        snackPosition:
+                                                            SnackPosition
+                                                                .BOTTOM,
+                                                        titleText: Center(
+                                                            child: Text(
+                                                                "Copied")));
                                                   },
                                                   icon: Icon(
                                                     Icons.copy,
@@ -290,14 +315,21 @@ class _OrderHistoryState extends State<OrderHistory> {
                                               ),
                                               IconButton(
                                                   onPressed: () {
-                                                     Clipboard.setData(
+                                                    Clipboard.setData(
                                                         ClipboardData(
                                                             text: _list
-                                                  .elementAt(index)
-                                                  .shippingAddress!
-                                                  .addressOne
-                                                  .toString()));
-                                                    Get.snackbar("","",snackPosition: SnackPosition.BOTTOM,titleText: Center(child: Text("Copied")));
+                                                                .elementAt(
+                                                                    index)
+                                                                .shippingAddress!
+                                                                .addressOne
+                                                                .toString()));
+                                                    Get.snackbar("", "",
+                                                        snackPosition:
+                                                            SnackPosition
+                                                                .BOTTOM,
+                                                        titleText: Center(
+                                                            child: Text(
+                                                                "Copied")));
                                                   },
                                                   icon: Icon(
                                                     Icons.copy,
@@ -360,10 +392,17 @@ class _OrderHistoryState extends State<OrderHistory> {
                                                     Clipboard.setData(
                                                         ClipboardData(
                                                             text: _list
-                                                  .elementAt(index)
-                                                  .shippingMethod!
-                                                  .toString()));
-                                                    Get.snackbar("","",snackPosition: SnackPosition.BOTTOM,titleText: Center(child: Text("Copied")));
+                                                                .elementAt(
+                                                                    index)
+                                                                .shippingMethod!
+                                                                .toString()));
+                                                    Get.snackbar("", "",
+                                                        snackPosition:
+                                                            SnackPosition
+                                                                .BOTTOM,
+                                                        titleText: Center(
+                                                            child: Text(
+                                                                "Copied")));
                                                   },
                                                   icon: Icon(
                                                     Icons.copy,
@@ -684,7 +723,11 @@ class _OrderHistoryState extends State<OrderHistory> {
                           );
                         });
                   } else {
-                    return CircularProgressIndicator();
+                    return Center(
+                        child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircularProgressIndicator(),
+                    ));
                   }
                 })
               ],

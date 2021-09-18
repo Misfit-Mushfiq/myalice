@@ -61,7 +61,8 @@ class OrderDataSource {
     this.shippingAddress,
   });
 
-  factory OrderDataSource.fromJson(Map<String, dynamic> json) => OrderDataSource(
+  factory OrderDataSource.fromJson(Map<String, dynamic> json) =>
+      OrderDataSource(
         id: json['id'] as String?,
         createdAt: json['created_at'] as String?,
         modifiedAt: json['modified_at'] as String?,

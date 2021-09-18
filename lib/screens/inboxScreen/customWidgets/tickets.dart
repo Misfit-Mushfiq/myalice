@@ -222,5 +222,4 @@ class _TicketsState extends State<Tickets> {
     await Future.delayed(Duration(seconds: 3));
     widget.onRefresh();
   }
-
 }
