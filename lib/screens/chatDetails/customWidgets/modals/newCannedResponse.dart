@@ -67,7 +67,9 @@ class _NewCannedResponseState extends State<NewCannedResponse> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("Title"),
-                SizedBox(height: 5,),
+                SizedBox(
+                  height: 5,
+                ),
                 Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Container(
@@ -99,7 +101,9 @@ class _NewCannedResponseState extends State<NewCannedResponse> {
                   ),
                 ),
                 Text("Response"),
-                SizedBox(height: 5,),
+                SizedBox(
+                  height: 5,
+                ),
                 Container(
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey),

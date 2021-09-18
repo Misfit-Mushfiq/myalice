@@ -9,7 +9,11 @@ class InboxAssignedModal extends StatefulWidget {
   final AvailableAgents agents;
   final ticketID;
   final Function(String name) onSaved;
-  InboxAssignedModal({Key? key, required this.agents,required this.ticketID,required this.onSaved})
+  InboxAssignedModal(
+      {Key? key,
+      required this.agents,
+      required this.ticketID,
+      required this.onSaved})
       : super(key: key);
 
   @override

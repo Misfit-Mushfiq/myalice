@@ -25,9 +25,10 @@ class AgentProfileController extends BaseApiController {
     return getDio()!
         .post("accounts/update-status",
             options: Options(headers: {"Authorization": "Token $_token"}),
-            data:{"status":status})
-        .then((response) =>
-            response.statusCode == 200 ? response.data['dataSource']["status"] : null)
+            data: {"status": status})
+        .then((response) => response.statusCode == 200
+            ? response.data['dataSource']["status"]
+            : null)
         .catchError((err) => print('Error!!!!! : $err'));
   }
 }

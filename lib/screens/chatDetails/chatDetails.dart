@@ -86,12 +86,13 @@ class _ChatDetailsState extends State<ChatDetails>
 /*     _sharedPref.saveString(
                   "selectedInboxTags", TagsDataSource.encode(_usedTags)); */
 
-    await pusherService.connectPusher('chat-C_${_customer.id!.toString()}', "messages");
+    await pusherService.connectPusher(
+        'chat-C_${_customer.id!.toString()}', "messages");
   }
 
   void animateToScreenEnd() {
     _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent ,
+      _scrollController.position.maxScrollExtent,
       duration: Duration(milliseconds: 3),
       curve: Curves.easeOut,
     );
@@ -127,7 +128,7 @@ class _ChatDetailsState extends State<ChatDetails>
                 flex: 4,
                 child: InkWell(
                   onTap: () {
-                    Get.toNamed(CUSTOMER_PROFILE_PAGE,arguments: [_customer]);
+                    Get.toNamed(CUSTOMER_PROFILE_PAGE, arguments: [_customer]);
                   },
                   child: Row(
                     children: [

@@ -135,7 +135,7 @@ class _FilterModalState extends State<FilterModal> {
                                 _pref.remove("selectedTimes");
 
                                 _inboxController.getTickets(
-                                  projectID: _inboxController.projectID,
+                                    projectID: _inboxController.projectID,
                                     order: widget.sortNew ? "desc" : "",
                                     resolved: widget.resolvedSelected ? 1 : 0,
                                     search: "",
@@ -171,7 +171,7 @@ class _FilterModalState extends State<FilterModal> {
                                 Navigator.pop(context, true);
 
                                 _inboxController.getTickets(
-                                   projectID: _inboxController.projectID,
+                                    projectID: _inboxController.projectID,
                                     order: widget.sortNew ? "desc" : "",
                                     resolved: widget.resolvedSelected ? 1 : 0,
                                     search: "",

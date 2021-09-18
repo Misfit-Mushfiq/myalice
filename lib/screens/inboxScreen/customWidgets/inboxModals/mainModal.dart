@@ -86,25 +86,24 @@ class _MainModalState extends State<MainModal> {
                 minLeadingWidth: 0.0,
                 contentPadding: EdgeInsets.only(left: 10.0),
                 onTap: () {
-                  setState(()  {
+                  setState(() {
                     widget.pendingSelected = !widget.pendingSelected;
                     widget.resolvedSelected = !widget.resolvedSelected;
                     widget.inboxController.isticketsDataAvailable.value = false;
                     widget.resolvedSelected
                         ? widget.inboxController.resolved = 1
                         : widget.inboxController.resolved = 0;
-                   
                   });
-                   widget.inboxController.getTickets(
-                       projectID: widget.inboxController.projectID,
-                        order: widget.inboxController.sort,
-                        resolved: widget.inboxController.resolved,
-                        search: "",
-                        channels: _selectedChannelsID!,
-                        agents: _selectedAgentsID!,
-                        groups: [],
-                        tags: _selectedTagsID!,
-                        dates: _selectedTimes!);
+                  widget.inboxController.getTickets(
+                      projectID: widget.inboxController.projectID,
+                      order: widget.inboxController.sort,
+                      resolved: widget.inboxController.resolved,
+                      search: "",
+                      channels: _selectedChannelsID!,
+                      agents: _selectedAgentsID!,
+                      groups: [],
+                      tags: _selectedTagsID!,
+                      dates: _selectedTimes!);
                   widget.onChanged(widget.pendingSelected,
                       widget.resolvedSelected, widget.sortNew);
                   Get.back();
@@ -164,7 +163,7 @@ class _MainModalState extends State<MainModal> {
                           ? widget.inboxController.sort = "asc"
                           : widget.inboxController.sort = "desc";
                       widget.inboxController.getTickets(
-                        projectID: widget.inboxController.projectID,
+                          projectID: widget.inboxController.projectID,
                           order: widget.inboxController.sort,
                           resolved: widget.inboxController.resolved,
                           search: "",

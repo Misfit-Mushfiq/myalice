@@ -234,5 +234,4 @@ class ChatApiController extends BaseApiController {
       }
     });
   }
-
 }

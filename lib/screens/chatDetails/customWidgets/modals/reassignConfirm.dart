@@ -11,7 +11,7 @@ class ReassignConfirm extends StatefulWidget {
   final String agentName;
   final String groupID;
   final String groupName;
-  final  ticketID;
+  final ticketID;
   final Function(String name) onSaved;
   ReassignConfirm(
       {Key? key,

@@ -46,7 +46,7 @@ class _UserProfileState extends State<AgentProfile> {
     _initPackageInfo();
   }
 
-  Future<void>  getProjectName() async {
+  Future<void> getProjectName() async {
     _projectName = await _sharedPref.readString("projectName") ??
         _projects.dataSource!.elementAt(0).name!;
     _online = _userInfoResponse.dataSource!.status == "online" ? true : false;

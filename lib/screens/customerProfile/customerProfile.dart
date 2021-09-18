@@ -19,7 +19,7 @@ class CustomerProfile extends StatefulWidget {
 
 class _CustomerProfileState extends State<CustomerProfile> {
   late Customer _customer;
-    CustomerProfileController _controller = Get.put(CustomerProfileController());
+  CustomerProfileController _controller = Get.put(CustomerProfileController());
   @override
   void initState() {
     var _args = Get.arguments;
@@ -149,7 +149,8 @@ class _CustomerProfileState extends State<CustomerProfile> {
                             ],
                           ),
                           onTap: () {
-                            print("object");
+                            Get.toNamed(CUSTOMER_ORDER,
+                                arguments: [_customer.id!]);
                           },
                         ),
                         SizedBox(

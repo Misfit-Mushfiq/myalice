@@ -4,10 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myalice/controllers/apiControllers/databinging.dart';
+import 'package:myalice/models/responseModels/customerOrder/customer_order_history.dart';
 import 'package:myalice/screens/chatDetails/chatDetails.dart';
 import 'package:myalice/screens/customerProfile/customerInfo.dart';
 import 'package:myalice/screens/customerProfile/customerProfile.dart';
 import 'package:myalice/screens/customerProfile/editCustomerInfo.dart';
+import 'package:myalice/screens/customerProfile/orderHistory.dart';
 import 'package:myalice/screens/inboxScreen/inboxScreen.dart';
 import 'package:myalice/screens/loginScreen.dart';
 import 'package:myalice/screens/signUpScreen.dart';
@@ -42,7 +44,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: USER_PROFILE_PAGE, page: () => AgentProfile()),
         GetPage(name: CUSTOMER_PROFILE_PAGE, page: () => CustomerProfile()),
         GetPage(name: CUSTOMER_INFO_PAGE, page: () => CustomerInfo()),
-        GetPage(name: CUSTOMER_INFO_EDIT, page: () => EditCustomerInfo())
+        GetPage(name: CUSTOMER_INFO_EDIT, page: () => EditCustomerInfo()),
+        GetPage(name: CUSTOMER_ORDER, page: () => OrderHistory())
       ],
     );
   }

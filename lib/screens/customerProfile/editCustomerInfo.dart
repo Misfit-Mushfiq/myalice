@@ -257,8 +257,7 @@ class _EditCustomerInfoState extends State<EditCustomerInfo> {
                                             },
                                             decoration:
                                                 InputDecoration.collapsed(
-                                                    hintText:
-                                                        "Enter your first name",
+                                                    hintText: "Enter text",
                                                     hintStyle: TextStyle(
                                                         fontSize: 14)),
                                           ),

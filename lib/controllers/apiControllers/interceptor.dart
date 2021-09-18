@@ -48,7 +48,7 @@ class LoggingInterceptors extends InterceptorsWrapper {
   Future<void> onError(DioError err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
       // pref.Get.offNamed(LOGIN_PAGE);
-     /*  pref.Get.snackbar(
+      /*  pref.Get.snackbar(
         err.response!.statusMessage!,
         LoginResponse.fromJson(err.response!.data!).detail!,
         backgroundColor: Colors.red,

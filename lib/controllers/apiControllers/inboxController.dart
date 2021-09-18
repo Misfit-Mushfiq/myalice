@@ -142,7 +142,6 @@ class InboxController extends BaseApiController {
         .then((response) {
           if (response.statusCode == 200) {
             _ticketResponse = TicketResponse.fromJson(response.data);
-            
           } else {
             return null;
           }
