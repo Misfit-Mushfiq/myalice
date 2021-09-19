@@ -64,6 +64,7 @@ class _ChatDetailsState extends State<ChatDetails>
   @override
   void initState() {
     init();
+
     super.initState();
   }
 
@@ -98,11 +99,11 @@ class _ChatDetailsState extends State<ChatDetails>
     );
   }
 
-  void jumpToScreenEnd() {
+  /*  void jumpToScreenEnd() {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     });
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +113,7 @@ class _ChatDetailsState extends State<ChatDetails>
 
     return Scaffold(
         key: _chatboxBottomSheet,
+
         appBar: AppBar(
           backgroundColor: Colors.white,
           titleSpacing: 0,
@@ -207,41 +209,52 @@ class _ChatDetailsState extends State<ChatDetails>
             ),
           ],
         ),
-        body: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            color: Colors.white,
+        body: SingleChildScrollView(
+          physics: ScrollPhysics(),
+          controller: _scrollController,
+ /*            width: MediaQuery.of(context).size.width,
+            color: Colors.white, */
             child: Column(
               children: <Widget>[
-                Expanded(
-                  child: Obx(() {
-                    return ListView.builder(
-                      itemCount: Get.find<ChatApiController>().chats.length,
-                      shrinkWrap: true,
-                      addAutomaticKeepAlives: true,
-                      controller: _scrollController,
-                      padding: EdgeInsets.only(top: 10, bottom: 00),
-                      physics: AlwaysScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        animateToScreenEnd();
-                        /* if (index + 1 ==
+                Obx(() {
+                    if (Get.find<ChatApiController>()
+                        .chatResponse
+                        .value
+                        .isNotEmpty) {
+                              Timer(
+                          Duration(milliseconds: 1),
+                          () => _scrollController.jumpTo(
+                                _scrollController.position.maxScrollExtent,
+                              ));
+                      return ListView.builder(
+                        itemCount: Get.find<ChatApiController>().chats.length,
+                        shrinkWrap: true,
+                        addAutomaticKeepAlives: true,
+                        padding: EdgeInsets.only(top: 10, bottom: 00),
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          // animateToScreenEnd();
+                          /* if (index + 1 ==
                             Get.find<ChatApiController>().chats.length) {
                           animateToScreenEnd();
                         } */
-                        //print(index);
-                        return obj.chats.elementAt(index)!.type == "action" ||
-                                obj.chats.elementAt(index)!.type == "note"
-                            ? ActionText(
-                                text: obj.chats.elementAt(index)!.text!,
-                                type: obj.chats.elementAt(index)!.type,
-                              )
-                            : Texts(object: obj, index: index);
-                      },
-                    );
-                  }),
+                          //print(index);
+                          return obj.chats.elementAt(index)!.type == "action" ||
+                                  obj.chats.elementAt(index)!.type == "note"
+                              ? ActionText(
+                                  text: obj.chats.elementAt(index)!.text!,
+                                  type: obj.chats.elementAt(index)!.type,
+                                )
+                              : Texts(object: obj, index: index);
+                        },
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
                 ),
-                Align(
-                    alignment: Alignment.topCenter,
+                 Align(
+                    alignment: Alignment.bottomCenter,
                     child: Column(
                       children: [
                         AutoCompleteExample(
@@ -348,8 +361,8 @@ class _ChatDetailsState extends State<ChatDetails>
                     visible: _visiblity,
                     child: Attachments(
                         ticketId: _ticketId.toString(),
-                        cannedResponse: _cannedResponse))
-              ],
+                        cannedResponse: _cannedResponse))            
+             ],
             )));
   }
 
