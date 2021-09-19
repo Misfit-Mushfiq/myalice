@@ -94,7 +94,7 @@ class _ChatDetailsState extends State<ChatDetails>
   void animateToScreenEnd() {
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent,
-      duration: Duration(milliseconds: 3),
+      duration: Duration(milliseconds: 1),
       curve: Curves.easeOut,
     );
   }
@@ -113,7 +113,6 @@ class _ChatDetailsState extends State<ChatDetails>
 
     return Scaffold(
         key: _chatboxBottomSheet,
-
         appBar: AppBar(
           backgroundColor: Colors.white,
           titleSpacing: 0,
@@ -209,81 +208,90 @@ class _ChatDetailsState extends State<ChatDetails>
             ),
           ],
         ),
-        body: SingleChildScrollView(
-          physics: ScrollPhysics(),
-          controller: _scrollController,
- /*            width: MediaQuery.of(context).size.width,
-            color: Colors.white, */
-            child: Column(
-              children: <Widget>[
-                Obx(() {
-                    if (Get.find<ChatApiController>()
-                        .chatResponse
-                        .value
-                        .isNotEmpty) {
-                              Timer(
-                          Duration(milliseconds: 1),
-                          () => _scrollController.jumpTo(
-                                _scrollController.position.maxScrollExtent,
-                              ));
-                      return ListView.builder(
-                        itemCount: Get.find<ChatApiController>().chats.length,
-                        shrinkWrap: true,
-                        addAutomaticKeepAlives: true,
-                        padding: EdgeInsets.only(top: 10, bottom: 00),
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          // animateToScreenEnd();
-                          /* if (index + 1 ==
+        body: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                  physics: ScrollPhysics(),
+                  controller: _scrollController,
+                  child: Column(
+                    children: <Widget>[
+                      Obx(
+                        () {
+                          if (Get.find<ChatApiController>()
+                              .chatResponse
+                              .value
+                              .isNotEmpty) {
+                            Timer(
+                                Duration(milliseconds: 1),
+                                () => _scrollController.animateTo(
+                                      _scrollController
+                                          .position.maxScrollExtent, duration: Duration(microseconds: 1), curve: Curves.easeIn,
+                                    ));
+                            return ListView.builder(
+                              itemCount:
+                                  Get.find<ChatApiController>().chats.length,
+                              shrinkWrap: true,
+                              addAutomaticKeepAlives: true,
+                              padding: EdgeInsets.only(top: 10, bottom: 00),
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                // animateToScreenEnd();
+                                /* if (index + 1 ==
                             Get.find<ChatApiController>().chats.length) {
                           animateToScreenEnd();
                         } */
-                          //print(index);
-                          return obj.chats.elementAt(index)!.type == "action" ||
-                                  obj.chats.elementAt(index)!.type == "note"
-                              ? ActionText(
-                                  text: obj.chats.elementAt(index)!.text!,
-                                  type: obj.chats.elementAt(index)!.type,
-                                )
-                              : Texts(object: obj, index: index);
+                                //print(index);
+                                return obj.chats.elementAt(index)!.type ==
+                                            "action" ||
+                                        obj.chats.elementAt(index)!.type ==
+                                            "note"
+                                    ? ActionText(
+                                        text: obj.chats.elementAt(index)!.text!,
+                                        type: obj.chats.elementAt(index)!.type,
+                                      )
+                                    : Texts(object: obj, index: index);
+                              },
+                            );
+                          } else {
+                            return Container();
+                          }
                         },
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
-                 Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Column(
-                      children: [
-                        AutoCompleteExample(
-                          onAttachmentTap: (bool visiblity) {
-                            setState(() {
-                              _visiblity = visiblity;
-                              _spaceVisiblity = false;
-                            });
-                          },
-                          onTextTap: (bool spaceVisiblity) {
-                            setState(() {
-                              _visiblity = false;
-                              _spaceVisiblity = spaceVisiblity;
-                            });
-                          },
-                          cannedResponse: _cannedResponse,
-                          ticketID: _ticketId.toString(),
-                        ),
-                        Visibility(
-                            visible: _spaceVisiblity,
-                            child: Stack(
-                              children: [
-                                Container(
-                                  height: 200,
-                                )
-                              ],
+                      ),
+                    ],
+                  )),
+            ),
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  children: [
+                    AutoCompleteExample(
+                      onAttachmentTap: (bool visiblity) {
+                        setState(() {
+                          _visiblity = visiblity;
+                          _spaceVisiblity = false;
+                        });
+                      },
+                      onTextTap: (bool spaceVisiblity) {
+                        setState(() {
+                          _visiblity = false;
+                          _spaceVisiblity = spaceVisiblity;
+                        });
+                      },
+                      cannedResponse: _cannedResponse,
+                      ticketID: _ticketId.toString(),
+                    ),
+                    Visibility(
+                        visible: _spaceVisiblity,
+                        child: Stack(
+                          children: [
+                            Container(
+                              height: 200,
                             )
+                          ],
+                        )
 
-                            /* Container(
+                        /* Container(
                           padding:
                               EdgeInsets.only(bottom: 10, top: 10, right: 10),
                           width: double.infinity,
@@ -354,16 +362,16 @@ class _ChatDetailsState extends State<ChatDetails>
                           ),
                         ),
                        */
-                            )
-                      ],
-                    )),
-                Visibility(
-                    visible: _visiblity,
-                    child: Attachments(
-                        ticketId: _ticketId.toString(),
-                        cannedResponse: _cannedResponse))            
-             ],
-            )));
+                        )
+                  ],
+                )),
+            Visibility(
+                visible: _visiblity,
+                child: Attachments(
+                    ticketId: _ticketId.toString(),
+                    cannedResponse: _cannedResponse))
+          ],
+        ));
   }
 
   void showModal(BuildContext context) {
