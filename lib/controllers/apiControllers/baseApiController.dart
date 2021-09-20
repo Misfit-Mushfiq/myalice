@@ -1,3 +1,4 @@
+import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/interceptor.dart';
@@ -38,7 +39,12 @@ class BaseApiController extends GetxController with StateMixin<dynamic> {
       headers: {_contentType: 'application/json'},
     );
 
-    _dio = Dio(dioOptions)..interceptors.add(LoggingInterceptors());
+    _dio = Dio(dioOptions)
+      ..interceptors.add(LoggingInterceptors(
+        dio: getDio()!,
+        requestRetrier: DioConnectivityRequestRetrier(
+            dio: getDio()!, connectivity: Connectivity()),
+      ));
   }
 
   Dio? getDio() => _dio;

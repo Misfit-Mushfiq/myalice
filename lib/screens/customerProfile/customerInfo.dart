@@ -15,7 +15,7 @@ class CustomerInfo extends StatefulWidget {
 
 class _CustomerInfoState extends State<CustomerInfo> {
   late Customer _customer;
-  late Map _cusomerData;
+  late Map _cusomerData = Map().obs;
   late var _fixedData = Map().obs;
   late var _variableData = Map().obs;
   CustomerProfileController _controller = Get.find<CustomerProfileController>();
@@ -28,8 +28,12 @@ class _CustomerInfoState extends State<CustomerInfo> {
   }
 
   getMapdata() async {
-    _cusomerData =
-        await _controller.getAttributeMap(customerID: _customer.id!.toString());
+    _cusomerData = await _controller
+        .getAttributeMap(customerID: _customer.id!.toString())
+        .then((value) {
+      print("ok");
+      return value;
+    });
     setState(() {});
     _fixedData.value = _cusomerData["fixed"];
     _variableData.value = _cusomerData['variable'];
@@ -118,7 +122,7 @@ class _CustomerInfoState extends State<CustomerInfo> {
                     color: Colors.grey,
                   ),
                   Obx(() {
-                    if (_fixedData.length > 0) {
+                    if (_cusomerData.length > 0) {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ListView.builder(

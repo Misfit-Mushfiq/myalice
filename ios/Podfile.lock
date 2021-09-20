@@ -1,4 +1,7 @@
 PODS:
+  - connectivity (0.0.1):
+    - Flutter
+    - Reachability
   - Flutter (1.0.0)
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
@@ -16,6 +19,7 @@ PODS:
   - PusherSwiftWithEncryption (9.2.2):
     - NWWebSocket (~> 0.5.2)
     - TweetNacl (~> 1.0.0)
+  - Reachability (3.2)
   - shared_preferences (0.0.1):
     - Flutter
   - sqflite (0.0.2):
@@ -24,6 +28,7 @@ PODS:
   - TweetNacl (1.0.2)
 
 DEPENDENCIES:
+  - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - Flutter (from `Flutter`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
@@ -37,9 +42,12 @@ SPEC REPOS:
     - FMDB
     - NWWebSocket
     - PusherSwiftWithEncryption
+    - Reachability
     - TweetNacl
 
 EXTERNAL SOURCES:
+  connectivity:
+    :path: ".symlinks/plugins/connectivity/ios"
   Flutter:
     :path: Flutter
   image_picker:
@@ -56,6 +64,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
+  connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   image_picker: e06f7a68f000bd36f552c1847e33cda96ed31f1f
@@ -64,6 +73,7 @@ SPEC CHECKSUMS:
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   pusher_client: 028936d5ccafceda44ce0498b55f029691c76c9d
   PusherSwiftWithEncryption: 7c5192445971a4105e1f425dcbcc7d0286c4fc23
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6

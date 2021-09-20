@@ -1,17 +1,20 @@
+import 'dart:async';
+import 'dart:io';
+
+import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as pref;
-import 'package:myalice/controllers/apiControllers/chatApiController.dart';
-import 'package:myalice/controllers/apiControllers/inboxController.dart';
-import 'package:myalice/controllers/apiControllers/loginApiController.dart';
-import 'package:myalice/models/responseModels/loginResponse.dart';
-import 'package:myalice/utils/routes.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
 class LoggingInterceptors extends InterceptorsWrapper {
   int maxCharactersPerLine = 200;
   SharedPref _sharedPref = SharedPref();
+  late DioConnectivityRequestRetrier requestRetrier;
+  final Dio dio;
+
+  LoggingInterceptors({required this.dio, required this.requestRetrier});
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -45,31 +48,91 @@ class LoggingInterceptors extends InterceptorsWrapper {
   }
 
   @override
-  Future<void> onError(DioError err, ErrorInterceptorHandler handler) async {
-    if (err.response?.statusCode == 401) {
-      // pref.Get.offNamed(LOGIN_PAGE);
-      /*  pref.Get.snackbar(
-        err.response!.statusMessage!,
-        LoginResponse.fromJson(err.response!.data!).detail!,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        snackPosition: pref.SnackPosition.BOTTOM,
-        margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
-        borderRadius: 50.0,
-        snackStyle: pref.SnackStyle.FLOATING,
-      ); */
-      pref.Get.put(LoginApiController());
-      pref.Get.find<LoginApiController>()
-          .refreshToken(await _sharedPref.readString("apiRefreshToken"))
-          .then((value) {
-        _sharedPref.saveString("apiToken", value.access);
-      });
-      pref.Get.find<InboxController>().token =
-          await _sharedPref.readString("apiToken");
+  Future onError(DioError error, ErrorInterceptorHandler handler) async {
+    if (error.response!.statusCode == 401) {
+      Dio tokenDio = new Dio();
+      String refreshToken = await _sharedPref.readString("apiRefreshToken");
+      Options options = Options(
+          method: error.requestOptions.method,
+          sendTimeout: error.requestOptions.sendTimeout,
+          receiveTimeout: error.requestOptions.receiveTimeout,
+          extra: error.requestOptions.extra,
+          headers: error.requestOptions.headers,
+          responseType: error.requestOptions.responseType,
+          contentType: error.requestOptions.contentType);
+      tokenDio.interceptors.add(LogInterceptor(
+          responseBody: true, requestHeader: true, requestBody: true));
+      return await tokenDio
+          .post("https://v3stage.getalice.ai/api/accounts/refresh",
+              data: {'refresh': refreshToken})
+          .then((d) {
+            //update Token
+            error.requestOptions.headers["Authorization"] =
+                "Token " + d.data["access"];
+            _sharedPref.saveString("apiToken", d.data["access"]);
+          })
+          .catchError((onError) {})
+          .then((e) async {
+            //repeat
+            final response = await tokenDio.request(
+                error.requestOptions.baseUrl + error.requestOptions.path,
+                data: error.requestOptions.data,
+                cancelToken: error.requestOptions.cancelToken,
+                onReceiveProgress: error.requestOptions.onReceiveProgress,
+                onSendProgress: error.requestOptions.onSendProgress,
+                queryParameters: error.requestOptions.queryParameters,
+                options: options);
+
+            return handler.resolve(response);
+          });
     }
-    debugPrint(err.response!.statusMessage);
-    debugPrint(
-        "ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.baseUrl}${err.requestOptions.path}");
-    return super.onError(err, handler);
+    // return super.onError(error, handler);
+  }
+
+  bool _shouldRetry(DioError err) {
+    return err.type == DioErrorType.other &&
+        err.error != null &&
+        err.error is SocketException;
+  }
+}
+
+class DioConnectivityRequestRetrier {
+  final Dio dio;
+  final Connectivity connectivity;
+
+  DioConnectivityRequestRetrier({
+    required this.dio,
+    required this.connectivity,
+  });
+
+  Future<Response> scheduleRequestRetry(RequestOptions requestOptions) async {
+    var streamSubscription;
+    final responseCompleter = Completer<Response>();
+
+    streamSubscription = connectivity.onConnectivityChanged.listen(
+      (connectivityResult) async {
+        print(connectivityResult);
+        if (connectivityResult != ConnectivityResult.none) {
+          streamSubscription.cancel();
+          responseCompleter.complete(dio.request(
+            requestOptions.baseUrl + requestOptions.path,
+            cancelToken: requestOptions.cancelToken,
+            data: requestOptions.data,
+            onReceiveProgress: requestOptions.onReceiveProgress,
+            onSendProgress: requestOptions.onSendProgress,
+            queryParameters: requestOptions.queryParameters,
+            options: Options(
+                method: requestOptions.method,
+                sendTimeout: requestOptions.sendTimeout,
+                receiveTimeout: requestOptions.receiveTimeout,
+                extra: requestOptions.extra,
+                headers: requestOptions.headers,
+                responseType: requestOptions.responseType,
+                contentType: requestOptions.contentType),
+          ));
+        }
+      },
+    );
+    return responseCompleter.future;
   }
 }

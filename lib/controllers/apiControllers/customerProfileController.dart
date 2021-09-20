@@ -17,7 +17,7 @@ class CustomerProfileController extends BaseApiController {
     super.onInit();
   }
 
-  Future<dynamic> getAttributeMap({String? customerID}) async {
+  Future<Map> getAttributeMap({String? customerID}) async {
     return getDio()!
         .get("crm/customers/$customerID/attributes",
             options: Options(headers: {"Authorization": "Token $_token"}))
