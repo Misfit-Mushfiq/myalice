@@ -50,41 +50,46 @@ class LoggingInterceptors extends InterceptorsWrapper {
   @override
   Future onError(DioError error, ErrorInterceptorHandler handler) async {
     if (error.response!.statusCode == 401) {
-      Dio tokenDio = new Dio();
-      String refreshToken = await _sharedPref.readString("apiRefreshToken");
-      Options options = Options(
-          method: error.requestOptions.method,
-          sendTimeout: error.requestOptions.sendTimeout,
-          receiveTimeout: error.requestOptions.receiveTimeout,
-          extra: error.requestOptions.extra,
-          headers: error.requestOptions.headers,
-          responseType: error.requestOptions.responseType,
-          contentType: error.requestOptions.contentType);
-      tokenDio.interceptors.add(LogInterceptor(
-          responseBody: true, requestHeader: true, requestBody: true));
-      return await tokenDio
-          .post("https://v3stage.getalice.ai/api/accounts/refresh",
-              data: {'refresh': refreshToken})
-          .then((d) {
-            //update Token
-            error.requestOptions.headers["Authorization"] =
-                "Token " + d.data["access"];
-            _sharedPref.saveString("apiToken", d.data["access"]);
-          })
-          .catchError((onError) {})
-          .then((e) async {
-            //repeat
-            final response = await tokenDio.request(
-                error.requestOptions.baseUrl + error.requestOptions.path,
-                data: error.requestOptions.data,
-                cancelToken: error.requestOptions.cancelToken,
-                onReceiveProgress: error.requestOptions.onReceiveProgress,
-                onSendProgress: error.requestOptions.onSendProgress,
-                queryParameters: error.requestOptions.queryParameters,
-                options: options);
+      String refreshToken =
+          await _sharedPref.readString("apiRefreshToken") ?? "";
+      if (refreshToken.isNotEmpty) {
+        Dio tokenDio = new Dio();
+        Options options = Options(
+            method: error.requestOptions.method,
+            sendTimeout: error.requestOptions.sendTimeout,
+            receiveTimeout: error.requestOptions.receiveTimeout,
+            extra: error.requestOptions.extra,
+            headers: error.requestOptions.headers,
+            responseType: error.requestOptions.responseType,
+            contentType: error.requestOptions.contentType);
+        tokenDio.interceptors.add(LogInterceptor(
+            responseBody: true, requestHeader: true, requestBody: true));
+        return await tokenDio
+            .post("https://v3stage.getalice.ai/api/accounts/refresh",
+                data: {'refresh': refreshToken})
+            .then((d) {
+              //update Token
+              error.requestOptions.headers["Authorization"] =
+                  "Token " + d.data["access"];
+              _sharedPref.saveString("apiToken", d.data["access"]);
+            })
+            .catchError((onError) {})
+            .then((e) async {
+              //repeat
+              final response = await tokenDio.request(
+                  error.requestOptions.baseUrl + error.requestOptions.path,
+                  data: error.requestOptions.data,
+                  cancelToken: error.requestOptions.cancelToken,
+                  onReceiveProgress: error.requestOptions.onReceiveProgress,
+                  onSendProgress: error.requestOptions.onSendProgress,
+                  queryParameters: error.requestOptions.queryParameters,
+                  options: options);
 
-            return handler.resolve(response);
-          });
+              return handler.resolve(response);
+            });
+      } else {
+        return super.onError(error, handler);
+      }
     }
     // return super.onError(error, handler);
   }

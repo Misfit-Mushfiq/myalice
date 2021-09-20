@@ -43,8 +43,6 @@ class _InboxState extends State<Inbox> {
 
   @override
   void didChangeDependencies() {
-    print("hello");
-
     readFilterParams();
     super.didChangeDependencies();
   }
@@ -70,7 +68,6 @@ class _InboxState extends State<Inbox> {
 
   @override
   Widget build(BuildContext context) {
-    print("Hello");
     InboxController _inboxController = Get.put(InboxController());
     _inboxController.onInit();
     return Scaffold(

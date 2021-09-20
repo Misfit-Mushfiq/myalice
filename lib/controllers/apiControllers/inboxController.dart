@@ -81,8 +81,8 @@ class InboxController extends BaseApiController {
         getChannels(projectID);
         getAvailableAgents(projectID);
         getAvailableGroups(projectID);
-        getCannedResponse(projectID);
         getTicketTags(projectID);
+        getCannedResponse(projectID);
       }
     });
     await _sharedPref.saveBool("sortNew", false);
