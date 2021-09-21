@@ -9,6 +9,7 @@ import 'package:myalice/controllers/pusherController/pusherController.dart';
 import 'package:myalice/customWidgets/botButton.dart';
 import 'package:myalice/models/chatModel/chat.dart';
 import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
+import 'package:myalice/models/responseModels/availableGroups/available_groups.dart';
 import 'package:myalice/models/responseModels/cannedResponse/canned_response.dart';
 import 'package:myalice/models/responseModels/chatResponse.dart';
 import 'package:myalice/models/responseModels/tags/data_source.dart';
@@ -44,6 +45,7 @@ class _ChatDetailsState extends State<ChatDetails>
   late Tags _availableTags;
   late List<TagsDataSource> _usedTags;
   late AvailableAgents _agents;
+  late AvailableGroups _groups;
   late CannedResponse _cannedResponse;
   late List<AssignedAgents> _assignedAgents;
   late int _ticketId;
@@ -84,6 +86,7 @@ class _ChatDetailsState extends State<ChatDetails>
     _assignedAgents = args[4];
     _cannedResponse = args[5];
     _usedTags = args[6];
+    _groups = args[7];
 /*     _sharedPref.saveString(
                   "selectedInboxTags", TagsDataSource.encode(_usedTags)); */
 
@@ -387,6 +390,7 @@ class _ChatDetailsState extends State<ChatDetails>
             },
             ticketID: _ticketId,
             agents: _agents,
+            groups: _groups,
             customerID: _customer.id!.toString(),
             assignAgents: _assignedAgents,
             availableTags: _availableTags.dataSource,

@@ -19,6 +19,7 @@ class MainModal extends StatefulWidget {
   final usedTags;
   final availableTags;
   final agents;
+  final groups;
   final ticketID;
   final customerID;
   final List<AssignedAgents> assignAgents;
@@ -29,6 +30,7 @@ class MainModal extends StatefulWidget {
       required this.agents,
       required this.assignAgents,
       required this.usedTags,
+      required this.groups,
       required this.onsaVed,
       required this.ticketID,
       required this.customerID})
@@ -281,6 +283,7 @@ class _MainModalState extends State<MainModal> {
         builder: (context) {
           return InboxAssignedModal(
             agents: widget.agents,
+            groups:widget.groups,
             ticketID: widget.ticketID,
             onSaved: (String selectedAgent) {
               _selectedAgent = selectedAgent;

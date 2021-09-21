@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
 import 'package:myalice/models/responseModels/availableAgents/data_source.dart';
+import 'package:myalice/models/responseModels/availableGroups/available_groups.dart';
+import 'package:myalice/models/responseModels/availableGroups/data_source.dart';
 import 'package:myalice/screens/chatDetails/customWidgets/modals/reassignConfirm.dart';
 import 'package:myalice/utils/colors.dart';
 
 class InboxAssignedModal extends StatefulWidget {
   final AvailableAgents agents;
+  final AvailableGroups groups;
   final ticketID;
-  final Function(String name) onSaved;
+  final Function(String agentName) onSaved;
   InboxAssignedModal(
       {Key? key,
       required this.agents,
+      required this.groups,
       required this.ticketID,
       required this.onSaved})
       : super(key: key);
@@ -22,6 +26,7 @@ class InboxAssignedModal extends StatefulWidget {
 
 class _AssignedModalState extends State<InboxAssignedModal> {
   List<AvailableAgentsDataSource> _agents = [];
+  List<AvailableGroupsDataSource> _groups = [];
   String selectedAgentName = '';
   String selectedAgentpic = "";
   @override
@@ -32,6 +37,7 @@ class _AssignedModalState extends State<InboxAssignedModal> {
 
   getAgents() {
     _agents = widget.agents.dataSource!;
+    _groups=  widget.groups.dataSource!;
   }
 
   @override
@@ -142,7 +148,7 @@ class _AssignedModalState extends State<InboxAssignedModal> {
                     },
                   ),
                   ListView.separated(
-                    itemCount: 100,
+                    itemCount: _groups.length,
                     separatorBuilder: (context, index) {
                       return Divider(
                         height: 0.5,
@@ -154,13 +160,21 @@ class _AssignedModalState extends State<InboxAssignedModal> {
                         padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                         child: ListTile(
                           leading: CircleAvatar(
-                            backgroundImage: NetworkImage(""),
+                            backgroundImage: NetworkImage(_groups.elementAt(index).image!),
                             radius: 25,
                           ),
                           title: Text(
-                            "Jenny Wilson",
+                            _groups.elementAt(index).name!,
                             style: TextStyle(color: Colors.black, fontSize: 15),
                           ),
+                          onTap: (){
+                            showModal(
+                              context,
+                              "",
+                              "",
+                              _groups.elementAt(index).name!,
+                              _groups.elementAt(index).id.toString());
+                          },
                         ),
                       );
                     },

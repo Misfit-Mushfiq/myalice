@@ -365,7 +365,7 @@ class _FilterModalState extends State<FilterModal> {
                           fit: FlexFit.tight,
                           child: GridView.builder(
                             shrinkWrap: true,
-                            itemCount: _selectedAgents.length,
+                            itemCount: _selectedGroups.length,
                             itemBuilder: (context, index) {
                               return Container(
                                 margin: EdgeInsets.only(left: 8.0),
@@ -414,7 +414,7 @@ class _FilterModalState extends State<FilterModal> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text("TagsDataSource",
+                        Text("Tags",
                             style: TextStyle(
                               fontWeight: _selectedTags.length <= 0
                                   ? FontWeight.normal

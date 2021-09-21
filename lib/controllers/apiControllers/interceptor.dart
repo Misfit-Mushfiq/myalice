@@ -49,6 +49,9 @@ class LoggingInterceptors extends InterceptorsWrapper {
 
   @override
   Future onError(DioError error, ErrorInterceptorHandler handler) async {
+    debugPrint(
+        "ERROR[${error.response?.statusCode}] => PATH: ${error.requestOptions.baseUrl}${error.requestOptions.path}");
+
     if (error.response!.statusCode == 401) {
       String refreshToken =
           await _sharedPref.readString("apiRefreshToken") ?? "";

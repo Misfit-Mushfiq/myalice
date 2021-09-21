@@ -137,17 +137,19 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                         items: _availableAgents,
                         dropdownButtonBuilder: (context) {
                           return Padding(
-                            padding: const EdgeInsets.only(right:5.0),
+                            padding: const EdgeInsets.only(right: 5.0),
                             child: Icon(Icons.arrow_drop_down),
                           );
                         },
                         itemAsString: (AvailableAgentsDataSource agents) =>
                             agents.admin!.fullName!,
-                        hint: "Search for agents/groups",
                         onChanged: (value) {
                           setState(() {
-                            _selectedAgents.addIf(!_selectedAgents.contains(value),value!);
-                            _selectedAgentsID.addIf(!_selectedAgents.contains(value.id.toString()),value.id.toString());
+                            _selectedAgents.addIf(
+                                !_selectedAgents.contains(value), value!);
+                            _selectedAgentsID.addIf(
+                                !_selectedAgents.contains(value.id.toString()),
+                                value.id.toString());
                             assignedAgents = false;
                           });
                         },
@@ -192,8 +194,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                               ),
                               Text(
                                 "Search Agents",
-                                style:
-                                    TextStyle(color: Colors.grey),
+                                style: TextStyle(color: Colors.grey),
                               )
                             ],
                           );
@@ -216,8 +217,12 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                           hint: "Search for groups",
                           onChanged: (value) {
                             setState(() {
-                              _selectedGroups.addIf(!_selectedGroups.contains(value!), value);
-                              _selectedGroupsID.addIf(_selectedGroupsID.contains(value.id.toString()),value.id.toString());
+                              _selectedGroups.addIf(
+                                  !_selectedGroups.contains(value!), value);
+                              _selectedGroupsID.addIf(
+                                  _selectedGroupsID
+                                      .contains(value.id.toString()),
+                                  value.id.toString());
                               assignedAgents = false;
                             });
                           },
@@ -249,11 +254,11 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                             );
                           },
                           dropdownButtonBuilder: (context) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right:5.0),
-                            child: Icon(Icons.arrow_drop_down),
-                          );
-                        },
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 5.0),
+                              child: Icon(Icons.arrow_drop_down),
+                            );
+                          },
                           dropdownBuilder: (BuildContext context,
                               AvailableGroupsDataSource? groups,
                               String itemDesignation) {
@@ -269,8 +274,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                                 ),
                                 Text(
                                   "Search Groups",
-                                  style: TextStyle(
-                                      color: Colors.grey),
+                                  style: TextStyle(color: Colors.grey),
                                 )
                               ],
                             );
@@ -340,16 +344,21 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                         setState(() {
                           assignedAgents = false;
                           _selectedAgents.clear();
+                          _selectedGroups.clear();
                         });
                       },
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("Selected Agents"),
-              ),
+              _selectedAgents.length > 0
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Selected Agents"),
+                    )
+                  : Container(
+                      margin: EdgeInsets.zero,
+                    ),
               GridView.builder(
                 shrinkWrap: true,
                 padding: EdgeInsets.all(8),
@@ -391,11 +400,15 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                     mainAxisExtent: 30.0,
                     mainAxisSpacing: 10.0),
               ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("Selected Groups"),
-            ),
-            GridView.builder(
+              _selectedGroups.length > 0
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text("Selected Groups"),
+                    )
+                  : Container(
+                      margin: EdgeInsets.zero,
+                    ),
+              GridView.builder(
                 shrinkWrap: true,
                 padding: EdgeInsets.all(8),
                 itemCount: _selectedGroups.length,
@@ -409,10 +422,7 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
-                                _selectedGroups
-                                    .elementAt(index)
-                                    .name!,
+                            Text(_selectedGroups.elementAt(index).name!,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Colors.green, fontSize: 12)),
@@ -435,7 +445,6 @@ class _AssignedAgentModalState extends State<AssignedAgentModal> {
                     mainAxisExtent: 30.0,
                     mainAxisSpacing: 10.0),
               ),
-           
             ],
           ),
         )
