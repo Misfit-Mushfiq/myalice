@@ -11,10 +11,12 @@ IconData platformIcon(String name) {
       return FontAwesomeIcons.viber;
     case "line_messenger":
       return FontAwesomeIcons.line;
-    case "facebook":
+    case "facebook_feed":
       return FontAwesomeIcons.facebook;
     case "telegram_messenger":
       return FontAwesomeIcons.telegram;
+    case "webchat":
+      return FontAwesomeIcons.chrome;
     default:
       return FontAwesomeIcons.info;
   }

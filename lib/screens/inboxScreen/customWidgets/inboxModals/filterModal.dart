@@ -4,6 +4,7 @@ import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
 import 'package:myalice/models/responseModels/availableAgents/data_source.dart';
 import 'package:myalice/models/responseModels/availableGroups/available_groups.dart';
+import 'package:myalice/models/responseModels/availableGroups/data_source.dart';
 import 'package:myalice/models/responseModels/channels/channels.dart';
 import 'package:myalice/models/responseModels/channels/data_source.dart';
 import 'package:myalice/models/responseModels/tags/data_source.dart';
@@ -41,9 +42,11 @@ class FilterModal extends StatefulWidget {
 class _FilterModalState extends State<FilterModal> {
   List<ChannelDataSource?> _selectedChannels = [];
   List<AvailableAgentsDataSource?> _selectedAgents = [];
+  List<AvailableGroupsDataSource> _selectedGroups = [];
   InboxController _inboxController = Get.find<InboxController>();
   List<TagsDataSource?> _selectedTags = [];
   List<String> _selectedAgentsID = [];
+  List<String> _selectedGroupsID = [];
   List<String> _selectedChannelsID = [];
   List<String> _selectedTagsID = [];
   List<String>? _selectedTimes = [];
@@ -57,6 +60,8 @@ class _FilterModalState extends State<FilterModal> {
   getSelectedAgents() async {
     _selectedAgents = AvailableAgentsDataSource.decode(
         await _pref.readString("selectedAgents"));
+    _selectedGroups = AvailableGroupsDataSource.decode(
+        await _pref.readString("selectedGroups"));
     _selectedChannels =
         ChannelDataSource.decode(await _pref.readString("selectedChannels"));
     _selectedTags =
@@ -91,6 +96,7 @@ class _FilterModalState extends State<FilterModal> {
                     ),
                     if (_selectedChannels.length > 0 ||
                         _selectedAgents.length > 0 ||
+                        _selectedGroups.length > 0 ||
                         _selectedTags.length > 0 ||
                         _selectedTimes!.length > 0)
                       Row(
@@ -127,9 +133,13 @@ class _FilterModalState extends State<FilterModal> {
                                 _selectedChannels.clear();
                                 _selectedChannelsID.clear();
 
+                                _selectedGroups.clear();
+                                _selectedGroupsID.clear();
+
                                 _selectedTimes!.clear();
 
                                 _pref.remove("selectedAgents");
+                                _pref.remove("selectedGroups");
                                 _pref.remove("selectedChannels");
                                 _pref.remove("selectedTags");
                                 _pref.remove("selectedTimes");
@@ -141,7 +151,7 @@ class _FilterModalState extends State<FilterModal> {
                                     search: "",
                                     channels: _selectedChannelsID,
                                     agents: _selectedAgentsID,
-                                    groups: [],
+                                    groups: _selectedGroupsID,
                                     tags: _selectedTagsID,
                                     dates: _selectedTimes!);
                               }),
@@ -177,7 +187,7 @@ class _FilterModalState extends State<FilterModal> {
                                     search: "",
                                     channels: _selectedChannelsID,
                                     agents: _selectedAgentsID,
-                                    groups: [],
+                                    groups: _selectedGroupsID,
                                     tags: _selectedTagsID,
                                     dates: _selectedTimes!);
                               }),
@@ -349,6 +359,41 @@ class _FilterModalState extends State<FilterModal> {
                                     childAspectRatio: 2.5),
                           ),
                         ),
+                       
+                        Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            itemCount: _selectedAgents.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: EdgeInsets.only(left: 8.0),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: AliceColors.ALICE_SELECTED_CHANNEL),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Center(
+                                    child: Text(
+                                        _selectedGroups
+                                            .elementAt(index).name!,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.green, fontSize: 10)),
+                                  ),
+                                ),
+                              );
+                            },
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 0.5,
+                                    mainAxisSpacing: 5.0,
+                                    childAspectRatio: 2.5),
+                          ),
+                        ),
+                      
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Icon(Icons.arrow_forward_ios,
@@ -432,11 +477,15 @@ class _FilterModalState extends State<FilterModal> {
           return AssignedAgentModal(
             agents: agents,
             groups: availableGroups,
-            onsaved: (List<AvailableAgentsDataSource>? value) {
-              for (int a = 0; a < value!.length; a++) {
-                _selectedAgentsID.add(value.elementAt(a).admin!.id!.toString());
+            onsaved: (List<AvailableAgentsDataSource>? selectedAgents,List<AvailableGroupsDataSource>? selectedGroups) {
+              for (int a = 0; a < selectedAgents!.length; a++) {
+                _selectedAgentsID.add(selectedAgents.elementAt(a).admin!.id!.toString());
+              }
+              for (int a = 0; a < selectedGroups!.length; a++) {
+                _selectedGroupsID.add(selectedGroups.elementAt(a).id.toString());
               }
               _pref.saveStringList("selectedAgentsID", _selectedAgentsID);
+              _pref.saveStringList("selectedGroupsID", _selectedGroupsID);
             },
           );
         }).whenComplete(() {

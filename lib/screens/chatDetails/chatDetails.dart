@@ -226,7 +226,9 @@ class _ChatDetailsState extends State<ChatDetails>
                                 Duration(milliseconds: 1),
                                 () => _scrollController.animateTo(
                                       _scrollController
-                                          .position.maxScrollExtent, duration: Duration(microseconds: 1), curve: Curves.easeIn,
+                                          .position.maxScrollExtent,
+                                      duration: Duration(microseconds: 1),
+                                      curve: Curves.easeIn,
                                     ));
                             return ListView.builder(
                               itemCount:

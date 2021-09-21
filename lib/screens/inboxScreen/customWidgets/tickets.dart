@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
+import 'package:myalice/models/responseModels/availableGroups/available_groups.dart';
 import 'package:myalice/models/responseModels/cannedResponse/canned_response.dart';
 import 'package:myalice/models/responseModels/tags/data_source.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
@@ -16,12 +17,14 @@ import 'package:myalice/utils/shared_pref.dart';
 class Tickets extends StatefulWidget {
   final Tags? availableTags;
   final AvailableAgents? agents;
+  final AvailableGroups? groups;
   final CannedResponse? cannedResponse;
   final Function onRefresh;
   Tickets(
       {Key? key,
       required this.availableTags,
       required this.agents,
+      required this.groups,
       required this.cannedResponse,
       required this.onRefresh})
       : super(key: key);
@@ -205,7 +208,8 @@ class _TicketsState extends State<Tickets> {
                                 widget.cannedResponse,
                                 _inboxController.tickets.dataSource!
                                     .elementAt(index)
-                                    .tags
+                                    .tags,
+                                widget.groups
                               ]);
                             }));
                   },

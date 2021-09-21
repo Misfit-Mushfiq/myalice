@@ -70,6 +70,7 @@ class _InboxState extends State<Inbox> {
   Widget build(BuildContext context) {
     InboxController _inboxController = Get.put(InboxController());
     _inboxController.onInit();
+    print("hello");
     return Scaffold(
         key: _inboxBottomSheet,
         body: Container(
@@ -214,10 +215,13 @@ class _InboxState extends State<Inbox> {
             }),
           ),
           Obx(() {
-            if (_inboxController.tagsAvailable) {
+            if (_inboxController.tagsAvailable &&
+                _inboxController.cannedResponseAvailable &&
+                _inboxController.ticketDataAvailable) {
               return Tickets(
                 availableTags: _inboxController.tags,
                 agents: _inboxController.agents,
+                groups: _inboxController.groups,
                 cannedResponse: _inboxController.cannedResponse,
                 onRefresh: () {
                   setState(() {});

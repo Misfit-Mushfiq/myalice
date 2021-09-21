@@ -41,22 +41,45 @@ class InboxController extends BaseApiController {
   late Tags _availableTags;
 
   var _userDataAvailable = false.obs;
-  var isticketsDataAvailable = false.obs;
+  var _isticketsDataAvailable = false.obs;
+  var _isTagsAvailable = false.obs;
+  var _isCannedResponseAvailable = false.obs;
+  var _isAgentsAvailable = false.obs;
+  var _isGroupsAvailable = false.obs;
 
-  var isTagsAvailable = false.obs;
-  bool get tagsAvailable => isTagsAvailable.value;
-
-  bool get userDataAvailable => _userDataAvailable.value;
-  UserInfoResponse get user => _user;
   Projects get projects => _projects;
   Channels get channels => _channels;
-  AvailableAgents get agents => _agents;
-  AvailableGroups get groups => _groups;
-  CannedResponse get cannedResponse => _cannedResponse;
-  Tags get tags => _availableTags;
 
-  bool get ticketDataAvailable => isticketsDataAvailable.value;
+  AvailableGroups get groups => _groups;
+  bool get groupaAvailable => _isGroupsAvailable.value;
+  set groupaAvailable(bool value) {
+    _isGroupsAvailable.value = value;
+  }
+
+  AvailableAgents get agents => _agents;
+  bool get agentsAvailable => _isAgentsAvailable.value;
+
+  UserInfoResponse get user => _user;
+  bool get userDataAvailable => _userDataAvailable.value;
+
+  Tags get tags => _availableTags;
+  bool get tagsAvailable => _isTagsAvailable.value;
+  set tagsAvailable(bool value) {
+    _isTagsAvailable.value = value;
+  }
+
+  bool get ticketDataAvailable => _isticketsDataAvailable.value;
+  set ticketDataAvailable(bool value) {
+    _isticketsDataAvailable.value = value;
+  }
+
   TicketResponse get tickets => _ticketResponse;
+
+  CannedResponse get cannedResponse => _cannedResponse;
+  bool get cannedResponseAvailable => _isCannedResponseAvailable.value;
+  set cannedResponseAvailable(bool value) {
+    _isCannedResponseAvailable.value = value;
+  }
 
   late String? token;
   late String _projectId;
@@ -78,11 +101,10 @@ class InboxController extends BaseApiController {
     await getUser();
     await getProjects().then((value) {
       if (value!.success!) {
-        getChannels(projectID);
-        getAvailableAgents(projectID);
-        getAvailableGroups(projectID);
-        getTicketTags(projectID);
-        getCannedResponse(projectID);
+        getChannels(projectID).whenComplete(() => getAvailableAgents(projectID)
+            .whenComplete(() => getAvailableGroups(projectID))
+            .whenComplete(() => getTicketTags(projectID)
+                .whenComplete(() => getCannedResponse(projectID))));
       }
     });
     await _sharedPref.saveBool("sortNew", false);
@@ -147,7 +169,7 @@ class InboxController extends BaseApiController {
           }
         })
         .catchError((err) => print(err.toString()))
-        .whenComplete(() => isticketsDataAvailable.value =
+        .whenComplete(() => _isticketsDataAvailable.value =
             _ticketResponse.dataSource!.length > 0 ? true : false);
   }
 
@@ -178,10 +200,12 @@ class InboxController extends BaseApiController {
     return getDio()!
         .get("bots/projects/$projectID/access",
             options: Options(headers: {"Authorization": "Token $token"}))
-        .then((response) => response.statusCode == 200
-            ? _agents = AvailableAgents.fromJson(response.data)
-            : null)
-        .whenComplete(() => _agents);
+        .then((response) {
+      if (response.statusCode == 200) {
+        _agents = AvailableAgents.fromJson(response.data);
+        _isAgentsAvailable.value = true;
+      }
+    }).whenComplete(() => _agents);
   }
 
   Future<AvailableGroups?> getAvailableGroups(String projectID) async {
@@ -201,7 +225,7 @@ class InboxController extends BaseApiController {
         .then((response) {
       if (response.statusCode == 200) {
         _availableTags = Tags.fromJson(response.data);
-        isTagsAvailable.value = _availableTags != null;
+        _isTagsAvailable.value = true;
         return _availableTags;
       }
     });
@@ -214,6 +238,7 @@ class InboxController extends BaseApiController {
         .then((response) {
       if (response.statusCode == 200) {
         _cannedResponse = CannedResponse.fromJson(response.data);
+        _isCannedResponseAvailable.value = true;
         SharedPref().saveString("cannedResponse",
             CannedDataSource.encode(_cannedResponse.dataSource!));
         return _cannedResponse;

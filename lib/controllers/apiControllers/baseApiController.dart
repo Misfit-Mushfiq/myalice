@@ -4,30 +4,13 @@ import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/interceptor.dart';
 
 class BaseApiController extends GetxController with StateMixin<dynamic> {
-  static const bool MODE_DEVELOPMENT = false;
+  static const bool MODE_DEVELOPMENT = true;
 
   static const String _baseUrl = MODE_DEVELOPMENT == true
       ? 'https://v3stage.getalice.ai/api/'
-      : 'https://v3stage.getalice.ai/api/';
+      : 'https://live-v3.getalice.ai/api/';
 
   static const String _contentType = 'Content-Type';
-  //static const String _xAuthorization = 'X-Authorization';
-
-  /*  static const String _xAuthorizationKeyAndroidApp = MODE_DEVELOPMENT == true
-      ? '9dZ24lz9WC7VkfeQhxpYM4Wn6sKaENxGxihZN2wqdBroK6f5FzuRIiFddRqanbgu'
-      : '9dZ24lz9WC7VkfeQhxpYM4Wn6sKaENxGxihZN2wqdBroK6f5FzuRIiFddRqanbgu';
-
-  static const String _xAuthorizationKeyIosApp = MODE_DEVELOPMENT == true
-      ? '9dZ24lz9WC7VkfeQhxpYM4Wn6sKaENxGxihZN2wqdBroK6f5FzuRIiFddRqanbgu'
-      : 'wlnqsSkIilb34YGpcVAXAHjdvsKHNIIIJZZkQNuo2CELkhRmjlc4wOHni1bMUHA1'; */
-
-/*   static String getXAuthorizationKey = getAppWiseXAuthorizationKey();
-
-  static String getAppWiseXAuthorizationKey() {
-    return Platform.isAndroid == true
-        ? _xAuthorizationKeyAndroidApp
-        : _xAuthorizationKeyIosApp;
-  } */
 
   Dio? _dio = Dio();
 

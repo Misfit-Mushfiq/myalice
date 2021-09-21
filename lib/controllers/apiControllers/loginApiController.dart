@@ -11,8 +11,8 @@ class LoginApiController extends BaseApiController {
   Future login(String email, String password) async {
     try {
       var response = await getDio()!.post(_loginPath, data: {
-        'username': email /* 'raphhael@misfit.tech' */,
-        'password': password /*'raphael1234'*/,
+        'username': 'masuma+1@myalice.ai', //email,
+        'password': 'stage1234', //password,
       });
       return LoginResponse.fromJson(response.data);
     } on DioError catch (e) {

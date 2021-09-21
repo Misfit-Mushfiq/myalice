@@ -67,7 +67,7 @@ class DataSource {
     id = json['id'];
     onboardCompletionState = json['onboard_completion_state'];
     email = json['email'];
-    avatar = json['avatar'];
+    avatar = json['avatar'] ?? "";
     firstName = json['first_name'];
     lastName = json['last_name'];
     fullName = json['full_name'];

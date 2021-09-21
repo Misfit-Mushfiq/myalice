@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class AliceColors {
   static const SPLASH_SCREEN_BACKGROUND = const Color(0xFF1F2937);
@@ -23,10 +24,12 @@ Color platformColor(String name) {
       return AliceColors.ALICE_VIBER;
     case "line_messenger":
       return AliceColors.ALICE_GREEN;
-    case "facebook":
-      return AliceColors.ALICE_GREEN;
+    case "facebook_feed":
+      return AliceColors.ALICE_BLUE;
     case "telegram_messenger":
       return AliceColors.ALICE_BLUE;
+    case "webchat":
+      return Colors.redAccent;
     default:
       return AliceColors.ALICE_BLUE;
   }

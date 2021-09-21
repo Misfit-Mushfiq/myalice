@@ -11,7 +11,8 @@ class ProductInteraction {
         success: json['success'] as bool?,
         dataSource: json['dataSource'] == null
             ? null
-            : InteractionDataSource.fromJson(json['dataSource'] as Map<String, dynamic>),
+            : InteractionDataSource.fromJson(
+                json['dataSource'] as Map<String, dynamic>),
       );
 
   Map<String, dynamic> toJson() => {

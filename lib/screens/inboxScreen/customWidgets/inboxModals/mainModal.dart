@@ -40,6 +40,7 @@ class MainModal extends StatefulWidget {
 class _MainModalState extends State<MainModal> {
   SharedPref _sharedPref = SharedPref();
   List<String>? _selectedAgentsID = [];
+  List<String>? _selectedGroupsID = [];
   List<String>? _selectedChannelsID = [];
   List<String>? _selectedTagsID = [];
   List<String>? _selectedTimes = [];
@@ -54,6 +55,8 @@ class _MainModalState extends State<MainModal> {
         await _sharedPref.readStringList("selectedChannelsID") ?? [];
     _selectedAgentsID =
         (await _sharedPref.readStringList("selectedAgentsID")) ?? [];
+    _selectedGroupsID =
+        (await _sharedPref.readStringList("selectedGroupsID")) ?? [];
     _selectedTagsID =
         (await _sharedPref.readStringList("selectedTagsID")) ?? [];
     _selectedTimes = await _sharedPref.readStringList("selectedTimes") ?? [];
@@ -89,7 +92,7 @@ class _MainModalState extends State<MainModal> {
                   setState(() {
                     widget.pendingSelected = !widget.pendingSelected;
                     widget.resolvedSelected = !widget.resolvedSelected;
-                    widget.inboxController.isticketsDataAvailable.value = false;
+                    widget.inboxController.ticketDataAvailable = false;
                     widget.resolvedSelected
                         ? widget.inboxController.resolved = 1
                         : widget.inboxController.resolved = 0;
@@ -101,7 +104,7 @@ class _MainModalState extends State<MainModal> {
                       search: "",
                       channels: _selectedChannelsID!,
                       agents: _selectedAgentsID!,
-                      groups: [],
+                      groups: _selectedGroupsID!,
                       tags: _selectedTagsID!,
                       dates: _selectedTimes!);
                   widget.onChanged(widget.pendingSelected,
@@ -157,8 +160,7 @@ class _MainModalState extends State<MainModal> {
                   onTap: () async {
                     setState(() {
                       widget.sortNew = !widget.sortNew;
-                      widget.inboxController.isticketsDataAvailable.value =
-                          false;
+                      widget.inboxController.ticketDataAvailable = false;
                       widget.sortNew
                           ? widget.inboxController.sort = "asc"
                           : widget.inboxController.sort = "desc";

@@ -21,7 +21,7 @@ class _ProductInteractionScreenState extends State<ProductInteractionScreen> {
   late ProductInteraction _productInteraction;
   late var _id;
   var _dataAvailable = false.obs;
-  
+
   @override
   void initState() {
     getData();
@@ -45,7 +45,7 @@ class _ProductInteractionScreenState extends State<ProductInteractionScreen> {
 
   @override
   Widget build(BuildContext context) {
-     Locale locale = Localizations.localeOf(context);
+    Locale locale = Localizations.localeOf(context);
     var format = NumberFormat.simpleCurrency(locale: locale.toString());
     return new DefaultTabController(
       length: 3,
@@ -154,7 +154,8 @@ class _ProductInteractionScreenState extends State<ProductInteractionScreen> {
                                                     .elementAt(index)
                                                     .productImages!
                                                     .elementAt(0))),
-                                        borderRadius: BorderRadius.circular(10)),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
                                     height: 150,
                                   ),
                                   Positioned(
@@ -168,30 +169,39 @@ class _ProductInteractionScreenState extends State<ProductInteractionScreen> {
                                                 .ALICE_SELECTED_CHANNEL),
                                         child: Padding(
                                           padding: const EdgeInsets.all(2.0),
-                                          child: Text("${format.currencySymbol}"+_productInteraction
-                                                    .dataSource!.boughtProducts!
-                                                    .elementAt(index)
-                                                    .unitPrice.toString()),
+                                          child: Text(
+                                              "${format.currencySymbol}" +
+                                                  _productInteraction
+                                                      .dataSource!
+                                                      .boughtProducts!
+                                                      .elementAt(index)
+                                                      .unitPrice
+                                                      .toString()),
                                         ),
                                       ))
                                 ],
                               ),
-                              Expanded(child: Padding(
-                                padding: const EdgeInsets.only(top:8.0,bottom:8.0),
-                                child: Text( _productInteraction
-                                                    .dataSource!.boughtProducts!
-                                                    .elementAt(index)
-                                                    .productName!),
+                              Expanded(
+                                  child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 8.0, bottom: 8.0),
+                                child: Text(_productInteraction
+                                    .dataSource!.boughtProducts!
+                                    .elementAt(index)
+                                    .productName!),
                               )),
-
-                              Expanded(child: Padding(
-                                padding: const EdgeInsets.only(top:8.0,bottom:8.0),
-                                child: Text( getDateWithTime(_productInteraction
-                                                    .dataSource!.boughtProducts!
-                                                    .elementAt(index)
-                                                    .timestamp!),style: TextStyle(color: Colors.grey[700]),),
+                              Expanded(
+                                  child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 8.0, bottom: 8.0),
+                                child: Text(
+                                  getDateWithTime(_productInteraction
+                                      .dataSource!.boughtProducts!
+                                      .elementAt(index)
+                                      .timestamp!),
+                                  style: TextStyle(color: Colors.grey[700]),
+                                ),
                               )),
-
                             ],
                           ),
                         ),

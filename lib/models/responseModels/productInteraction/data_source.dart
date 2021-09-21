@@ -5,9 +5,11 @@ class InteractionDataSource {
   List<dynamic>? cartProducts;
   List<dynamic>? viewedProducts;
 
-  InteractionDataSource({this.boughtProducts, this.cartProducts, this.viewedProducts});
+  InteractionDataSource(
+      {this.boughtProducts, this.cartProducts, this.viewedProducts});
 
-  factory InteractionDataSource.fromJson(Map<String, dynamic> json) => InteractionDataSource(
+  factory InteractionDataSource.fromJson(Map<String, dynamic> json) =>
+      InteractionDataSource(
         boughtProducts: (json['bought_products'] as List<dynamic>?)
             ?.map((e) => BoughtProduct.fromJson(e as Map<String, dynamic>))
             .toList(),
