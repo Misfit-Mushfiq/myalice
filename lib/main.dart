@@ -12,6 +12,7 @@ import 'package:myalice/screens/customerProfile/customerSummary.dart';
 import 'package:myalice/screens/customerProfile/editCustomerInfo.dart';
 import 'package:myalice/screens/customerProfile/orderHistory.dart';
 import 'package:myalice/screens/customerProfile/productInteraction.dart';
+import 'package:myalice/screens/forgotPassword.dart';
 import 'package:myalice/screens/inboxScreen/inboxScreen.dart';
 import 'package:myalice/screens/loginScreen.dart';
 import 'package:myalice/screens/signUpScreen.dart';
@@ -51,7 +52,10 @@ class MyApp extends StatelessWidget {
         GetPage(name: CUSTOMER_SUMMARY, page: () => CustomerSummaryScreen()),
         GetPage(
             name: CUSTOMER_PRODUCT_INTERACTION,
-            page: () => ProductInteractionScreen())
+            page: () => ProductInteractionScreen()),
+            GetPage(
+            name: FORGOT_PASSWORD,
+            page: () => ForgotPassword()), 
       ],
     );
   }

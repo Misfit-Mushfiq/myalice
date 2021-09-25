@@ -10,3 +10,4 @@ const CUSTOMER_INFO_EDIT = "customerInfoEdit";
 const CUSTOMER_ORDER = "customerOrderHitory";
 const CUSTOMER_PRODUCT_INTERACTION = "customerProductInterAction";
 const CUSTOMER_SUMMARY = "customerSummary";
+const FORGOT_PASSWORD = "forgotPassword";

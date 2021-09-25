@@ -93,8 +93,8 @@ class LoggingInterceptors extends InterceptorsWrapper {
       } else {
         return super.onError(error, handler);
       }
-    }
-    // return super.onError(error, handler);
+    } else
+     return super.onError(error, handler);
   }
 
   bool _shouldRetry(DioError err) {

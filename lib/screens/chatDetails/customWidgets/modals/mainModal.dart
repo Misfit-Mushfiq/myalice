@@ -173,7 +173,7 @@ class _MainModalState extends State<MainModal> {
                                     backgroundImage: CachedNetworkImageProvider(
                                         widget.assignAgents
                                             .elementAt(0)
-                                            .avatar!),
+                                            .avatar??""),
                                     radius: 10,
                                   )
                                 : Container(),

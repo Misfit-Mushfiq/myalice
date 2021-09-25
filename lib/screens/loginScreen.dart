@@ -20,9 +20,11 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final SharedPref _sharedPref = SharedPref();
+  late LoginApiController loginApiController;
 
   @override
   void initState() {
+    loginApiController = Get.put(LoginApiController());
     passwordVisible = true;
     showLoader = false;
     super.initState();
@@ -30,7 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final LoginApiController loginApiController = Get.put(LoginApiController());
     return Scaffold(
         backgroundColor: Colors.white,
         body: Container(
@@ -284,7 +285,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: AliceColors.ALICE_BLUE,
                             fontWeight: FontWeight.bold),
                       ),
-                      onTap: () {},
+                      onTap: () {
+                        Get.toNamed(FORGOT_PASSWORD);
+                      },
                     ),
                   ],
                 ),

@@ -152,6 +152,7 @@ class _ChatDetailsState extends State<ChatDetails>
                               overflow: TextOverflow.ellipsis),
                         ),
                       ),
+                      
                     ],
                   ),
                 ),
@@ -391,7 +392,7 @@ class _ChatDetailsState extends State<ChatDetails>
             ticketID: _ticketId,
             agents: _agents,
             groups: _groups,
-            customerID: _customer.id!.toString(),
+            customerID: _customer.id.toString(),
             assignAgents: _assignedAgents,
             availableTags: _availableTags.dataSource,
             usedTags: _usedTags,

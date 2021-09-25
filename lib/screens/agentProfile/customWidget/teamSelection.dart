@@ -90,6 +90,9 @@ class _TeamSelectionState extends State<TeamSelection> {
                             widget.teams.elementAt(index).id.toString());
                         await _sharedPref.saveString(
                             "projectName", widget.teams.elementAt(index).name);
+                        _sharedPref.remove("pendingSelected");
+                        _sharedPref.remove("resolvedSelected");
+                        _sharedPref.remove("sortNew");
                         Get.offAllNamed(INBOX_PAGE);
                       },
                       trailing: widget.teams.elementAt(index).id.toString() ==
