@@ -23,6 +23,7 @@ class Inbox extends StatefulWidget {
 
 class _InboxState extends State<Inbox> {
   final _inboxBottomSheet = GlobalKey<ScaffoldState>();
+  InboxController _inboxController = Get.put(InboxController());
   late bool pendingSelected;
   late bool resolvedSelected;
   late bool channelSelected;
@@ -39,12 +40,8 @@ class _InboxState extends State<Inbox> {
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
+    _inboxController.onInit();
     readFilterParams();
-    super.didChangeDependencies();
   }
 
   void readFilterParams() async {
@@ -68,8 +65,6 @@ class _InboxState extends State<Inbox> {
 
   @override
   Widget build(BuildContext context) {
-    InboxController _inboxController = Get.put(InboxController());
-    _inboxController.onInit();
     print("hello");
     return Scaffold(
         key: _inboxBottomSheet,
@@ -228,7 +223,7 @@ class _InboxState extends State<Inbox> {
                 },
               );
             } else {
-              return Center(child: CircularProgressIndicator());
+              return Container();
             }
           })
         ])));

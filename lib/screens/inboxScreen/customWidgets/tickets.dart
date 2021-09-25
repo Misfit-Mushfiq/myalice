@@ -90,7 +90,7 @@ class _TicketsState extends State<Tickets> {
                                                           .elementAt(index)
                                                           .agents!
                                                           .elementAt(0)
-                                                          .avatar!),
+                                                          .avatar??""),
                                                   radius: 8,
                                                 ),
                                                 radius: 10,
@@ -217,7 +217,7 @@ class _TicketsState extends State<Tickets> {
             ))
           : Padding(
               padding: const EdgeInsets.all(20.0),
-              child: CircularProgressIndicator(),
+              child: Center(child: CircularProgressIndicator()),
             );
     });
   }

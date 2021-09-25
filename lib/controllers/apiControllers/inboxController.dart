@@ -95,7 +95,6 @@ class InboxController extends BaseApiController {
   static String _projectsPath = "bots/projects";
   static String _accountPath = "accounts/info";
 
-  @override
   Future<void> onInit() async {
     token = await _sharedPref.readString("apiToken");
     await getUser();
@@ -145,6 +144,7 @@ class InboxController extends BaseApiController {
       required List<String> groups,
       required List<String> tags,
       required List<String> dates}) async {
+    ticketDataAvailable = false;
     getDio()!
         .get("crm/projects/$projectID/tickets",
             queryParameters: {
@@ -169,7 +169,7 @@ class InboxController extends BaseApiController {
           }
         })
         .catchError((err) => print(err.toString()))
-        .whenComplete(() => _isticketsDataAvailable.value =
+        .whenComplete(() => ticketDataAvailable =
             _ticketResponse.dataSource!.length > 0 ? true : false);
   }
 
