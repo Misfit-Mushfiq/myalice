@@ -4,12 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
-import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
-import 'package:myalice/models/responseModels/availableGroups/available_groups.dart';
-import 'package:myalice/models/responseModels/cannedResponse/canned_response.dart';
-import 'package:myalice/models/responseModels/cannedResponse/data_source.dart';
-import 'package:myalice/models/responseModels/channels/channels.dart';
-import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/mainModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/profileImage.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/tickets.dart';
@@ -73,6 +67,7 @@ class _InboxState extends State<Inbox> {
     return Scaffold(
         key: _inboxBottomSheet,
         body: Container(
+          color: Colors.white,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
@@ -107,7 +102,9 @@ class _InboxState extends State<Inbox> {
                               showCupertinoModalBottomSheet(
                                       context: context,
                                       useRootNavigator: true,
+                                      expand: false,
                                       isDismissible: true,
+                                      
                                       builder: (context) {
                                         return MainModal(
                                           channels: _inboxController.channels,
@@ -142,10 +139,6 @@ class _InboxState extends State<Inbox> {
                                 _sharedPref.saveBool(
                                     "resolvedSelected", resolvedSelected);
                                 _sharedPref.saveBool("sortNew", sortNew);
-                                Future.delayed(
-                                    const Duration(milliseconds: 300), () {
-                                  setState(() {});
-                                });
                               });
                             }))
                   ],
@@ -161,6 +154,7 @@ class _InboxState extends State<Inbox> {
                 right: 10.0,
                 child: AppBar(
                   toolbarHeight: 40,
+                  elevation: 1.0,
                   backgroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
@@ -216,14 +210,16 @@ class _InboxState extends State<Inbox> {
             if (_inboxController.tagsAvailable &&
                 _inboxController.cannedResponseAvailable &&
                 _inboxController.ticketDataAvailable) {
-              return Tickets(
-                availableTags: _inboxController.tags,
-                agents: _inboxController.agents,
-                groups: _inboxController.groups,
-                cannedResponse: _inboxController.cannedResponse,
-                onRefresh: () {
-
-                },
+              return Expanded(
+                child: Tickets(
+                  availableTags: _inboxController.tags,
+                  agents: _inboxController.agents,
+                  groups: _inboxController.groups,
+                  cannedResponse: _inboxController.cannedResponse,
+                  onRefresh: () {
+                    setState(() {});
+                  },
+                ),
               );
             } else {
               return Container();

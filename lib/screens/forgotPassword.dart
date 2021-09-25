@@ -4,7 +4,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/utils.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/loginApiController.dart';
-import 'package:myalice/utils/routes.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/constant_strings.dart';
 

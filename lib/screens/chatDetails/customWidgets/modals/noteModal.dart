@@ -55,7 +55,7 @@ class _NoteModalState extends State<NoteModal> {
           ],
         ),
         body: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding:  EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 20),
           child: Container(
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),

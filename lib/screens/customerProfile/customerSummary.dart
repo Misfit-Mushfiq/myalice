@@ -191,7 +191,6 @@ class _CustomerSummaryState extends State<CustomerSummaryScreen> {
                             Row(
                               children: [
                                 Text(
-                                  "${format.currencySymbol}" +
                                       _customerSummary.dataSource!.frequencyDays
                                           .toString(),
                                   style: TextStyle(
@@ -215,32 +214,7 @@ class _CustomerSummaryState extends State<CustomerSummaryScreen> {
                         thickness: 1.5,
                         height: 25,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Customer Lifetime Value",
-                              style: TextStyle(
-                                  fontSize: 15, color: Colors.grey[700]),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "${format.currencySymbol}" +
-                                  _customerSummary.dataSource!.lifetimeValue
-                                      .toString(),
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Divider(
-                        thickness: 1.5,
-                      ),
+                      
                       Padding(
                         padding: const EdgeInsets.only(left: 15.0),
                         child: Row(

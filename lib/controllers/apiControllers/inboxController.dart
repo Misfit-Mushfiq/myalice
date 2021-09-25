@@ -153,7 +153,7 @@ class InboxController extends BaseApiController {
               "groups": groups.length == 0 ? "all" : groups.join(','),
               "tags": tags.length == 0 ? "all" : tags.join(','),
               "order": order,
-              "start": dates!.length > 0 ? dates.elementAt(0) : "",
+              "start": dates.length > 0 ? dates.elementAt(0) : "",
               "end": dates.length > 0 ? dates.elementAt(1) : ""
             },
             options: Options(headers: {"Authorization": "Token $token"}))
@@ -171,7 +171,7 @@ class InboxController extends BaseApiController {
         })
         .catchError((err) => print(err.toString()))
         .whenComplete(() => ticketDataAvailable =
-            ticketResponse.value.dataSource!.length > 0 ? true : false);
+            ticketResponse.value!=null? true : false);
   }
 
   Future<Projects?> getProjects() async {

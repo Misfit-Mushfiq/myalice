@@ -131,6 +131,5 @@ class _AddCustomerAttributeState extends State<AddCustomerAttribute> {
         ),
       ),
     ));
-    ;
   }
 }

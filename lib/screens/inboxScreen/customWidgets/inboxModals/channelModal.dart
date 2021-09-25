@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:myalice/controllers/apiControllers/inboxController.dart';
 import 'package:myalice/models/responseModels/channels/channels.dart';
 import 'package:myalice/models/responseModels/channels/data_source.dart';
-
-import 'package:myalice/screens/chatDetails/chatDetails.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/platform_icon.dart';
 import 'package:myalice/utils/shared_pref.dart';
@@ -24,7 +20,6 @@ class ChannelModal extends StatefulWidget {
 
 class _ChannelModalState extends State<ChannelModal> {
   List<ChannelDataSource> _selectedChannels = [];
-  int _index = 0;
   SharedPref _pref = SharedPref();
   @override
   void initState() {

@@ -65,7 +65,7 @@ class _MainModalState extends State<MainModal> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: 220,
       child: Center(
         child: Scaffold(
           body: Column(
@@ -138,7 +138,7 @@ class _MainModalState extends State<MainModal> {
                 color: Colors.grey,
               ),
               ListTile(
-                  contentPadding: EdgeInsets.only(left: 10.0),
+                  contentPadding: EdgeInsets.only(left: 15.0),
                   title: widget.sortNew
                       ? Text(
                           "Sort by newest",

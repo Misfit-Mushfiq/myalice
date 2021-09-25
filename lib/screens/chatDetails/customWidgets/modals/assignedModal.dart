@@ -84,7 +84,7 @@ class _AssignedModalState extends State<InboxAssignedModal> {
                   ],
                 ),
                 title: Text(
-                  'Ressaign Ticket',
+                  'Reassign Ticket',
                   style: TextStyle(color: Colors.black, fontSize: 15),
                 ),
                 centerTitle: false,

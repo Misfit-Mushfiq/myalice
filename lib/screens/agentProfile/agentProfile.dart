@@ -5,13 +5,13 @@ import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/agentProfileController.dart';
 import 'package:myalice/customWidgets/botButton.dart';
 import 'package:myalice/models/responseModels/UserResponse.dart';
-import 'package:myalice/models/responseModels/projectsModels/data_source.dart';
 import 'package:myalice/models/responseModels/projectsModels/projects.dart';
 import 'package:myalice/screens/agentProfile/customWidget/teamSelection.dart';
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/routes.dart';
 import 'package:myalice/utils/shared_pref.dart';
 import 'package:package_info/package_info.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AgentProfile extends StatefulWidget {
   AgentProfile({Key? key}) : super(key: key);
@@ -253,7 +253,7 @@ class _UserProfileState extends State<AgentProfile> {
                             ],
                           ),
                           onTap: () {
-                            print("object");
+                            launch("https://myalice.ai/terms/");
                           },
                         ),
                         SizedBox(
@@ -313,7 +313,7 @@ class _UserProfileState extends State<AgentProfile> {
                             ],
                           ),
                           onTap: () {
-                            print("object");
+                            _launchURL("https://docs.myalice.ai");
                           },
                         ),
                         SizedBox(
@@ -492,5 +492,13 @@ class _UserProfileState extends State<AgentProfile> {
         builder: (context) {
           return TeamSelection(teams: projects.dataSource!);
         });
+  }
+
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

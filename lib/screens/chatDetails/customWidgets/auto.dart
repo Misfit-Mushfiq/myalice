@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/chatApiController.dart';
@@ -52,7 +54,7 @@ class _AutoCompleteExampleState extends State<AutoCompleteExample> {
             FocusNode fieldFocusNode,
             VoidCallback onFieldSubmitted) {
           return Container(
-            padding: EdgeInsets.only(top: 10, bottom: 10),
+            padding: EdgeInsets.only(top: 10, bottom: 10,left: Platform.isIOS? 10:0,right: Platform.isIOS?10:0),
             width: double.infinity,
             child: Row(
               children: <Widget>[
@@ -67,7 +69,7 @@ class _AutoCompleteExampleState extends State<AutoCompleteExample> {
                     icon: Icon(
                       Icons.add,
                       color: AliceColors.ALICE_GREEN,
-                      size: 20,
+                      size: 25,
                     )),
                 SizedBox(
                   width: 10,
@@ -106,7 +108,8 @@ class _AutoCompleteExampleState extends State<AutoCompleteExample> {
                     //await pusherService.pusherTrigger('test-event');
                     //animateToScreenEnd();
 
-                    Get.find<ChatApiController>()
+                    if(fieldTextEditingController.text.isNotEmpty){
+                      Get.find<ChatApiController>()
                         .chatResponse
                         .add(DataSource.fromJson({
                           "text": fieldTextEditingController.text,
@@ -120,6 +123,7 @@ class _AutoCompleteExampleState extends State<AutoCompleteExample> {
                         "");
                     fieldTextEditingController.text = "";
                     setState(() {});
+                    }
                   },
                   icon: Icon(
                     Icons.send,

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
@@ -9,10 +11,8 @@ import 'package:myalice/models/responseModels/channels/channels.dart';
 import 'package:myalice/models/responseModels/channels/data_source.dart';
 import 'package:myalice/models/responseModels/tags/data_source.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
-import 'package:myalice/screens/chatDetails/chatDetails.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/assignedModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/channelModal.dart';
-import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/mainModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/tagsModal.dart';
 import 'package:myalice/screens/inboxScreen/customWidgets/inboxModals/timeModal.dart';
 import 'package:myalice/utils/colors.dart';
@@ -409,7 +409,7 @@ class _FilterModalState extends State<FilterModal> {
                   color: Colors.grey,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 10.0),
+                  padding: Platform.isIOS? EdgeInsets.only(left: 15.0,bottom:10.0,right:10.0):EdgeInsets.only(left:8.0,bottom:8.0),
                   child: InkWell(
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,

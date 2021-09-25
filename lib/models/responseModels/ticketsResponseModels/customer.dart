@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'meta.dart';
 import 'platform.dart';
 

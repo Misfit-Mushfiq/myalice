@@ -1,7 +1,6 @@
 import 'package:myalice/models/responseModels/sendChats/data.dart';
 
 import 'admin_info.dart';
-import 'attached_data.dart';
 
 class SendDataSource {
   dynamic id;

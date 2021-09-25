@@ -30,7 +30,6 @@ String readTimestamp(int timestamp) {
 }
 
 String getDateFromTimeStamp(int timestamp) {
-  var now = DateTime.now();
   var format = DateFormat('dd MMM,yyyy');
   var date =
       format.format(DateTime.fromMillisecondsSinceEpoch(timestamp * 1000));
@@ -39,7 +38,6 @@ String getDateFromTimeStamp(int timestamp) {
 }
 
 String getDateWithTime(int timestamp) {
-  var now = DateTime.now();
   var format = DateFormat('d MMM yyyy, HH:mm a');
   var date = format.format(DateTime.fromMillisecondsSinceEpoch(timestamp * 1));
 

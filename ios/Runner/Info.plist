@@ -27,6 +27,12 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+  	<string>https</string>
+  	<string>http</string>
+	</array>
+
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>MyAlice needs permission for the Photo Library to upload profile image and chatting</string>
 

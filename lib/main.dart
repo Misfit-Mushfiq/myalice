@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myalice/controllers/apiControllers/databinging.dart';
-import 'package:myalice/models/responseModels/customerOrder/customer_order_history.dart';
 import 'package:myalice/screens/chatDetails/chatDetails.dart';
 import 'package:myalice/screens/customerProfile/customerInfo.dart';
 import 'package:myalice/screens/customerProfile/customerProfile.dart';

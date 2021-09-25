@@ -66,8 +66,8 @@ class _TicketsState extends State<Tickets> {
                                       children: [
                                         CircleAvatar(
                                           backgroundImage: NetworkImage(
-                                              _inboxController
-                                                      .ticketResponse.value.dataSource!
+                                              _inboxController.ticketResponse
+                                                      .value.dataSource!
                                                       .elementAt(index)
                                                       .customer!
                                                       .avatar ??
@@ -78,7 +78,9 @@ class _TicketsState extends State<Tickets> {
                                             top: 30,
                                             left: 30,
                                             child: _inboxController
-                                                        .ticketResponse.value.dataSource!
+                                                        .ticketResponse
+                                                        .value
+                                                        .dataSource!
                                                         .elementAt(index)
                                                         .agents!
                                                         .length >
@@ -87,7 +89,8 @@ class _TicketsState extends State<Tickets> {
                                                     child: CircleAvatar(
                                                       backgroundImage: NetworkImage(
                                                           _inboxController
-                                                                  .ticketResponse.value
+                                                                  .ticketResponse
+                                                                  .value
                                                                   .dataSource!
                                                                   .elementAt(
                                                                       index)
@@ -114,8 +117,8 @@ class _TicketsState extends State<Tickets> {
                                           Row(
                                             children: [
                                               Text(
-                                                _inboxController
-                                                    .ticketResponse.value.dataSource!
+                                                _inboxController.ticketResponse
+                                                    .value.dataSource!
                                                     .elementAt(index)
                                                     .customer!
                                                     .fullName!,
@@ -128,7 +131,9 @@ class _TicketsState extends State<Tickets> {
                                               ),
                                               FaIcon(
                                                 platformIcon(_inboxController
-                                                    .ticketResponse.value.dataSource!
+                                                    .ticketResponse
+                                                    .value
+                                                    .dataSource!
                                                     .elementAt(index)
                                                     .customer!
                                                     .platform!
@@ -136,7 +141,9 @@ class _TicketsState extends State<Tickets> {
                                                 size: 15,
                                                 color: platformColor(
                                                     _inboxController
-                                                        .ticketResponse.value.dataSource!
+                                                        .ticketResponse
+                                                        .value
+                                                        .dataSource!
                                                         .elementAt(index)
                                                         .customer!
                                                         .platform!
@@ -148,7 +155,8 @@ class _TicketsState extends State<Tickets> {
                                             height: 10,
                                           ),
                                           Text(
-                                            _inboxController.ticketResponse.value.dataSource!
+                                            _inboxController.ticketResponse
+                                                .value.dataSource!
                                                 .elementAt(index)
                                                 .customer!
                                                 .lastMessageText!,
@@ -164,8 +172,8 @@ class _TicketsState extends State<Tickets> {
                                       children: [
                                         Text(
                                           readTimestamp(int.parse(
-                                              _inboxController
-                                                  .ticketResponse.value.dataSource!
+                                              _inboxController.ticketResponse
+                                                  .value.dataSource!
                                                   .elementAt(index)
                                                   .createdAt!)),
                                           style: TextStyle(
@@ -178,7 +186,9 @@ class _TicketsState extends State<Tickets> {
                                           children: [
                                             CircleAvatar(
                                               backgroundColor: _inboxController
-                                                      .ticketResponse.value.dataSource!
+                                                      .ticketResponse
+                                                      .value
+                                                      .dataSource!
                                                       .elementAt(index)
                                                       .isReplied!
                                                   ? AliceColors.ALICE_GREEN
@@ -189,8 +199,8 @@ class _TicketsState extends State<Tickets> {
                                               width: 10,
                                             ),
                                             Icon(
-                                              _inboxController
-                                                      .ticketResponse.value.dataSource!
+                                              _inboxController.ticketResponse
+                                                      .value.dataSource!
                                                       .elementAt(index)
                                                       .isLocked!
                                                   ? Icons.lock
@@ -206,33 +216,52 @@ class _TicketsState extends State<Tickets> {
                                 onTap: () {
                                   Get.toNamed(CHAT_DETAILS_PAGE, arguments: [
                                     widget.availableTags,
-                                    _inboxController.ticketResponse.value.dataSource!
+                                    _inboxController
+                                        .ticketResponse.value.dataSource!
                                         .elementAt(index)
                                         .id,
-                                    _inboxController.ticketResponse.value.dataSource!
+                                    _inboxController
+                                        .ticketResponse.value.dataSource!
                                         .elementAt(index)
                                         .customer,
                                     widget.agents,
-                                    _inboxController.ticketResponse.value.dataSource!
+                                    _inboxController
+                                        .ticketResponse.value.dataSource!
                                         .elementAt(index)
                                         .agents,
                                     widget.cannedResponse,
-                                    _inboxController.ticketResponse.value.dataSource!
+                                    _inboxController
+                                        .ticketResponse.value.dataSource!
                                         .elementAt(index)
                                         .tags,
                                     widget.groups
                                   ]);
                                 }));
                       },
-                      itemCount: _inboxController.ticketResponse.value.dataSource!.length),
+                      itemCount: _inboxController
+                          .ticketResponse.value.dataSource!.length),
                 ))
               : Center(
-                child: Expanded(
-                  child: Container(
-                      child: FaIcon(FontAwesomeIcons.copy,size: 150,color: Colors.grey,),
+                  child: Expanded(
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.copy,
+                            size: 150,
+                            color: Colors.grey,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("No Tickets Found!"),
+                          )
+                        ],
+                      ),
                     ),
-                ),
-              )
+                  ),
+                )
           : Padding(
               padding: const EdgeInsets.all(20.0),
               child: Center(child: CircularProgressIndicator()),

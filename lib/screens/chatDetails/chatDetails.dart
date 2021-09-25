@@ -195,7 +195,7 @@ class _ChatDetailsState extends State<ChatDetails>
                   padding: EdgeInsets.zero,
                   icon: Icon(
                     Icons.settings,
-                    size: 20,
+                    size: 25,
                   ),
                   color: AliceColors.ALICE_GREEN,
                   onPressed: () {

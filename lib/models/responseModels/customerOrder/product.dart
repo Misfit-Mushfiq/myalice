@@ -42,7 +42,7 @@ class Product {
         quantity: json['quantity'] as int?,
         unitPrice: json['unit_price'] as double?,
         totalCost: json['total_cost'] as double?,
-        timestamp: json['timestamp'] as dynamic?,
+        timestamp: json['timestamp'] as dynamic,
       );
 
   Map<String, dynamic> toJson() => {

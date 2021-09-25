@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -207,7 +205,7 @@ class _AttachmentsState extends State<Attachments> {
                                               value.dataSource!.data!.type ==
                                                       "attachment"
                                                   ? value.dataSource!.data!
-                                                      .data!.urls!
+                                                      .data!.urls
                                                       .elementAt(0)
                                                   : ""
                                         }));
@@ -249,8 +247,9 @@ class _AttachmentsState extends State<Attachments> {
   _showNoteModal(BuildContext context) {
     showModalBottomSheet(
         context: context,
-        constraints: BoxConstraints(maxHeight: 200),
         isDismissible: true,
+         isScrollControlled: true,
+         constraints: BoxConstraints(maxHeight: 500),
         builder: (context) {
           return NoteModal(
             onSaved: (String note) {

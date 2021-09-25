@@ -1,13 +1,17 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:myalice/controllers/apiControllers/customerProfileController.dart';
 import 'package:myalice/models/responseModels/customerOrder/customer_order_history.dart';
 import 'package:myalice/models/responseModels/customerOrder/data_source.dart';
+import 'package:myalice/screens/customerProfile/customWidgets/noDataFound.dart';
 import 'package:myalice/utils/readTimeStamp.dart';
 
 class OrderHistory extends StatefulWidget {
@@ -23,6 +27,7 @@ class _OrderHistoryState extends State<OrderHistory> {
   late var _list = <OrderDataSource>[].obs;
   late var _id;
   var _itemsTotal = 0;
+  bool _visiblity = false;
   @override
   void initState() {
     getData();
@@ -35,10 +40,20 @@ class _OrderHistoryState extends State<OrderHistory> {
     _orderHistory =
         await _controller.getOrderHistory(customerID: _id.toString());
     _list.value = _orderHistory.dataSource!;
+    Timer(Duration(seconds: 2), () {
+      setState(() {
+        _visiblity = true;
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+        Timer(Duration(seconds: 2), () {
+      setState(() {
+        _visiblity = true;
+      });
+    });
     Locale locale = Localizations.localeOf(context);
     var format = NumberFormat.simpleCurrency(locale: locale.toString());
     return Scaffold(
@@ -65,8 +80,8 @@ class _OrderHistoryState extends State<OrderHistory> {
       body: SingleChildScrollView(
           physics: ScrollPhysics(),
           child: Container(
-            color: Colors.white,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Obx(() {
                   if (_list.length > 0) {
@@ -723,11 +738,9 @@ class _OrderHistoryState extends State<OrderHistory> {
                           );
                         });
                   } else {
-                    return Center(
-                        child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CircularProgressIndicator(),
-                    ));
+                    return Visibility(
+                        visible: _visiblity,
+                        child: NoDataFound(title: "No orders found!"));
                   }
                 })
               ],

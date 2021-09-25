@@ -93,8 +93,8 @@ class OrderDataSource {
             : PaymentLine.fromJson(
                 json['payment_line'] as Map<String, dynamic>),
         couponInfo: json['coupon_info'] as List<dynamic>?,
-        dateCompleted: json['date_completed'] as dynamic?,
-        datePaid: json['date_paid'] as dynamic?,
+        dateCompleted: json['date_completed'] as dynamic,
+        datePaid: json['date_paid'] as dynamic,
         billingAddress: json['billing_address'] == null
             ? null
             : BillingAddress.fromJson(

@@ -93,13 +93,13 @@ class _CannedResponseState extends State<CannedResponseModal> {
                 onTap: () {
                   _showResponseEdit(
                       context,
-                      _dataSource!.elementAt(index).title!,
-                      _dataSource!.elementAt(index).text!,
+                      _dataSource.elementAt(index).title!,
+                      _dataSource.elementAt(index).text!,
                       index,
-                      _dataSource!.elementAt(index).forTeam!);
+                      _dataSource.elementAt(index).forTeam!);
                 },
                 child: ListTile(
-                  leading: Text("#${_dataSource!.elementAt(index).title}"),
+                  leading: Text("#${_dataSource.elementAt(index).title}"),
                   trailing: Icon(Icons.arrow_forward_ios, color: Colors.grey),
                 ),
               );
@@ -114,8 +114,8 @@ class _CannedResponseState extends State<CannedResponseModal> {
       BuildContext context, String title, String text, int index, bool team) {
     showModalBottomSheet(
         context: context,
-        constraints: BoxConstraints(maxHeight: 800),
         backgroundColor: Colors.white,
+        isScrollControlled: true,
         builder: (context) {
           return CannedResponsEdit(
             onDelete: (int index) {
@@ -172,7 +172,7 @@ class _CannedResponseState extends State<CannedResponseModal> {
   _showNewResponse(BuildContext context) {
     showModalBottomSheet(
         context: context,
-        constraints: BoxConstraints(maxHeight: 800),
+        isScrollControlled: true,
         backgroundColor: Colors.white,
         builder: (context) {
           return NewCannedResponse(

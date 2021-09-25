@@ -213,7 +213,7 @@ class _TimeModalState extends State<TimeModal> {
             child: CupertinoDatePicker(
               mode: CupertinoDatePickerMode.date,
               onDateTimeChanged: (picked) {
-                if (picked != null && picked != _startDate)
+                if ( picked != _startDate)
                   state(() {
                     _startDate = picked;
                   });
@@ -250,7 +250,7 @@ class _TimeModalState extends State<TimeModal> {
             child: CupertinoDatePicker(
               mode: CupertinoDatePickerMode.date,
               onDateTimeChanged: (picked) {
-                if (picked != null && picked != _endDate)
+                if ( picked != _endDate)
                   state(() {
                     _endDate = picked;
                   });
