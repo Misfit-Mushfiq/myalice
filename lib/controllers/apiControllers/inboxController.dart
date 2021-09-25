@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:myalice/controllers/apiControllers/baseApiController.dart';
 import 'package:myalice/models/responseModels/UserResponse.dart';
 import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
@@ -11,7 +10,6 @@ import 'package:myalice/models/responseModels/channels/channels.dart';
 import 'package:myalice/models/responseModels/projectsModels/projects.dart';
 import 'package:myalice/models/responseModels/tags/tags.dart';
 import 'package:myalice/models/responseModels/ticketsResponseModels/ticketResponse.dart';
-import 'package:myalice/screens/inboxScreen/inboxScreen.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
 class InboxController extends BaseApiController {
@@ -32,7 +30,7 @@ class InboxController extends BaseApiController {
   }
 
   var _user;
-  late TicketResponse _ticketResponse;
+  Rx<TicketResponse> ticketResponse = TicketResponse().obs;
   late Projects _projects;
   late Channels _channels;
   late AvailableAgents _agents;
@@ -72,8 +70,6 @@ class InboxController extends BaseApiController {
   set ticketDataAvailable(bool value) {
     _isticketsDataAvailable.value = value;
   }
-
-  TicketResponse get tickets => _ticketResponse;
 
   CannedResponse get cannedResponse => _cannedResponse;
   bool get cannedResponseAvailable => _isCannedResponseAvailable.value;
@@ -163,14 +159,19 @@ class InboxController extends BaseApiController {
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) {
           if (response.statusCode == 200) {
-            _ticketResponse = TicketResponse.fromJson(response.data);
+            // tickets = TicketResponse.fromJson(response.data);
+            ticketResponse.value = TicketResponse.fromJson(response.data);
+            ticketResponse.update((val) {
+              val = TicketResponse.fromJson(response.data);
+            });
+            ticketResponse.refresh();
           } else {
             return null;
           }
         })
         .catchError((err) => print(err.toString()))
         .whenComplete(() => ticketDataAvailable =
-            _ticketResponse.dataSource!.length > 0 ? true : false);
+            ticketResponse.value.dataSource!.length > 0 ? true : false);
   }
 
   Future<Projects?> getProjects() async {

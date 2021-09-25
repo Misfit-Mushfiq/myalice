@@ -141,8 +141,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   width: 1.0,
                                 ),
                                 borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(10.0),
-                                  topRight: Radius.circular(10.0),
+                                    bottomLeft: Radius.circular(10.0),
+                                bottomRight: Radius.circular(10.0),
                                 )),
                             errorBorder: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -164,7 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 width: 0.5,
                               ),
                               borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(10.0),
+                                  bottomLeft: Radius.circular(10.0),
                                 bottomRight: Radius.circular(10.0),
                               ),
                             ),
@@ -174,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 width: 1.0,
                               ),
                               borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(10.0),
+                               bottomLeft: Radius.circular(10.0),
                                 bottomRight: Radius.circular(10.0),
                               ),
                             ),
