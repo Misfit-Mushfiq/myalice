@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:myalice/controllers/apiControllers/databinging.dart';
+import 'package:myalice/helper/notificationService.dart';
 import 'package:myalice/screens/chatDetails/chatDetails.dart';
 import 'package:myalice/screens/customerProfile/customerInfo.dart';
 import 'package:myalice/screens/customerProfile/customerProfile.dart';
@@ -19,9 +20,10 @@ import 'package:myalice/screens/splashScreen.dart';
 import 'package:myalice/screens/agentProfile/agentProfile.dart';
 import 'package:myalice/utils/routes.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   DataBinding().dependencies();
+  await NotificationService().init();
   runApp(MyApp());
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.white, statusBarIconBrightness: Brightness.dark));

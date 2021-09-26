@@ -24,6 +24,7 @@ class _InboxState extends State<Inbox> {
   late bool sortNew;
   final SharedPref _sharedPref = SharedPref();
 
+
   List<String>? _selectedAgentsID = [];
   List<String>? _selectedChannelsID = [];
   List<String>? _selectedTagsID = [];
@@ -63,7 +64,6 @@ class _InboxState extends State<Inbox> {
 
   @override
   Widget build(BuildContext context) {
-    print("hello");
     return Scaffold(
         key: _inboxBottomSheet,
         body: Container(
@@ -149,7 +149,7 @@ class _InboxState extends State<Inbox> {
               ),
               Positioned(
                 // To take AppBar Size only
-                top: MediaQuery.of(context).size.height * 0.12,
+                top: MediaQuery.of(context).size.height * 0.11,
                 left: 10.0,
                 right: 10.0,
                 child: AppBar(

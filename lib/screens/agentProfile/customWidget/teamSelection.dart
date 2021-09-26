@@ -38,7 +38,7 @@ class _TeamSelectionState extends State<TeamSelection> {
   }
 
   Future<void> getProjectID() async {
-    _projectID = await _sharedPref.readString("projectID") ?? "0";
+    _projectID = await _sharedPref.readString("projectID") ?? widget.teams.elementAt(0).id.toString();
     setState(() {});
   }
 

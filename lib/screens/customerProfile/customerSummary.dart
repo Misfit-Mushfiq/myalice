@@ -1,16 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:myalice/controllers/apiControllers/customerProfileController.dart';
-import 'package:myalice/models/responseModels/customerOrder/customer_order_history.dart';
-import 'package:myalice/models/responseModels/customerOrder/data_source.dart';
 import 'package:myalice/models/responseModels/customerSummary/customer_summary.dart';
-import 'package:myalice/utils/readTimeStamp.dart';
 
 class CustomerSummaryScreen extends StatefulWidget {
   CustomerSummaryScreen({Key? key}) : super(key: key);

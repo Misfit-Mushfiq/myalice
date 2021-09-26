@@ -35,7 +35,6 @@ class ChatDetails extends StatefulWidget {
 class _ChatDetailsState extends State<ChatDetails>
     with SingleTickerProviderStateMixin {
   late List<ChatMessage> messages = <ChatMessage>[];
-  late final PusherService pusherService;
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _textEditingController = TextEditingController();
   bool _visiblity = false;
@@ -77,7 +76,6 @@ class _ChatDetailsState extends State<ChatDetails>
   }
 
   Future<void> init() async {
-    pusherService = PusherService();
     var args = Get.arguments;
     _availableTags = args[0];
     _ticketId = args[1];
@@ -89,9 +87,6 @@ class _ChatDetailsState extends State<ChatDetails>
     _groups = args[7];
 /*     _sharedPref.saveString(
                   "selectedInboxTags", TagsDataSource.encode(_usedTags)); */
-
-    await pusherService.connectPusher(
-        'chat-C_${_customer.id!.toString()}', "messages");
   }
 
   void animateToScreenEnd() {

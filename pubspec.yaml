@@ -45,4 +45,8 @@ flutter:
   assets:
     - assets/launch_icon/
 
+flutter_icons:
+  android: "launcher_icon"
+  image_path: "assets/launch_icon/appicon.png"    
+
 

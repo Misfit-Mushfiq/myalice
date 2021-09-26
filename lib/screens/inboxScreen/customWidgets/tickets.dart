@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:myalice/controllers/apiControllers/inboxController.dart';
+import 'package:myalice/controllers/pusherController/pusherController.dart';
 import 'package:myalice/models/responseModels/availableAgents/assigned_agents.dart';
 import 'package:myalice/models/responseModels/availableGroups/available_groups.dart';
 import 'package:myalice/models/responseModels/cannedResponse/canned_response.dart';
@@ -33,8 +34,10 @@ class Tickets extends StatefulWidget {
 }
 
 class _TicketsState extends State<Tickets> {
+  late final PusherService pusherService;
   @override
   void initState() {
+    pusherService = PusherService();
     super.initState();
   }
 
@@ -57,6 +60,11 @@ class _TicketsState extends State<Tickets> {
                                 .ticketResponse.value.dataSource!
                                 .elementAt(index)
                                 .tags!));
+                        _connectPusher(_inboxController
+                                        .ticketResponse.value.dataSource!
+                                        .elementAt(index)
+                                        .customer!.id
+                            .toString());
                         return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: InkWell(
@@ -272,5 +280,9 @@ class _TicketsState extends State<Tickets> {
   Future _refreshData() async {
     await Future.delayed(Duration(seconds: 3));
     widget.onRefresh();
+  }
+
+  Future _connectPusher(String id) async {
+    await pusherService.connectPusher('chat-C_$id', "messages");
   }
 }
