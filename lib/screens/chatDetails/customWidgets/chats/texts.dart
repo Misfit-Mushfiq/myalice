@@ -79,8 +79,8 @@ class Texts extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
                       child: Text(
                         object.chats.elementAt(index)!.source == "customer"
-                            ? object.chats.elementAt(index)!.text!
-                            : object.chats.elementAt(index)!.text!,
+                            ? object.chats.elementAt(index)!.text??""
+                            : object.chats.elementAt(index)!.text??"",
                         style: TextStyle(
                             fontSize: 14,
                             height: 1.8,

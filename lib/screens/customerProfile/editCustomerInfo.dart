@@ -66,10 +66,9 @@ class _EditCustomerInfoState extends State<EditCustomerInfo> {
                 size: 18,
               )),
         ),
-        body: SingleChildScrollView(
-          physics: ScrollPhysics(),
-          child: Container(
+        body: Container(
             color: Colors.white,
+            height: MediaQuery.of(context).size.height,
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Column(
@@ -318,13 +317,13 @@ class _EditCustomerInfoState extends State<EditCustomerInfo> {
               ),
             ),
           ),
-        ));
+       );
   }
 
   _showModal(BuildContext context) {
     showModalBottomSheet(
         context: context,
-        constraints: BoxConstraints(maxHeight: 250),
+        isScrollControlled: true,
         builder: (context) {
           return AddCustomerAttribute(
             onSaved: (String title, String value) {

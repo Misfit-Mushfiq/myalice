@@ -30,6 +30,8 @@ Color platformColor(String name) {
       return AliceColors.ALICE_BLUE;
     case "webchat":
       return Colors.redAccent;
+    case "instagram_messenger":
+      return Colors.redAccent;
     default:
       return AliceColors.ALICE_BLUE;
   }

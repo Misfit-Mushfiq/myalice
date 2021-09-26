@@ -71,7 +71,7 @@ class _InboxState extends State<Inbox> {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
-            height: MediaQuery.of(context).size.height * 0.18,
+            height: MediaQuery.of(context).size.height * 0.19,
             child: Stack(children: <Widget>[
               Container(
                 child: Row(
@@ -91,7 +91,7 @@ class _InboxState extends State<Inbox> {
                       ),
                     ),
                     Padding(
-                        padding: const EdgeInsets.all(0.0),
+                        padding: const EdgeInsets.only(right:5.0),
                         child: GestureDetector(
                             child: Icon(
                               Icons.more_vert,
@@ -149,7 +149,7 @@ class _InboxState extends State<Inbox> {
               ),
               Positioned(
                 // To take AppBar Size only
-                top: MediaQuery.of(context).size.height * 0.11,
+                top: MediaQuery.of(context).size.height * 0.12,
                 left: 10.0,
                 right: 10.0,
                 child: AppBar(
@@ -197,7 +197,7 @@ class _InboxState extends State<Inbox> {
             ]),
           ),
           Container(
-            margin: const EdgeInsets.only(left: 10.0, top: 15, bottom: 5),
+            margin: const EdgeInsets.only(left: 10.0, top: 0, bottom: 5),
             child: Obx(() {
               return Text(ticketType.value,
                   style: TextStyle(

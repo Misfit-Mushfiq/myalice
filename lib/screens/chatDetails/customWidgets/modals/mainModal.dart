@@ -17,6 +17,8 @@ import 'package:myalice/screens/chatDetails/customWidgets/modals/tagsModal.dart'
 import 'package:myalice/utils/colors.dart';
 import 'package:myalice/utils/shared_pref.dart';
 
+import '../../../../utils/colors.dart';
+
 class MainModal extends StatefulWidget {
   final usedTags;
   final availableTags;
@@ -91,7 +93,7 @@ class _MainModalState extends State<MainModal> {
                             scrollBar: HorizontalScrollBar(isAlwaysShown: true),
                             icon: Icon(
                               Icons.cancel,
-                              color: Colors.white,
+                              color: AliceColors.ALICE_GREEN,
                               size: 5,
                             ),
                             shape: RoundedRectangleBorder(

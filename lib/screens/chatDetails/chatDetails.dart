@@ -133,6 +133,7 @@ class _ChatDetailsState extends State<ChatDetails>
                     children: [
                       CircleAvatar(
                         radius: 18,
+                        backgroundImage: CachedNetworkImageProvider(_customer.avatar),
                       ),
                       SizedBox(
                         width: 5,
@@ -255,7 +256,10 @@ class _ChatDetailsState extends State<ChatDetails>
                               },
                             );
                           } else {
-                            return Container();
+                            return Center(child: Padding(
+                              padding: const EdgeInsets.only(top:30.0),
+                              child: CircularProgressIndicator(),
+                            ));
                           }
                         },
                       ),

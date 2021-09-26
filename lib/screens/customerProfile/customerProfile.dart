@@ -44,13 +44,13 @@ class _CustomerProfileState extends State<CustomerProfile> {
             },
           ),
         ),
-        body: SingleChildScrollView(
-            child: Container(
+        body: Container(
           color: Colors.white,
+          height: MediaQuery.of(context).size.height,
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Column(
                   children: [
@@ -220,6 +220,6 @@ class _CustomerProfileState extends State<CustomerProfile> {
               ],
             ),
           ),
-        )));
+        ));
   }
 }

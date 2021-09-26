@@ -76,6 +76,7 @@ class _CustomerInfoState extends State<CustomerInfo> {
         body: SingleChildScrollView(
             physics: ScrollPhysics(),
             child: Container(
+              height: MediaQuery.of(context).size.height,
               color: Colors.white,
               child: Column(
                 children: [
@@ -140,6 +141,7 @@ class _CustomerInfoState extends State<CustomerInfo> {
                                     children: [
                                       Expanded(
                                           child: Text(
+                                            (key.capitalizeFirst)!.split("_").first=="Full"?"Full Name":
                                               "${(key.capitalizeFirst)!.split("_").first} ",
                                               style: TextStyle(
                                                 color: Colors.grey[600],
@@ -180,7 +182,7 @@ class _CustomerInfoState extends State<CustomerInfo> {
                                           ))),
                                   Expanded(
                                       child: new Text(
-                                    "${_variableData[key]}",
+                                    "${_variableData[key]??""}",
                                     textAlign: TextAlign.end,
                                   ))
                                 ],

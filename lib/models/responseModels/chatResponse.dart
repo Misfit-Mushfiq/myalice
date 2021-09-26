@@ -181,7 +181,7 @@ class Data {
 
     attachment = json["attachment"] != null
         ? Attachment.fromJson(json["attachment"])
-        : null;
+        : Attachment();
   }
 
   Map<String, dynamic> toJson() {
@@ -224,6 +224,7 @@ class Datam {
   bool? save;
   //Null attribute;
   List<Buttons>? buttons;
+   List<Elements>? elements;
   //Null api;
   String? subType;
   List<String>? urls;
@@ -234,13 +235,20 @@ class Datam {
       //this.attribute,
       this.buttons,
       //this.api,
-      this.subType});
+      this.subType,this.elements});
 
   Datam.fromJson(Map<String, dynamic> json) {
     text = json['text'];
     save = json['save'];
     if (json['urls'] != null) {
       urls = json['urls'].cast<String>();
+    }
+
+     if (json['elements'] != null) {
+      elements =  <Elements>[];
+      json['elements'].forEach((v) {
+        elements!.add(new Elements.fromJson(v));
+      });
     }
 
     //attribute = json['attribute'];
@@ -259,12 +267,111 @@ class Datam {
     data['text'] = this.text;
     data['save'] = this.save;
     // data['attribute'] = this.attribute;
+     if (this.elements != null) {
+      data['elements'] = this.elements!.map((v) => v.toJson()).toList();
+    }
     if (this.buttons != null) {
       data['buttons'] = this.buttons!.map((v) => v.toJson()).toList();
     }
     //data['api'] = this.api;
     data['sub_type'] = this.subType;
     data['urls'] = this.urls;
+    return data;
+  }
+}
+
+class Elements {
+  int? id;
+  String? url;
+  String? image;
+  String? title;
+  List<ElementButtons>? buttons;
+  String? subtitle;
+
+  Elements(
+      {this.id, this.url, this.image, this.title, this.buttons, this.subtitle});
+
+  Elements.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    url = json['url'];
+    image = json['image'];
+    title = json['title'];
+    if (json['buttons'] != null) {
+      buttons =  <ElementButtons>[];
+      json['buttons'].forEach((v) {
+        buttons!.add(new ElementButtons.fromJson(v));
+      });
+    }
+    subtitle = json['subtitle'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['url'] = this.url;
+    data['image'] = this.image;
+    data['title'] = this.title;
+    if (this.buttons != null) {
+      data['buttons'] = this.buttons!.map((v) => v.toJson()).toList();
+    }
+    data['subtitle'] = this.subtitle;
+    return data;
+  }
+}
+
+class ElementButtons {
+  int? id;
+  String? type;
+  String? extra;
+  String? title;
+  String? value;
+  String? payload;
+  String? verbose;
+  int? formSequence;
+  //Null formSequenceTitle;
+  bool? messengerExtensions;
+  String? webviewHeightRatio;
+
+  ElementButtons(
+      {this.id,
+      this.type,
+      this.extra,
+      this.title,
+      this.value,
+      this.payload,
+      this.verbose,
+      this.formSequence,
+     // this.formSequenceTitle,
+      this.messengerExtensions,
+      this.webviewHeightRatio});
+
+  ElementButtons.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    type = json['type'];
+    extra = json['extra'];
+    title = json['title'];
+    value = json['value'].toString();
+    payload = json['payload'];
+    verbose = json['verbose'];
+    formSequence = json['form_sequence'];
+   // formSequenceTitle = json['form_sequence_title'];
+    messengerExtensions = json['messenger_extensions'];
+    webviewHeightRatio = json['webview_height_ratio'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['type'] = this.type;
+    data['extra'] = this.extra;
+    data['title'] = this.title;
+    data['value'] = this.value;
+    data['payload'] = this.payload;
+    data['verbose'] = this.verbose;
+    data['form_sequence'] = this.formSequence;
+   // data['form_sequence_title'] = this.formSequenceTitle;
+    data['messenger_extensions'] = this.messengerExtensions;
+    data['webview_height_ratio'] = this.webviewHeightRatio;
     return data;
   }
 }

@@ -18,7 +18,12 @@ class _AddCustomerAttributeState extends State<AddCustomerAttribute> {
   Widget build(BuildContext context) {
     return Material(
         child: Scaffold(
-      appBar: AppBar(
+       body: Container(
+        margin: EdgeInsets.all(15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            AppBar(
         elevation: 0.0,
         centerTitle: false,
         automaticallyImplyLeading: false,
@@ -29,7 +34,7 @@ class _AddCustomerAttributeState extends State<AddCustomerAttribute> {
               Get.back();
             },
             icon: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding:  EdgeInsets.zero,
               child: Icon(
                 Icons.arrow_back_ios_new,
                 color: Colors.black,
@@ -60,11 +65,7 @@ class _AddCustomerAttributeState extends State<AddCustomerAttribute> {
           )
         ],
       ),
-      body: Container(
-        margin: EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+     
             Text(
               "Title",
               textAlign: TextAlign.start,

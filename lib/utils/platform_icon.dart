@@ -17,6 +17,8 @@ IconData platformIcon(String name) {
       return FontAwesomeIcons.telegram;
     case "webchat":
       return FontAwesomeIcons.chrome;
+      case "instagram_messenger":
+      return FontAwesomeIcons.instagram;
     default:
       return FontAwesomeIcons.info;
   }

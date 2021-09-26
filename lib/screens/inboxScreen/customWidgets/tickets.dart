@@ -47,8 +47,7 @@ class _TicketsState extends State<Tickets> {
     return Obx(() {
       return _inboxController.ticketDataAvailable
           ? _inboxController.ticketResponse.value.dataSource!.length > 0
-              ? Expanded(
-                  child: RefreshIndicator(
+              ? RefreshIndicator(
                   onRefresh: _refreshData,
                   child: ListView.builder(
                       shrinkWrap: true,
@@ -126,6 +125,10 @@ class _TicketsState extends State<Tickets> {
                                             children: [
                                               Text(
                                                 _inboxController.ticketResponse
+                                                    .value.dataSource!
+                                                    .elementAt(index)
+                                                    .customer!
+                                                    .fullName!.isEmpty?"Anonymous":_inboxController.ticketResponse
                                                     .value.dataSource!
                                                     .elementAt(index)
                                                     .customer!
@@ -248,28 +251,26 @@ class _TicketsState extends State<Tickets> {
                       },
                       itemCount: _inboxController
                           .ticketResponse.value.dataSource!.length),
-                ))
-              : Center(
-                  child: Expanded(
-                    child: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          FaIcon(
-                            FontAwesomeIcons.copy,
-                            size: 150,
-                            color: Colors.grey,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text("No Tickets Found!"),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
                 )
+              : Center(
+                child: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            FaIcon(
+                              FontAwesomeIcons.copy,
+                              size: 150,
+                              color: Colors.grey,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text("No Tickets Found!"),
+                            )
+                          ],
+                        ),
+                      ),
+              )
           : Padding(
               padding: const EdgeInsets.all(20.0),
               child: Center(child: CircularProgressIndicator()),
