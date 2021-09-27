@@ -44,7 +44,7 @@ class PusherService extends ChatApiController {
                       : ""
                   : ""));
           const AndroidNotificationDetails androidPlatformChannelSpecifics =
-              AndroidNotificationDetails('12345', 'your channel name',
+              AndroidNotificationDetails('12345', 'MyAlice Channel',
                   'your channel description', //Required for Android 8.0 or after
                   importance: Importance.max,
                   priority: Priority.high);
@@ -66,9 +66,9 @@ class PusherService extends ChatApiController {
           );
 
           const NotificationDetails platformChannelSpecifics =
-              NotificationDetails(android: androidPlatformChannelSpecifics);
-          _showNotification(
-              platformChannelSpecifics, text['data']['text'], user,channelName);
+              NotificationDetails(android: androidPlatformChannelSpecifics,iOS: iOSPlatformChannelSpecifics);
+          _showNotification(platformChannelSpecifics, text['data']['text'],
+              user, channelName);
         }
       });
     } on PlatformException catch (e) {
@@ -85,12 +85,12 @@ class PusherService extends ChatApiController {
   } */
   Future<void> _showNotification(NotificationDetails platformChannelSpecifics,
       String text, Map<String, String> user, String channelName) async {
-    String name =  user.keys.firstWhere(
-    (k) => user[k]==channelName.split("chat-C_").last, orElse: () => "");
-    print("\n"+name+"\n");
-    await flutterLocalNotificationsPlugin.show(1234,
-        name, text, platformChannelSpecifics,
-        payload: 'data');
+    String name = user.keys.firstWhere(
+        (k) => user[k] == channelName.split("chat-C_").last,
+        orElse: () => "");
+    print("\n" + name + "\n");
+    await flutterLocalNotificationsPlugin
+        .show(1234, name, text, platformChannelSpecifics, payload: 'data');
   }
 }
 

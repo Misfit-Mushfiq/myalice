@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:myalice/controllers/apiControllers/databinging.dart';
+import 'package:myalice/dependncies/inboxBinding.dart';
+import 'package:myalice/dependncies/loginBinding.dart';
 import 'package:myalice/helper/notificationService.dart';
 import 'package:myalice/screens/chatDetails/chatDetails.dart';
 import 'package:myalice/screens/customerProfile/customerInfo.dart';
@@ -22,8 +23,8 @@ import 'package:myalice/utils/routes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  DataBinding().dependencies();
   await NotificationService().init();
+  await NotificationService().requestIOSPermissions(); 
   runApp(MyApp());
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.white, statusBarIconBrightness: Brightness.dark));
@@ -41,9 +42,9 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
       ),
       getPages: [
-        GetPage(name: LOGIN_PAGE, page: () => LoginScreen()),
+        GetPage(name: LOGIN_PAGE, page: () => LoginScreen(),binding: LoginBinding()),
         GetPage(name: CHAT_DETAILS_PAGE, page: () => ChatDetails()),
-        GetPage(name: INBOX_PAGE, page: () => Inbox(), binding: DataBinding()),
+        GetPage(name: INBOX_PAGE, page: () => Inbox(), binding: InboxBinding()),
         GetPage(name: SIGNUP_PAGE, page: () => SignUpScreen()),
         GetPage(name: USER_PROFILE_PAGE, page: () => AgentProfile()),
         GetPage(name: CUSTOMER_PROFILE_PAGE, page: () => CustomerProfile()),

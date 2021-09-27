@@ -24,6 +24,7 @@ class NotificationService {
       requestAlertPermission: false,
       //onDidReceiveLocalNotification: (int, String?, String?, String?),
     );
+   
 
     final InitializationSettings initializationSettings =
         InitializationSettings(
@@ -39,4 +40,18 @@ class NotificationService {
     print(payload.toString());
   }
 
+Future<void> requestIOSPermissions() async{
+      FlutterLocalNotificationsPlugin()
+          .resolvePlatformSpecificImplementation<
+              IOSFlutterLocalNotificationsPlugin>()
+          ?.requestPermissions(
+            alert: true,
+            badge: true,
+            sound: true,
+          );
+    }
+
 }
+
+
+ 
