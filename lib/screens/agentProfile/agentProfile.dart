@@ -80,6 +80,7 @@ class _UserProfileState extends State<AgentProfile> {
         body: SingleChildScrollView(
             child: Container(
           color: Colors.white,
+  
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(

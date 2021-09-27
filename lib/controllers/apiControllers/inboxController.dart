@@ -44,6 +44,7 @@ class InboxController extends BaseApiController {
   var _isCannedResponseAvailable = false.obs;
   var _isAgentsAvailable = false.obs;
   var _isGroupsAvailable = false.obs;
+  var _lastText = "".obs;
 
   Projects get projects => _projects;
   Channels get channels => _channels;
@@ -91,7 +92,7 @@ class InboxController extends BaseApiController {
   static String _projectsPath = "bots/projects";
   static String _accountPath = "accounts/info";
 
-  Future<void> onInit() async {
+  Future<void> init() async {
     token = await _sharedPref.readString("apiToken");
     await getUser();
     await getProjects().then((value) {
@@ -116,7 +117,6 @@ class InboxController extends BaseApiController {
         groups: [],
         tags: [],
         dates: []);
-    super.onInit();
   }
 
   Future<dynamic> getUser() async {
@@ -158,20 +158,17 @@ class InboxController extends BaseApiController {
             },
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) {
-          if (response.statusCode == 200) {
-            // tickets = TicketResponse.fromJson(response.data);
-            ticketResponse.value = TicketResponse.fromJson(response.data);
-            ticketResponse.update((val) {
-              val = TicketResponse.fromJson(response.data);
-            });
-            ticketResponse.refresh();
-          } else {
-            return null;
-          }
-        })
-        .catchError((err) => print(err.toString()))
-        .whenComplete(() => ticketDataAvailable =
-            ticketResponse.value!=null? true : false);
+      if (response.statusCode == 200) {
+        ticketResponse.value = TicketResponse.fromJson(response.data);
+        ticketResponse.update((val) {
+          val = TicketResponse.fromJson(response.data);
+        });
+        ticketResponse.refresh();
+        ticketDataAvailable = true;
+      } else {
+        return null;
+      }
+    });
   }
 
   Future<Projects?> getProjects() async {

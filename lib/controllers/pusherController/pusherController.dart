@@ -66,9 +66,18 @@ class PusherService extends ChatApiController {
           );
 
           const NotificationDetails platformChannelSpecifics =
-              NotificationDetails(android: androidPlatformChannelSpecifics,iOS: iOSPlatformChannelSpecifics);
-          _showNotification(platformChannelSpecifics, text['data']['text'],
-              user, channelName);
+              NotificationDetails(
+                  android: androidPlatformChannelSpecifics,
+                  iOS: iOSPlatformChannelSpecifics);
+          _showNotification(
+              platformChannelSpecifics,
+              text['data']['type'] == "attachment"
+                  ? text['data']["attachment"]["type"] == "image"
+                      ? "Sent you an image"
+                      : ""
+                  : text['data']['text'],
+              user,
+              channelName);
         }
       });
     } on PlatformException catch (e) {

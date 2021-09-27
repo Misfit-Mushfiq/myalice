@@ -30,7 +30,7 @@ class PersistentMenu {
         type: json['type'] as String?,
         extra: json['extra'] as String?,
         title: json['title'] as String?,
-        value: json['value'] ,
+        value: json['value'].toString() ,
         payload: json['payload'] as String?,
         verbose: json['verbose'] as String?,
         formSequence: json['form_sequence'] as int?,

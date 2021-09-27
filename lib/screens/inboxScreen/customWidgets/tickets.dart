@@ -18,6 +18,7 @@ class Tickets extends StatefulWidget {
   final Tags? availableTags;
   final AvailableAgents? agents;
   final AvailableGroups? groups;
+  final InboxController inboxController;
   final CannedResponse? cannedResponse;
   final Function onRefresh;
   Tickets(
@@ -25,6 +26,7 @@ class Tickets extends StatefulWidget {
       required this.availableTags,
       required this.agents,
       required this.groups,
+      required this.inboxController,
       required this.cannedResponse,
       required this.onRefresh})
       : super(key: key);
@@ -43,10 +45,9 @@ class _TicketsState extends State<Tickets> {
 
   @override
   Widget build(BuildContext context) {
-    InboxController _inboxController = Get.put(InboxController());
     return Obx(() {
-      return _inboxController.ticketDataAvailable
-          ? _inboxController.ticketResponse.value.dataSource!.length > 0
+      return widget.inboxController.ticketDataAvailable
+          ? widget.inboxController.ticketResponse.value.dataSource!.length > 0
               ? RefreshIndicator(
                   onRefresh: _refreshData,
                   child: ListView.builder(
@@ -54,20 +55,21 @@ class _TicketsState extends State<Tickets> {
                       padding: EdgeInsets.zero,
                       itemBuilder: (context, index) {
                         SharedPref().saveString(
-                            "selectedInboxTags${_inboxController.ticketResponse.value.dataSource!.elementAt(index).id.toString()}",
-                            TagsDataSource.encode(_inboxController
+                            "selectedInboxTags${widget.inboxController.ticketResponse.value.dataSource!.elementAt(index).id.toString()}",
+                            TagsDataSource.encode(widget.inboxController
                                 .ticketResponse.value.dataSource!
                                 .elementAt(index)
                                 .tags!));
-                        _connectPusher(_inboxController
-                            .ticketResponse.value.dataSource!
-                            .elementAt(index)
-                            .customer!.fullName!,_inboxController
-                            .ticketResponse.value.dataSource!
-                            .elementAt(index)
-                            .customer!
-                            .id
-                            .toString());
+                        _connectPusher(
+                            widget.inboxController.ticketResponse.value.dataSource!
+                                .elementAt(index)
+                                .customer!
+                                .fullName!,
+                            widget.inboxController.ticketResponse.value.dataSource!
+                                .elementAt(index)
+                                .customer!
+                                .id
+                                .toString());
                         return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: InkWell(
@@ -77,7 +79,7 @@ class _TicketsState extends State<Tickets> {
                                       children: [
                                         CircleAvatar(
                                           backgroundImage: NetworkImage(
-                                              _inboxController.ticketResponse
+                                              widget.inboxController.ticketResponse
                                                       .value.dataSource!
                                                       .elementAt(index)
                                                       .customer!
@@ -88,7 +90,7 @@ class _TicketsState extends State<Tickets> {
                                         Positioned(
                                             top: 30,
                                             left: 30,
-                                            child: _inboxController
+                                            child: widget.inboxController
                                                         .ticketResponse
                                                         .value
                                                         .dataSource!
@@ -99,7 +101,7 @@ class _TicketsState extends State<Tickets> {
                                                 ? CircleAvatar(
                                                     child: CircleAvatar(
                                                       backgroundImage: NetworkImage(
-                                                          _inboxController
+                                                          widget.inboxController
                                                                   .ticketResponse
                                                                   .value
                                                                   .dataSource!
@@ -128,14 +130,14 @@ class _TicketsState extends State<Tickets> {
                                           Row(
                                             children: [
                                               Text(
-                                                _inboxController.ticketResponse
+                                                widget.inboxController.ticketResponse
                                                         .value.dataSource!
                                                         .elementAt(index)
                                                         .customer!
                                                         .fullName!
                                                         .isEmpty
                                                     ? "Anonymous"
-                                                    : _inboxController
+                                                    : widget.inboxController
                                                         .ticketResponse
                                                         .value
                                                         .dataSource!
@@ -143,14 +145,20 @@ class _TicketsState extends State<Tickets> {
                                                         .customer!
                                                         .fullName!,
                                                 style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                    fontWeight: widget.inboxController
+                                                            .ticketResponse
+                                                            .value
+                                                            .dataSource!
+                                                            .elementAt(index)
+                                                            .isReplied!
+                                                        ? FontWeight.normal
+                                                        : FontWeight.bold),
                                               ),
                                               SizedBox(
                                                 width: 8,
                                               ),
                                               FaIcon(
-                                                platformIcon(_inboxController
+                                                platformIcon(widget.inboxController
                                                     .ticketResponse
                                                     .value
                                                     .dataSource!
@@ -160,7 +168,7 @@ class _TicketsState extends State<Tickets> {
                                                     .type!),
                                                 size: 15,
                                                 color: platformColor(
-                                                    _inboxController
+                                                    widget.inboxController
                                                         .ticketResponse
                                                         .value
                                                         .dataSource!
@@ -175,7 +183,7 @@ class _TicketsState extends State<Tickets> {
                                             height: 10,
                                           ),
                                           Text(
-                                            _inboxController.ticketResponse
+                                            widget.inboxController.ticketResponse
                                                 .value.dataSource!
                                                 .elementAt(index)
                                                 .customer!
@@ -192,7 +200,7 @@ class _TicketsState extends State<Tickets> {
                                       children: [
                                         Text(
                                           readTimestamp(int.parse(
-                                              _inboxController.ticketResponse
+                                              widget.inboxController.ticketResponse
                                                   .value.dataSource!
                                                   .elementAt(index)
                                                   .createdAt!)),
@@ -205,7 +213,7 @@ class _TicketsState extends State<Tickets> {
                                               MainAxisAlignment.end,
                                           children: [
                                             CircleAvatar(
-                                              backgroundColor: _inboxController
+                                              backgroundColor: widget.inboxController
                                                       .ticketResponse
                                                       .value
                                                       .dataSource!
@@ -219,7 +227,7 @@ class _TicketsState extends State<Tickets> {
                                               width: 10,
                                             ),
                                             Icon(
-                                              _inboxController.ticketResponse
+                                              widget.inboxController.ticketResponse
                                                       .value.dataSource!
                                                       .elementAt(index)
                                                       .isLocked!
@@ -236,21 +244,21 @@ class _TicketsState extends State<Tickets> {
                                 onTap: () {
                                   Get.toNamed(CHAT_DETAILS_PAGE, arguments: [
                                     widget.availableTags,
-                                    _inboxController
+                                    widget.inboxController
                                         .ticketResponse.value.dataSource!
                                         .elementAt(index)
                                         .id,
-                                    _inboxController
+                                    widget.inboxController
                                         .ticketResponse.value.dataSource!
                                         .elementAt(index)
                                         .customer,
                                     widget.agents,
-                                    _inboxController
+                                    widget.inboxController
                                         .ticketResponse.value.dataSource!
                                         .elementAt(index)
                                         .agents,
                                     widget.cannedResponse,
-                                    _inboxController
+                                    widget.inboxController
                                         .ticketResponse.value.dataSource!
                                         .elementAt(index)
                                         .tags,
@@ -258,7 +266,7 @@ class _TicketsState extends State<Tickets> {
                                   ]);
                                 }));
                       },
-                      itemCount: _inboxController
+                      itemCount: widget.inboxController
                           .ticketResponse.value.dataSource!.length),
                 )
               : Center(
@@ -292,9 +300,9 @@ class _TicketsState extends State<Tickets> {
     widget.onRefresh();
   }
 
-  Future _connectPusher(String name,String id) async {
+  Future _connectPusher(String name, String id) async {
     Map<String, String> user = Map();
     user.addAll({name: id});
-    await pusherService.connectPusher('chat-C_$id', "messages",user);
+    await pusherService.connectPusher('chat-C_$id', "messages", user);
   }
 }

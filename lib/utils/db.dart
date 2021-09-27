@@ -58,5 +58,6 @@ class ChatDataBase {
     String path = join(await getDatabasesPath(), "alice_chat.db");
     await _database!.close();
     deleteDatabase(path);
+    print("DB Closed");
   }
 }

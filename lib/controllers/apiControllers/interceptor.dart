@@ -19,17 +19,17 @@ class LoggingInterceptors extends InterceptorsWrapper {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    /*  debugPrint("--> ${options.method} ${options.baseUrl}${options.path}");
+     debugPrint("--> ${options.method} ${options.baseUrl}${options.path}");
     debugPrint("Content type: ${options.contentType}");
     debugPrint("QueryParams: ${options.queryParameters}");
     debugPrint("Headers: ${options.headers}");
-    debugPrint("Data: ${options.data}"); */
+    debugPrint("Data: ${options.data}");
     return super.onRequest(options, handler);
   }
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    /* debugPrint("<-- STATUS : ${response.statusCode}");
+    debugPrint("<-- STATUS : ${response.statusCode}");
     String responseAsString = response.data.toString();
     if (responseAsString.length > maxCharactersPerLine) {
       int iterations = (responseAsString.length / maxCharactersPerLine).floor();
@@ -44,7 +44,7 @@ class LoggingInterceptors extends InterceptorsWrapper {
     } else {
       debugPrint(response.data.toString());
     }
-    debugPrint("<-- END HTTP"); */
+    debugPrint("<-- END HTTP");
     return super.onResponse(response, handler);
   }
 

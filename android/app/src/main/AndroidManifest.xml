@@ -2,7 +2,7 @@
     package="com.example.myalice">
    <uses-permission android:name="android.permission.INTERNET" /> 
    <application
-        android:label="myalice"
+        android:label="MyAlice"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:showWhenLocked="true"

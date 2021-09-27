@@ -51,12 +51,9 @@ class Texts extends StatelessWidget {
                     imageUrl: object.chats.elementAt(index)!.imageUrl!,
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) => Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Container(
-                        height: 10,
-                        child: CircularProgressIndicator(
+                      padding: const EdgeInsets.all(5.0),
+                      child: LinearProgressIndicator(
                             value: downloadProgress.progress),
-                      ),
                     ),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),

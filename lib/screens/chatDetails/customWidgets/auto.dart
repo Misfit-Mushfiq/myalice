@@ -54,7 +54,11 @@ class _AutoCompleteExampleState extends State<AutoCompleteExample> {
             FocusNode fieldFocusNode,
             VoidCallback onFieldSubmitted) {
           return Container(
-            padding: EdgeInsets.only(top: 10, bottom: 10,left: Platform.isIOS? 10:0,right: Platform.isIOS?10:0),
+            padding: EdgeInsets.only(
+                top: 10,
+                bottom: 10,
+                left: Platform.isIOS ? 10 : 0,
+                right: Platform.isIOS ? 10 : 0),
             width: double.infinity,
             child: Row(
               children: <Widget>[
@@ -108,21 +112,24 @@ class _AutoCompleteExampleState extends State<AutoCompleteExample> {
                     //await pusherService.pusherTrigger('test-event');
                     //animateToScreenEnd();
 
-                    if(fieldTextEditingController.text.isNotEmpty){
+                    if (fieldTextEditingController.text.isNotEmpty) {
                       Get.find<ChatApiController>()
-                        .chatResponse
-                        .add(DataSource.fromJson({
-                          "text": fieldTextEditingController.text,
-                          "source": "admin",
-                          "sub_type": "",
-                          "type": ""
-                        }));
-                    Get.find<ChatApiController>().sendChats(
-                        widget.ticketID.toString(),
-                        fieldTextEditingController.text,
-                        "");
-                    fieldTextEditingController.text = "";
-                    setState(() {});
+                          .sendChats(widget.ticketID.toString(),
+                              fieldTextEditingController.text, "")
+                          .then((value) {
+                        if (value.success!) {
+                          Get.find<ChatApiController>()
+                              .chatResponse
+                              .add(DataSource.fromJson({
+                                "text": fieldTextEditingController.text,
+                                "source": "admin",
+                                "sub_type": "",
+                                "type": ""
+                              }));
+                          fieldTextEditingController.text = "";
+                          setState(() {});
+                        }
+                      });
                     }
                   },
                   icon: Icon(

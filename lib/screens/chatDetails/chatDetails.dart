@@ -65,7 +65,6 @@ class _ChatDetailsState extends State<ChatDetails>
   @override
   void initState() {
     init();
-
     super.initState();
   }
 
@@ -108,6 +107,7 @@ class _ChatDetailsState extends State<ChatDetails>
     final obj = Get.put(ChatApiController());
     obj.updateCustomerID(int.parse(_customer.id!.toString()));
     obj.updateID(_ticketId);
+    obj.init();
 
     return Scaffold(
         key: _chatboxBottomSheet,
@@ -133,7 +133,8 @@ class _ChatDetailsState extends State<ChatDetails>
                     children: [
                       CircleAvatar(
                         radius: 18,
-                        backgroundImage: CachedNetworkImageProvider(_customer.avatar),
+                        backgroundImage:
+                            CachedNetworkImageProvider(_customer.avatar),
                       ),
                       SizedBox(
                         width: 5,
@@ -148,7 +149,6 @@ class _ChatDetailsState extends State<ChatDetails>
                               overflow: TextOverflow.ellipsis),
                         ),
                       ),
-                      
                     ],
                   ),
                 ),
@@ -256,8 +256,9 @@ class _ChatDetailsState extends State<ChatDetails>
                               },
                             );
                           } else {
-                            return Center(child: Padding(
-                              padding: const EdgeInsets.only(top:30.0),
+                            return Center(
+                                child: Padding(
+                              padding: const EdgeInsets.only(top: 30.0),
                               child: CircularProgressIndicator(),
                             ));
                           }

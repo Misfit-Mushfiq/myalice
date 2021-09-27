@@ -20,20 +20,21 @@ class ChatApiController extends BaseApiController {
   ChatDataBase _chatDataBase = ChatDataBase();
   final SharedPref _sharedPref = SharedPref();
   late String? token;
-  int id = 0;
+  int ticketID = 0;
   int customerID = 0;
-  int get getId => id;
+  String _projectID = "";
+  int get getTicketId => ticketID;
   int get getCustomerID => customerID;
-  @override
-  Future<void> onInit() async {
-    super.onInit();
+
+  Future<void> init() async {
     token = await _sharedPref.readString("apiToken");
+    _projectID = await _sharedPref.readString("projectID");
     getMeta(customerID: getCustomerID.toString());
-    getChats(getId.toString());
+    getChats(getTicketId.toString());
   }
 
   void updateID(var ticketsID) {
-    id = ticketsID;
+    ticketID = ticketsID;
   }
 
   void updateCustomerID(var id) {
@@ -50,7 +51,6 @@ class ChatApiController extends BaseApiController {
 /* _chatResponse.update((val) {
           val!.data = DataSource.fromJson(value.data).data;
         }); */
-
         for (int i = 0; i < response.dataSource!.length; i++) {
           _chatDataBase.insertChats(response.dataSource![i]);
         }
@@ -93,7 +93,7 @@ class ChatApiController extends BaseApiController {
           filename: fileName, contentType: MediaType("image", fileExt)),
     });
     Response response = await getDio()!.post(
-      "crm/projects/81/images",
+      "crm/projects/$_projectID/images",
       options: Options(headers: {
         'Authorization': 'Token $token',
       }),
@@ -132,7 +132,7 @@ class ChatApiController extends BaseApiController {
    */
   Future<bool?> addTicketTags(String action, String name, int tagId) async {
     return getDio()!
-        .post("crm/tickets/$id/tag",
+        .post("crm/tickets/$ticketID/tag",
             data: {"action": action, "name": name, "id": tagId},
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) =>
@@ -144,7 +144,7 @@ class ChatApiController extends BaseApiController {
       required String name,
       required int tagId}) async {
     return getDio()!
-        .post("crm/tickets/$id/tag",
+        .post("crm/tickets/$ticketID/tag",
             data: {"action": action, "name": name, "id": tagId},
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) =>
@@ -153,7 +153,7 @@ class ChatApiController extends BaseApiController {
 
   Future<bool?> reassign(String agentID, String groupID) async {
     return getDio()!
-        .post("crm/tickets/$id/action-assign",
+        .post("crm/tickets/$ticketID/action-assign",
             data: {"agent_id": agentID, "group_id": groupID},
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) =>
@@ -162,7 +162,7 @@ class ChatApiController extends BaseApiController {
 
   Future<NoteResponse> saveNote(String note) async {
     return getDio()!
-        .post("crm/tickets/$id/messenger-chat",
+        .post("crm/tickets/$ticketID/messenger-chat",
             data: {"text": note, "image": null, "action": "write_note"},
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) => response.statusCode == 200
@@ -172,7 +172,7 @@ class ChatApiController extends BaseApiController {
 
   Future<bool?> deleteCannedResponse(String responseID) async {
     return getDio()!
-        .delete("crm/projects/$id/canned-responses/$responseID",
+        .delete("crm/projects/$ticketID/canned-responses/$responseID",
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) =>
             response.statusCode == 200 ? response.data["success"] : null);
@@ -181,7 +181,7 @@ class ChatApiController extends BaseApiController {
   Future<bool?> editCannedResponse(
       String responseID, String title, String body, bool team) async {
     return getDio()!
-        .patch("crm/projects/$id/canned-responses/$responseID",
+        .patch("crm/projects/$ticketID/canned-responses/$responseID",
             data: {"title": title, "text": body, "for_team": team},
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) =>
@@ -204,7 +204,7 @@ class ChatApiController extends BaseApiController {
 
   Future<bool?> resolveTicket() async {
     return getDio()!
-        .post("crm/tickets/$id/action-resolve",
+        .post("crm/tickets/$ticketID/action-resolve",
             data: {"status": true},
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) =>
@@ -213,7 +213,7 @@ class ChatApiController extends BaseApiController {
 
   Future<bool?> actionBot(bool status) async {
     return getDio()!
-        .post("crm/tickets/$id/action-bot",
+        .post("crm/tickets/$ticketID/action-bot",
             data: {"status": status},
             options: Options(headers: {"Authorization": "Token $token"}))
         .then((response) =>
