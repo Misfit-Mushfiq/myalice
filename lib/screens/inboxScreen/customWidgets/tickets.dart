@@ -60,9 +60,13 @@ class _TicketsState extends State<Tickets> {
                                 .elementAt(index)
                                 .tags!));
                         _connectPusher(_inboxController
-                                        .ticketResponse.value.dataSource!
-                                        .elementAt(index)
-                                        .customer!.id
+                            .ticketResponse.value.dataSource!
+                            .elementAt(index)
+                            .customer!.fullName!,_inboxController
+                            .ticketResponse.value.dataSource!
+                            .elementAt(index)
+                            .customer!
+                            .id
                             .toString());
                         return Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -125,14 +129,19 @@ class _TicketsState extends State<Tickets> {
                                             children: [
                                               Text(
                                                 _inboxController.ticketResponse
-                                                    .value.dataSource!
-                                                    .elementAt(index)
-                                                    .customer!
-                                                    .fullName!.isEmpty?"Anonymous":_inboxController.ticketResponse
-                                                    .value.dataSource!
-                                                    .elementAt(index)
-                                                    .customer!
-                                                    .fullName!,
+                                                        .value.dataSource!
+                                                        .elementAt(index)
+                                                        .customer!
+                                                        .fullName!
+                                                        .isEmpty
+                                                    ? "Anonymous"
+                                                    : _inboxController
+                                                        .ticketResponse
+                                                        .value
+                                                        .dataSource!
+                                                        .elementAt(index)
+                                                        .customer!
+                                                        .fullName!,
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -253,24 +262,24 @@ class _TicketsState extends State<Tickets> {
                           .ticketResponse.value.dataSource!.length),
                 )
               : Center(
-                child: Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            FaIcon(
-                              FontAwesomeIcons.copy,
-                              size: 150,
-                              color: Colors.grey,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text("No Tickets Found!"),
-                            )
-                          ],
+                  child: Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        FaIcon(
+                          FontAwesomeIcons.copy,
+                          size: 150,
+                          color: Colors.grey,
                         ),
-                      ),
-              )
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text("No Tickets Found!"),
+                        )
+                      ],
+                    ),
+                  ),
+                )
           : Padding(
               padding: const EdgeInsets.all(20.0),
               child: Center(child: CircularProgressIndicator()),
@@ -283,7 +292,9 @@ class _TicketsState extends State<Tickets> {
     widget.onRefresh();
   }
 
-  Future _connectPusher(String id) async {
-    await pusherService.connectPusher('chat-C_$id', "messages");
+  Future _connectPusher(String name,String id) async {
+    Map<String, String> user = Map();
+    user.addAll({name: id});
+    await pusherService.connectPusher('chat-C_$id', "messages",user);
   }
 }

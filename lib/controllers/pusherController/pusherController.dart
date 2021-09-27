@@ -16,7 +16,8 @@ class PusherService extends ChatApiController {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  Future<void> connectPusher(String channelName, String eventName) async {
+  Future<void> connectPusher(
+      String channelName, String eventName, Map<String, String> user) async {
     try {
       var options = PusherOptions(cluster: "ap1");
       pusher = PusherClient('199beaccd57c0306a7e7', options,
@@ -30,44 +31,44 @@ class PusherService extends ChatApiController {
         Map<String, dynamic> text = jsonDecode(event!.data!);
         if (text['source'] == "customer") {
           ChatApiController _controller = Get.put(ChatApiController());
-             _controller.chatResponse.add(DataSource(
-                text: text['data']['text'],
-                source: text['source'],
-                type: text['data']['type'],
-                subType: text['data']['type'] == "attachment"
-                    ? text['data']["attachment"]["type"]
-                    : "",
-                imageUrl: text['data']['type'] == "attachment"
-                    ? text['data']["attachment"]["type"] == "image"
-                        ? text['data']["attachment"]["urls"][0]
-                        : ""
-                    : ""));
-            const AndroidNotificationDetails androidPlatformChannelSpecifics =
-                AndroidNotificationDetails('12345', 'your channel name',
-                    'your channel description', //Required for Android 8.0 or after
-                    importance: Importance.max,
-                    priority: Priority.high);
+          _controller.chatResponse.add(DataSource(
+              text: text['data']['text'],
+              source: text['source'],
+              type: text['data']['type'],
+              subType: text['data']['type'] == "attachment"
+                  ? text['data']["attachment"]["type"]
+                  : "",
+              imageUrl: text['data']['type'] == "attachment"
+                  ? text['data']["attachment"]["type"] == "image"
+                      ? text['data']["attachment"]["urls"][0]
+                      : ""
+                  : ""));
+          const AndroidNotificationDetails androidPlatformChannelSpecifics =
+              AndroidNotificationDetails('12345', 'your channel name',
+                  'your channel description', //Required for Android 8.0 or after
+                  importance: Importance.max,
+                  priority: Priority.high);
 
-            const IOSNotificationDetails iOSPlatformChannelSpecifics =
-                IOSNotificationDetails(
-              presentAlert:
-                  true, // Present an alert when the notification is displayed and the application is in the foreground (only from iOS 10 onwards)
-              presentBadge:
-                  true, // Present the badge number when the notification is displayed and the application is in the foreground (only from iOS 10 onwards)
-              presentSound:
-                  true, // Play a sound when the notification is displayed and the application is in the foreground (only from iOS 10 onwards)
-              sound:
-                  "", // Specifics the file path to play (only from iOS 10 onwards)
-              badgeNumber: 1, // The application's icon badge number
-              //attachments: List<IOSNotificationAttachment> != null?// (only from iOS 10 onwards)
-              //subtitle: String?, //Secondary description  (only from iOS 10 onwards)
-              // threadIdentifier: String? (only from iOS 10 onwards)
-            );
+          const IOSNotificationDetails iOSPlatformChannelSpecifics =
+              IOSNotificationDetails(
+            presentAlert:
+                true, // Present an alert when the notification is displayed and the application is in the foreground (only from iOS 10 onwards)
+            presentBadge:
+                true, // Present the badge number when the notification is displayed and the application is in the foreground (only from iOS 10 onwards)
+            presentSound:
+                true, // Play a sound when the notification is displayed and the application is in the foreground (only from iOS 10 onwards)
+            sound:
+                "", // Specifics the file path to play (only from iOS 10 onwards)
+            badgeNumber: 1, // The application's icon badge number
+            //attachments: List<IOSNotificationAttachment> != null?// (only from iOS 10 onwards)
+            //subtitle: String?, //Secondary description  (only from iOS 10 onwards)
+            // threadIdentifier: String? (only from iOS 10 onwards)
+          );
 
-            const NotificationDetails platformChannelSpecifics =
-                NotificationDetails(android: androidPlatformChannelSpecifics);
-            _showNotification(platformChannelSpecifics,text['data']['text']);
-          
+          const NotificationDetails platformChannelSpecifics =
+              NotificationDetails(android: androidPlatformChannelSpecifics);
+          _showNotification(
+              platformChannelSpecifics, text['data']['text'], user,channelName);
         }
       });
     } on PlatformException catch (e) {
@@ -82,12 +83,13 @@ class PusherService extends ChatApiController {
       _inEventData.add(event.data);
     });
   } */
-   Future<void> _showNotification(NotificationDetails platformChannelSpecifics,String text) async {
-    await flutterLocalNotificationsPlugin.show(
-        1234,
-        "A Notification From My Application",
-        text,
-        platformChannelSpecifics,
+  Future<void> _showNotification(NotificationDetails platformChannelSpecifics,
+      String text, Map<String, String> user, String channelName) async {
+    String name =  user.keys.firstWhere(
+    (k) => user[k]==channelName.split("chat-C_").last, orElse: () => "");
+    print("\n"+name+"\n");
+    await flutterLocalNotificationsPlugin.show(1234,
+        name, text, platformChannelSpecifics,
         payload: 'data');
   }
 }
